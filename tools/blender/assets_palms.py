@@ -13,20 +13,24 @@ from mathutils import Matrix, Vector
 from pu_common import MeshBuilder, col, mix, rng, tube, with_alpha, hull_from_points
 
 
-def _trunk_path(height: float, lean: Vector, lean_amt: float, wobble: float, seed: int,
+def _trunk_path(arc: float, lean0: float, lean_top: float, wobble: float, seed: int,
                 rings: int) -> list[Vector]:
+    """Integrated bend: the trunk leaves the ground leaning `lean0` degrees
+    toward +X and recovers to `lean_top` near the crown (Ref A/B's curve).
+    `arc` is the trunk length along the curve; a gentle sideways wobble
+    keeps it from looking machined."""
     r = rng(seed)
-    side = Vector((-lean.z, 0.0, lean.x))
-    phase = r.uniform(0, math.pi)
-    pts = []
-    for i in range(rings + 1):
-        t = i / rings
-        # Bend grows quadratically: the classic leaning coconut-palm curve,
-        # plus a gentle S wobble sideways.
-        off = lean * (lean_amt * height * (0.55 * t * t + 0.25 * t))
-        off += side * (wobble * height * math.sin(math.pi * t + phase) * t)
-        # Recover a little at the top so the crown sits upright-ish.
-        pts.append(Vector((off.x, height * t, off.z)))
+    phase = r.uniform(0, math.tau)
+    p = Vector((0.0, 0.0, 0.0))
+    pts = [p.copy()]
+    seg = arc / rings
+    for i in range(rings):
+        t = (i + 0.5) / rings
+        th = math.radians(lean0 * (1.0 - t) ** 1.5 + lean_top * t)
+        sw = wobble * math.sin(math.pi * t * 1.6 + phase)
+        d = Vector((math.sin(th), math.cos(th), sw)).normalized()
+        p = p + d * seg
+        pts.append(p.copy())
     return pts
 
 
@@ -129,50 +133,76 @@ def build_coconuts(mb: MeshBuilder, top: Vector, seed: int, count: int) -> None:
         mb.merge(sub)
 
 
-def build_palm(seed: int, height: float, lean_deg: float, lean_amt: float, wobble: float,
-               fronds: int, frond_len: float, frond_w: float, coconuts: int = 3) -> MeshBuilder:
+def build_palm(seed: int, arc: float, lean0: float, lean_top: float, wobble: float,
+               fronds: int, frond_len: float, frond_w: float, coconuts: int = 3,
+               r_base: float | None = None) -> MeshBuilder:
+    """One palm leaning toward +X. Crown = upright inner fronds + long drooping outer ring."""
     r = rng(seed)
     mb = MeshBuilder()
-    lean = Vector((math.cos(math.radians(lean_deg)), 0.0, math.sin(math.radians(lean_deg))))
-    path = _trunk_path(height, lean, lean_amt, wobble, seed, rings=11)
-    build_trunk(mb, path, r_base=0.25 * height / 7.0 + 0.06, r_top=0.15)
+    rings = max(6, int(arc / 0.62))
+    path = _trunk_path(arc, lean0, lean_top, wobble, seed, rings)
+    if r_base is None:
+        r_base = 0.13 + arc * 0.017
+    build_trunk(mb, path, r_base=r_base, r_top=0.12 + arc * 0.004)
     top = path[-1]
-    # crown shaft: short dark-green bulb where fronds attach
     crown = [top - Vector((0, 0.25, 0)), top + Vector((0, 0.05, 0)), top + Vector((0, 0.22, 0))]
     cc = [with_alpha(col("trunk_dark"), 0.0), with_alpha(col("frond_under"), 0.0),
           with_alpha(col("frond_under", 0.9), 0.0)]
-    tube(mb, crown, [0.2, 0.24, 0.12], 7, cc, mat="PU_Plant")
+    tube(mb, crown, [0.19, 0.23, 0.11], 7, cc, mat="PU_Plant")
     build_coconuts(mb, top, seed + 7, coconuts)
-    for k in range(fronds):
-        az = 2 * math.pi * k / fronds + r.uniform(-0.25, 0.25)
-        elev = math.radians(r.uniform(18, 48) if k % 3 else r.uniform(45, 62))
-        droop = math.radians(r.uniform(70, 115))
-        L = frond_len * r.uniform(0.85, 1.12)
-        build_frond(mb, top + Vector((0, 0.12, 0)), az, L, frond_w * r.uniform(0.9, 1.1),
-                    elev, droop, seed * 100 + k)
+    inner = max(3, fronds // 3)
+    outer = fronds - inner
+    for k in range(outer):
+        az = 2 * math.pi * k / outer + r.uniform(-0.22, 0.22)
+        elev = math.radians(r.uniform(12, 38))
+        droop = math.radians(r.uniform(85, 125))
+        build_frond(mb, top + Vector((0, 0.1, 0)), az, frond_len * r.uniform(0.88, 1.1),
+                    frond_w * r.uniform(0.92, 1.08), elev, droop, seed * 100 + k)
+    for k in range(inner):
+        az = 2 * math.pi * (k + 0.5) / inner + r.uniform(-0.3, 0.3)
+        elev = math.radians(r.uniform(48, 68))
+        droop = math.radians(r.uniform(60, 85))
+        build_frond(mb, top + Vector((0, 0.18, 0)), az, frond_len * r.uniform(0.62, 0.78),
+                    frond_w * r.uniform(0.8, 0.95), elev, droop, seed * 100 + 50 + k)
     return mb
 
 
-# name: (seed, height, lean_deg, lean_amt, wobble, fronds, frond_len, frond_w, coconuts)
+# name: (seed, arc_length, lean0_deg, lean_top_deg, wobble, fronds, frond_len, frond_w, coconuts)
+# Every variant leans toward +X; the layout rotates them to lean seaward.
 PALM_VARIANTS = {
-    "palm_tall": (11, 7.6, 20.0, 0.30, 0.05, 10, 4.1, 0.74, 3),
-    "palm_lean": (23, 6.4, 200.0, 0.55, 0.07, 9, 3.8, 0.70, 3),
-    "palm_curve": (37, 7.0, 110.0, 0.42, 0.10, 10, 4.0, 0.76, 2),
-    "palm_young": (41, 4.2, 300.0, 0.22, 0.04, 8, 3.0, 0.62, 0),
+    "palm_tall": (11, 9.6, 18.0, 4.0, 0.05, 12, 4.3, 0.74, 3),
+    "palm_lean": (23, 8.2, 48.0, 10.0, 0.04, 11, 4.0, 0.72, 3),
+    "palm_curve": (37, 8.6, 36.0, -8.0, 0.08, 12, 4.2, 0.76, 2),
+    "palm_bent": (43, 6.8, 64.0, 16.0, 0.03, 11, 3.7, 0.7, 3),
+    "palm_mid": (51, 6.2, 22.0, 6.0, 0.06, 11, 3.5, 0.68, 2),
+    "palm_young": (41, 3.8, 15.0, 5.0, 0.04, 9, 2.7, 0.58, 0),
+    "palm_sapling": (61, 1.5, 8.0, 3.0, 0.02, 8, 1.8, 0.45, 0),
 }
 
 
-def build_twin(seed: int = 57) -> MeshBuilder:
-    """Two palms sharing a base, leaning apart (Ref A's front-left pair)."""
-    a = build_palm(seed, 7.2, 160.0, 0.38, 0.06, 10, 4.0, 0.74, 3)
-    b = build_palm(seed + 1, 5.6, 340.0, 0.30, 0.05, 9, 3.4, 0.66, 2)
+def _group(parts: list[tuple[tuple, float, tuple[float, float]]]) -> MeshBuilder:
+    """Several palms from one clump: (variant params, yaw degrees, (x, z) offset)."""
     mb = MeshBuilder()
-    mb.merge(a)
-    mb.merge(b, Matrix.Translation((0.55, 0.0, 0.25)))
+    for params, yaw, (ox, oz) in parts:
+        mb.merge(build_palm(*params), Matrix.Translation((ox, 0.0, oz)) @ Matrix.Rotation(math.radians(yaw), 4, "Y"))
     return mb
+
+
+def build_twin() -> MeshBuilder:
+    """Two palms from one base leaning apart (Ref A's front-left pair)."""
+    return _group([((57, 9.0, 26.0, 6.0, 0.05, 12, 4.1, 0.74, 3), 0.0, (0.0, 0.0)),
+                   ((58, 6.6, 40.0, 8.0, 0.05, 11, 3.6, 0.68, 2), 150.0, (0.45, 0.3))])
+
+
+def build_trio() -> MeshBuilder:
+    """A grove clump: tall + leaning + young, fanned out (Ref B's beach pair + one)."""
+    return _group([((71, 9.8, 30.0, 6.0, 0.05, 12, 4.3, 0.74, 3), 0.0, (0.0, 0.0)),
+                   ((72, 7.6, 52.0, 12.0, 0.04, 11, 3.9, 0.7, 2), 55.0, (0.6, -0.4)),
+                   ((73, 3.6, 20.0, 6.0, 0.04, 9, 2.6, 0.58, 0), -70.0, (-0.7, 0.5))])
 
 
 def build_all() -> dict[str, MeshBuilder]:
     out = {name: build_palm(*params) for name, params in PALM_VARIANTS.items()}
     out["palm_twin"] = build_twin()
+    out["palm_trio"] = build_trio()
     return out

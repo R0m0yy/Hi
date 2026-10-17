@@ -25,13 +25,24 @@ import haven_island_def as isl
 import haven_layout
 import pu_common as pu
 
-LEVELS = (0.9, 1.8, 3.4, 7.0)  # must match target_spacing() bands
+LEVELS = (0.9, 1.8, 2.6, 3.4, 7.0)  # must match every value target_spacing() returns
 HEIGHTMAP_SPACING = 1.0
+
+
+def _check_levels() -> None:
+    """Every spacing target_spacing() can return must be a sampling level, or that
+    region gets no vertices at all (it once silently left the interior empty)."""
+    for x in range(-130, 131, 3):
+        for z in range(-130, 131, 3):
+            sp = isl.target_spacing(x, z)
+            if not any(abs(sp - lv) < 1e-6 for lv in LEVELS):
+                raise ValueError(f"target_spacing {sp} at ({x}, {z}) is not in LEVELS {LEVELS}")
 
 
 def sample_points(seed: int = 5) -> list[tuple[float, float]]:
     """Multi-resolution jittered grids: each level only fills the area whose
     desired spacing equals that level, giving well-shaped triangles."""
+    _check_levels()
     r = random.Random(seed)
     pts: list[tuple[float, float]] = []
     E = isl.EXTENT

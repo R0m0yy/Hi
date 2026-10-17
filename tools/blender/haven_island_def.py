@@ -115,13 +115,31 @@ def height(x: float, z: float) -> float:
 
 def grass_mask(x: float, z: float) -> float:
     s = -sdf(x, z)
-    g = smoothstep(13.0, 19.0, s + fbm(x, z, 1.0 / 14.0, 2, 31.0) * 7.0)
+    # Ref A/B: grass comes in patches, not fields. A small inner meadow...
+    g = smoothstep(20.5, 24.0, s + fbm(x, z, 1.0 / 12.0, 2, 31.0) * 5.0)
+    # ...and a lawn wrapping the back and west side of the rock stack (its
+    # camera-facing cave approach stays sandy).
     rx, rz = ROCKSTACK_CENTRE
-    near_rock = math.exp(-((x - rx) ** 2 + (z - rz) ** 2) / 160.0)
-    g = max(g, smoothstep(0.35, 0.6, near_rock + n2(x, z, 1.0 / 6.0, 4.4) * 0.2) * smoothstep(3.0, 8.0, s))
+    near_rock = math.exp(-((x - rx) ** 2 + (z - rz) ** 2) / 130.0)
+    behind = smoothstep(-2.0, 3.0, (rz + 3.0) - z + (rx - x) * 0.6)
+    g = max(g, smoothstep(0.4, 0.62, near_rock + n2(x, z, 1.0 / 6.0, 4.4) * 0.2) * smoothstep(3.0, 8.0, s) * behind)
     cx, cz = CAMP_CENTRE
     clearing = smoothstep(10.0, 6.0, math.hypot(x - cx, z - cz))
-    return max(0.0, g - clearing)
+    trail = smoothstep(2.6, 1.3, trail_distance(x, z) + n2(x, z, 1.0 / 5.0, 12.0) * 0.5)
+    return max(0.0, g - clearing - trail)
+
+
+# A sandy footpath through the meadow from the camp to the cave mouth.
+TRAIL = [CAMP_CENTRE, (14.0, 10.0), (6.0, 4.5), (-2.0, 1.5), (-5.0, -3.0), (-5.6, -7.0)]  # ends inside the cave
+
+
+def trail_distance(x: float, z: float) -> float:
+    best = 1e9
+    for (ax, az), (bx, bz) in zip(TRAIL, TRAIL[1:]):
+        dx, dz = bx - ax, bz - az
+        t = max(0.0, min(1.0, ((x - ax) * dx + (z - az) * dz) / (dx * dx + dz * dz)))
+        best = min(best, math.hypot(x - (ax + dx * t), z - (az + dz * t)))
+    return best
 
 
 def target_spacing(x: float, z: float) -> float:

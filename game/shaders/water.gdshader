@@ -110,6 +110,7 @@ void fragment() {
 	float g1 = pu_value_noise(wp * vec2(2.2, 3.4) + TIME * vec2(0.31, 0.17));
 	float g2 = pu_value_noise(wp * vec2(2.9, 2.1) - TIME * vec2(0.23, 0.29) + 3.1);
 	float glint = smoothstep(0.74, 0.8, g1 * g2 * 1.55) * patch * smoothstep(1.5, 4.0, depth) * glint_strength;
+	glint *= 1.0 - smoothstep(60.0, 140.0, length(VERTEX));  // sparkles are a close-up detail
 
 	ALBEDO = mix(body * body_brightness * (1.0 - clarity), foam_color.rgb, foam);
 	EMISSION = transmitted * clarity * (1.0 - foam) + foam_color.rgb * (foam * 0.3 + glint * 0.6);

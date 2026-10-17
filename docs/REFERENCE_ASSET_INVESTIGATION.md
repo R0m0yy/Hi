@@ -141,6 +141,13 @@ provenance**.
 
 ---
 
+## 3b. Free-asset evaluation (v0.2, user-approved: Quaternius / Kenney / Poly Pizza)
+
+| Source | Access from this sandbox (re-tested 2026-10-17) | Result |
+|---|---|---|
+| quaternius.com, poly.pizza, kenney.nl | Still **blocked** (proxy refuses the connection) | Not evaluable. Quaternius has no GitHub distribution; its packs (e.g. CC0 *Lowpoly Animated Fish*) live on itch.io / OpenGameArt, both blocked. |
+| Kenney on GitHub ([KenneyNL/Starter-Kit-3D-Platformer](https://github.com/KenneyNL/Starter-Kit-3D-Platformer)) | **Reachable** (public git read) | Evaluated: 3D models and sprites are **CC0** (template code MIT). Contents: platforms, coins, bricks, grass, cloud, flag and one `character.glb` (UnityGLTF export), a robot mascot with a screen face. **NOT SUITABLE**: the character contradicts Ref B's castaway child, and nothing else is tropical, rock or marine. Nothing was imported into the project. |
+
 ## 4. Decision and next steps
 
 1. **No exact original is legally obtainable right now.**
@@ -152,7 +159,7 @@ provenance**.
 
 ### Questions for the user
 
-- Do you want to buy a **Polygon Hangar** membership to get the probable Ref A source scene? If yes, please check (or let me check, with access) whether its licence allows use in a commercial game.
+- *(v0.2 answer: do not purchase Polygon Hangar or Superhive yet; keep investigating.)* Do you want to buy a **Polygon Hangar** membership to get the probable Ref A source scene? If yes, please check (or let me check, with access) whether its licence allows use in a commercial game.
 - Do you approve buying **GGART-BCN Survival Island** (US$20) for props, once its licence is confirmed royalty-free?
 - Can the sandbox network allow-list be widened (e.g. `quaternius.com`, `kenney.nl`, `poly.pizza`) so CC0 animated fish and characters can be evaluated?
 

@@ -18,6 +18,11 @@ extends MeshInstance3D
 	set(v):
 		water_material = v
 		_rebuild()
+## A flat floor far below the surface so the ocean never "sees" past the
+## edge of the island terrain (the water shader colours by depth).
+@export var deep_floor_depth := 26.0
+
+var _floor: MeshInstance3D
 
 
 func _ready() -> void:
@@ -40,6 +45,21 @@ func _rebuild() -> void:
 	mesh = plane
 	cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	set_notify_transform(true)
+	if not is_inside_tree():
+		return
+	if _floor == null:
+		_floor = MeshInstance3D.new()
+		_floor.name = "DeepFloor"
+		add_child(_floor, false, Node.INTERNAL_MODE_BACK)
+	var floor_mesh := PlaneMesh.new()
+	floor_mesh.size = Vector2(size, size)
+	var floor_mat := StandardMaterial3D.new()
+	floor_mat.albedo_color = Color(0.03, 0.12, 0.25)
+	floor_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	floor_mesh.material = floor_mat
+	_floor.mesh = floor_mesh
+	_floor.position = Vector3(0.0, -deep_floor_depth, 0.0)
+	_floor.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 
 
 func water_level() -> float:

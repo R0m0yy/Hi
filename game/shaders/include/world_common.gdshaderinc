@@ -23,6 +23,28 @@ float pu_value_noise(vec2 p) {
 	return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
 }
 
+float pu_hash3(vec3 p) {
+	p = fract(p * vec3(0.1031, 0.1030, 0.0973));
+	p += dot(p, p.yxz + 33.33);
+	return fract((p.x + p.y) * p.z);
+}
+
+float pu_value_noise3(vec3 p) {
+	vec3 i = floor(p);
+	vec3 f = fract(p);
+	vec3 u = f * f * (3.0 - 2.0 * f);
+	float n000 = pu_hash3(i);
+	float n100 = pu_hash3(i + vec3(1.0, 0.0, 0.0));
+	float n010 = pu_hash3(i + vec3(0.0, 1.0, 0.0));
+	float n110 = pu_hash3(i + vec3(1.0, 1.0, 0.0));
+	float n001 = pu_hash3(i + vec3(0.0, 0.0, 1.0));
+	float n101 = pu_hash3(i + vec3(1.0, 0.0, 1.0));
+	float n011 = pu_hash3(i + vec3(0.0, 1.0, 1.0));
+	float n111 = pu_hash3(i + vec3(1.0, 1.0, 1.0));
+	return mix(mix(mix(n000, n100, u.x), mix(n010, n110, u.x), u.y),
+			mix(mix(n001, n101, u.x), mix(n011, n111, u.x), u.y), u.z);
+}
+
 float pu_fbm(vec2 p) {
 	float v = 0.0;
 	float a = 0.5;

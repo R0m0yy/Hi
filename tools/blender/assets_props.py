@@ -546,6 +546,73 @@ def coral_tube(seed: int = 44) -> MeshBuilder:
 
 
 # ---------------------------------------------------------------------------
+# Beach debris: driftwood, shells, fallen coconuts
+# ---------------------------------------------------------------------------
+
+def driftwood(seed: int, length: float) -> MeshBuilder:
+    """Sun-bleached twisted log with a couple of broken branch stubs."""
+    mb = MeshBuilder()
+    r = rng(seed)
+    pts = []
+    for i in range(6):
+        t = i / 5
+        pts.append(Vector((-length / 2 + length * t, 0.12 + math.sin(t * math.pi) * 0.06,
+                           math.sin(t * 2.4 + seed) * 0.12)))
+    radii = [0.13 * (1.1 - 0.5 * t) * r.uniform(0.9, 1.1) for t in [i / 5 for i in range(6)]]
+    cols = [with_alpha(mix(C("driftwood"), C("driftwood_dark"), 0.3 * (i % 2)), 0.0) for i in range(6)]
+    tube(mb, pts, radii, 7, cols, "PU_Solid", cap_color=with_alpha(C("driftwood_dark"), 0.0), twist=0.2)
+    for k in range(2):
+        a = pts[2 + k * 2]
+        b = a + Vector((r.uniform(-0.2, 0.2), 0.25, (0.35 if k else -0.35)))
+        tube(mb, [a, b], [0.055, 0.03], 5, [with_alpha(C("driftwood"), 0.0)] * 2, "PU_Solid",
+             cap_color=with_alpha(C("driftwood_dark"), 0.0))
+    return mb
+
+
+def shell_conch(seed: int) -> MeshBuilder:
+    mb = MeshBuilder()
+    r = rng(seed)
+    pts, radii, cols = [], [], []
+    for i in range(9):  # tapering spiral
+        t = i / 8
+        ang = t * 4.5
+        rad = 0.11 * (1.0 - t) + 0.012
+        pts.append(Vector((math.cos(ang) * 0.04 * (1 - t), 0.05 + t * 0.09, math.sin(ang) * 0.04 * (1 - t) + t * 0.05)))
+        radii.append(rad)
+        cols.append(with_alpha(mix(C("shell"), C("shell_pink"), t), 0.0))
+    tube(mb, pts, radii, 7, cols, "PU_Solid", cap_color=with_alpha(C("shell_pink", 1.05), 0.0))
+    return mb
+
+
+def shell_scallop(seed: int) -> MeshBuilder:
+    mb = MeshBuilder()
+    c = mb.v((0.0, 0.02, -0.08))
+    ring = []
+    for i in range(11):
+        a = math.radians(-75 + 150 * i / 10)
+        rad = 0.15 * (1.0 if i % 2 == 0 else 0.93)
+        ring.append(mb.v((math.sin(a) * rad, 0.05 if i % 2 == 0 else 0.035, math.cos(a) * rad - 0.08)))
+    for i in range(10):
+        cc = with_alpha(mix(C("shell"), C("shell_pink"), 0.6 if i % 2 else 0.2), 0.0)
+        mb.face((c, ring[i + 1], ring[i]), cc, "PU_Solid", False)
+    pu.fix_winding(mb, 0, Vector((0, -1, 0)))
+    return mb
+
+
+def coconuts_fallen(seed: int) -> MeshBuilder:
+    mb = MeshBuilder()
+    r = rng(seed)
+    for k in range(3):
+        cpos = Vector((r.uniform(-0.35, 0.35), 0.13, r.uniform(-0.35, 0.35)))
+        rr = rng(seed * 7 + k)
+        pts = [cpos + Vector((rr.gauss(0, 1), rr.gauss(0, 1) * 0.85, rr.gauss(0, 1))).normalized() * rr.uniform(0.15, 0.18)
+               for _ in range(14)]
+        cc = C("coconut") if k != 1 else C("coconut_green")
+        mb.merge(pu.hull_from_points(pts, color_fn=lambda p, n, c=cc: with_alpha(c, 0.0), smooth=False))
+    return mb
+
+
+# ---------------------------------------------------------------------------
 
 def export_all(export_builders) -> list[str]:
     report = []
@@ -568,6 +635,9 @@ def export_all(export_builders) -> list[str]:
     }
     raft_mb, _ = raft()
     simple["raft"] = raft_mb
+    simple["driftwood_a"] = driftwood(5, 2.6)
+    simple["driftwood_b"] = driftwood(9, 1.7)
+    simple["coconuts_fallen"] = coconuts_fallen(3)
     report += export_builders(simple, "props", sharp=40.0)
     # Campfire: base + separate Flame object (animated in Godot).
     pu.reset_scene()
@@ -575,4 +645,10 @@ def export_all(export_builders) -> list[str]:
     objs = [base.to_object("campfire", sharp_angle_deg=40.0), flame.to_object("Flame")]
     pu.export_glb(objs, pu.MODELS / "props" / "campfire.glb")
     report.append(f"props/campfire.glb tris={pu.tri_count(objs)}")
+    # Shells: one GLB with variants for scatter along the tide line.
+    pu.reset_scene()
+    objs = [shell_conch(1).to_object("shell_0"), shell_scallop(2).to_object("shell_1"),
+            shell_conch(3).to_object("shell_2")]
+    pu.export_glb(objs, pu.MODELS / "props" / "shells.glb")
+    report.append(f"props/shells.glb variants=3 tris={pu.tri_count(objs)}")
     return report

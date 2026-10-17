@@ -31,7 +31,7 @@ func _process(_delta: float) -> bool:
 		var rock_hit := space.intersect_ray(PhysicsRayQueryParameters3D.create(Vector3(-8, 30, -10), Vector3(-8, -30, -10)))
 		_check(not rock_hit.is_empty() and rock_hit.position.y > 3.0, "rock stack has collision (top %.2f)" % (rock_hit.position.y if rock_hit else 0.0))
 		var scatter := island.find_children("*", "ScatterField", true, false)
-		_check(scatter.size() == 5, "5 scatter fields")
+		_check(scatter.size() == 11, "11 scatter fields")
 		var mmi := 0
 		for s in scatter:
 			mmi += s.get_child_count(true)

@@ -1,5 +1,25 @@
 # Changelog
 
+## v0.2.0: Environment refinement pass (2026-10-17)
+
+Direction approved by the user on v0.1. This pass works through their feedback.
+
+- **Camera:** narrow perspective (FOV 38°, pitch −40°, yaw 18°) measured from and A/B-tested
+  against Ref B; orthographic stays available (`fov_degrees = 0`); max zoom 110 for whole-island views.
+- **Rock stack:** rebuilt with chamfered lavender-grey slabs, bevel rims, pits, inlays and a basin;
+  baked vertex AO (`pu_common.bake_vertex_ao`); `PU_Rock` stone mottling; deeper boolean cave with a
+  boulder arch and dark floor; grass caps with planted tufts; Ref A-style vegetation around the base.
+- **Palms:** integrated-bend trunks (lean then recover); 7 variants + twin + trio; two-layer crowns; richer greens.
+- **Set dressing:** vignette-based layout (groves, shrub/flower/broadleaf corners, dune grass, coast rocks,
+  driftwood spots, tide-line shells); new bushes, agaves, banana plants, flowering shrubs, beach grass,
+  grass carpets, driftwood, shells, coconuts, rock clusters, boulder_d.
+- **Terrain:** fixed missing interior vertices (sampling level 2.6 m was absent, now guarded);
+  real interior dunes; camp-to-cave sandy trail; patch grass with mottling.
+- **Sand and lighting:** ripples, mottling, sparkles, darker grass-edge sand; sun moved to the east;
+  shadow opacity 0.72; warmer ambient.
+- **Water (kept):** glints fade at distance; deep floor plane hides the terrain edge.
+- Kenney GitHub starter-kit character evaluated (CC0) and rejected as off-style; other free sources still blocked.
+
 ## v0.1.0: Haven Island visual foundation (2026-10-17)
 
 ### Research

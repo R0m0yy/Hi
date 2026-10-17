@@ -15,5 +15,5 @@
 script = ExtResource("3_water")
 
 [node name="IsometricCamera" parent="." instance=ExtResource("4_cam")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 0.5, 23)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0.5, 21)
 zoom_size = 17.0

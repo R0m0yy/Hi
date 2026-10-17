@@ -50,8 +50,9 @@ engine under the default daylight rig (§4).
 | Jungle green (ferns, bushes) | `#4E9A4A`, dark `#2C6A3F` | B `#365402`, `#728230`; A `#3c6f5a` |
 | Palm frond | base `#74B85A`, tip `#C6E8A2`, underside `#2F6B48` | A `#d7eecb` → `#71a17b` → `#3c6f5a`; B `#365402` (deeper, more saturated) |
 | Palm trunk | `#A8674F`, ring highlight `#CF9378` | A coral `#d47a82` / `#b34d62`; B brown `#5c3606`. Blended to a warm terracotta-brown |
-| Rock, Haven (lavender-grey) | `#BBAAA8`, pit/crevice `#7E6C7C` | A `#d3bfb4`, `#a4918d`, `#846b7b`, `#5e5074` |
-| Rock, coastal boulder (warm grey-brown) | `#8C7366` | B `#856654`, `#4f3d37` |
+| Rock: all island and coastal rock (lavender-grey, **primary**, approved v0.2) | wall `#9C9099`, top `#D3C5C0`, bevel rim `#C7B8B6`, pit `#776A78`, inlay `#958794`, cave `#231C2E` | A `#d3bfb4`, `#a4918d`, `#846b7b`, `#5e5074` |
+| Rock shading | Baked vertex AO pulls crevices toward ×(0.50, 0.47, 0.60); PU_Rock adds world-space stone mottling | A's dark violet crevices |
+| ~~Rock, coastal boulder (warm grey-brown)~~ | ~~`#8C7366`~~, retired in v0.2 by user decision | B `#856654`, `#4f3d37` |
 | Pebbles | `#5E5468` | B `#443539`, `#705d59` |
 | Driftwood / raft logs | `#A8693F`, dark end-grain `#6B4021` | A raft `#b37260` / `#673542`; B raft `#9c6013`, `#6e4414` |
 | Planks / ladder | `#C98B5E` | A planks `#d6a08f`, `#b97064` |
@@ -79,9 +80,9 @@ scattered **white sun-glint flecks** on the open water.
 
 | Element | Setting |
 |---|---|
-| Sun | Warm `#FFE7C2`, energy ~1.3–1.6, elevation 50–60°, azimuth so shadows fall **down-left on screen** (B's palm shadows fall toward bottom-left) |
-| Shadows | On for sun. Soft (PCF 13 / blur ~1.5). Long readable palm shadows on sand are a signature of B. |
-| Ambient | Sky-sourced, cool lavender-blue `#A9B7E0`. Shadowed sand must read lavender like A, never grey or black. |
+| Sun | Warm `#FFE7C2`, energy ~1.75, elevation ~48°, from the **east (screen right)** of the gameplay camera: camera-facing walls get ~40% direct light (Ref A's lit rock fronts), shadows fall left and away from the play area |
+| Shadows | Soft (PCF, blur 1.8) and **not harsh**: `shadow_opacity` 0.72 so shadowed sand stays warm and readable (v0.2 feedback). No angular-size PCSS (it speckles without TAA). |
+| Ambient | Sky + colour `#B8B0EB` at 0.95. Shadowed sand must read lavender-warm like A, never grey or black. |
 | AO | SSAO on, soft (radius ~1.5 m, intensity ~1.2). Gives A's contact darkening under rocks and props. |
 | Tonemap | Filmic or ACES, exposure tuned so lit sand peaks near B's `#eec472` without clipping. |
 | Glow | Subtle, high threshold. Only foam, sun glints and fire bloom. |
@@ -92,10 +93,10 @@ scattered **white sun-glint flecks** on the open water.
 
 | Rule | Value |
 |---|---|
-| Projection | **Orthographic** |
-| Pitch | −48° to −55° (elevated three-quarter, between A's ~40° and B's ~55°) |
-| Yaw | 35–45° (diagonal, like A; shows both sides of rocks and props) |
-| Zoom | Orthographic size 18–60 m, default ~30 m (hero ≈ 4–6% of screen height, like B) |
+| Projection | **Narrow-angle perspective, FOV 38°** (v0.2). Measured from Ref B (campfire ring foreshortening ≈ 0.57, prop fronts larger than tops), Ref B is a gentle perspective. Orthographic stays available (`fov_degrees = 0`) and was A/B-tested in `docs/VISUAL_REVIEW_v0.2.md`. |
+| Pitch | −40° (Ref B ≈ 35–42° camera elevation) |
+| Yaw | 18° (props face the camera almost square-on, as in Ref B) |
+| Zoom | `zoom_size` = view height in metres at the focus: 9–110, default 17 (Ref B framing) |
 | Tracking | Critically damped follow (no overshoot), small look-ahead in the movement direction, never rotates on its own |
 | Optional diorama DOF | Very subtle far blur only (A's tilt-shift). Must never blur the gameplay area. |
 

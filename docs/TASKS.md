@@ -8,8 +8,8 @@ Legend: [x] done and verified · [~] partial · [ ] not started
 - [x] Check Superhive *Survival Island* pack → SIMILAR ALTERNATIVE (unverified)
 - [x] Check JustCreate3D *Stylized Tropical Island with Ruins* → NOT A MATCH for Ref A
 - [x] Write `REFERENCE_ASSET_INVESTIGATION.md`, `ASSET_MANIFEST.csv`
-- [ ] **User decision:** Polygon Hangar (probable Ref A source, licence unclear) / GGART-BCN pack purchase
-- [ ] **User decision:** widen network allow-list for CC0 sources (Quaternius / Kenney / Poly Pizza)
+- [x] User decision (v0.2): do **not** purchase Polygon Hangar / Superhive yet; keep investigating
+- [~] Free CC0 sources: Kenney GitHub kit evaluated (not suitable); Quaternius / Poly Pizza / kenney.nl still blocked
 
 ## Phase 1: Visual foundation
 - [x] `ART_BIBLE.md` with palette sampled from both references
@@ -22,6 +22,14 @@ Legend: [x] done and verified · [~] partial · [ ] not started
 - [x] Terrain collision from exported heightmap
 - [ ] Sunrise/sunset lighting variants
 - [ ] Underwater post-process (when diving, Phase 4)
+
+## v0.2 environment refinement (user feedback)
+- [x] Gameplay camera matched to Ref B (perspective FOV 38°, pitch −40°, yaw 18°), A/B-tested with captures
+- [x] Rock stack: sculpted slabs, baked AO, stone material, deeper cave, vegetation around it
+- [x] Palms: curved trunks, 9 variants incl. groves, richer leaves, composed placement
+- [x] Handcrafted vignettes, coastal details, terrain variation (dunes, trail, patch grass)
+- [x] Sand variation, softer shadows; water preserved
+- [x] Captures: island / beach / cave / water + reference comparisons
 
 ## Phase 2: Environment assets
 - [x] Palms ×5 variants (incl. twin), wind sway and flutter shader

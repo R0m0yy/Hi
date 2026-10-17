@@ -3,9 +3,9 @@ extends Node
 ##
 ## Usage (arguments after "--" are user args):
 ##   godot --path game [res://scene.tscn] -- --capture=/abs/out.png [--frames=40]
-##        [--view=x,y,z,size,yaw,pitch]
+##        [--view=x,y,z,size,yaw,pitch[,fov]]   (fov 0 = orthographic)
 ##   godot --path game -- --shots=/abs/shots.json
-## shots.json: [{"file": "/abs/a.png", "view": [x, y, z, size, yaw, pitch], "frames": 40}, ...]
+## shots.json: [{"file": "/abs/a.png", "view": [x, y, z, size, yaw, pitch, fov?], "frames": 40}, ...]
 ## The view is applied to the first node in group "camera_rig" (IsometricCamera).
 
 var _shots: Array = []
@@ -63,7 +63,8 @@ func _apply_view(view: Array) -> void:
 	if rig == null or view.size() < 6:
 		push_warning("[capture] no camera_rig found or bad view")
 		return
-	rig.set_view(Vector3(view[0], view[1], view[2]), view[3], view[4], view[5])
+	var fov: float = view[6] if view.size() > 6 else -1.0
+	rig.set_view(Vector3(view[0], view[1], view[2]), view[3], view[4], view[5], fov)
 
 
 static func _parse_args(raw: PackedStringArray) -> Dictionary:

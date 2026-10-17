@@ -6,6 +6,7 @@ extends RefCounted
 const BY_NAME := {
 	"PU_Solid": preload("res://materials/pu_solid.tres"),
 	"PU_Faceted": preload("res://materials/pu_faceted.tres"),
+	"PU_Rock": preload("res://materials/pu_rock.tres"),
 	"PU_Plant": preload("res://materials/pu_plant.tres"),
 	"PU_Foliage": preload("res://materials/pu_foliage.tres"),
 	"PU_Cloth": preload("res://materials/pu_cloth.tres"),

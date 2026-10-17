@@ -34,26 +34,28 @@ MODELS = GAME / "assets" / "models"
 PALETTE = {
     "sand": "#E9C48A",
     "sand_wet": "#C99D68",
-    "grass": "#86C46A",
-    "grass_light": "#CFE6A8",
-    "grass_dark": "#5E9E5A",
+    "grass": "#5FA552",
+    "grass_light": "#94C877",
+    "grass_dark": "#357A3E",
     "jungle": "#4E9A4A",
     "jungle_dark": "#2C6A3F",
-    "frond": "#4FA343",
-    "frond_tip": "#93CF62",
-    "frond_under": "#2A6142",
-    "frond_spine": "#7DBE57",
+    "frond": "#3F9A3C",
+    "frond_tip": "#86C85A",
+    "frond_under": "#235A3A",
+    "frond_spine": "#6DB24E",
     "trunk": "#A8674F",
     "trunk_ring": "#CF9378",
     "trunk_dark": "#7D4A3A",
     "coconut": "#6B5A2E",
     "coconut_green": "#7F8F3A",
-    "rock": "#C4B2A4",
-    "rock_light": "#D4C3B4",
-    "rock_pit": "#7E6C7C",
-    "rock_cave": "#3A3048",
+    "rock": "#9C9099",
+    "rock_light": "#D3C5C0",
+    "rock_pit": "#776A78",
+    "rock_cave": "#231C2E",
     "boulder": "#8C7366",
-    "pebble": "#4A4250",
+    "rock_inlay": "#958794",
+    "rock_rim": "#C7B8B6",
+    "pebble": "#4C4A5E",
     "wood": "#A8693F",
     "wood_dark": "#6B4021",
     "wood_end": "#D9A877",
@@ -79,6 +81,18 @@ PALETTE = {
     "coral_yellow": "#F2D46B",
     "coral_teal": "#5CC8B8",
     "seaweed": "#3F8F5A",
+    "agave": "#5DB65C",
+    "agave_dark": "#2E7B44",
+    "leaf_broad": "#4E9F47",
+    "flower_red": "#E8484E",
+    "flower_pink": "#F28AB2",
+    "flower_yellow": "#F6C744",
+    "beach_grass": "#A2BF63",
+    "beach_grass_tip": "#DCD69A",
+    "driftwood": "#C8B49C",
+    "driftwood_dark": "#8C7867",
+    "shell": "#F3DCCB",
+    "shell_pink": "#E9A496",
 }
 
 
@@ -313,6 +327,66 @@ def hull_from_points(points: Iterable[Vector], bevel: float = 0.0, bevel_segment
         mb.face(idx, cols, mat, smooth)
     bm.free()
     return mb
+
+
+def bake_vertex_ao(mb: MeshBuilder, rays: int = 24, max_dist: float = 2.5, strength: float = 0.7,
+                   ground_y: float | None = 0.0, tint: Sequence[float] = (0.5, 0.47, 0.6),
+                   start_face: int = 0, seed: int = 1) -> None:
+    """Bake ambient occlusion into the per-corner colours of faces >= start_face.
+
+    Rays are cosine-distributed around each vertex normal and tested against
+    the whole builder (plus an optional ground plane), so crevices between
+    blocks, overhangs and cave interiors darken. Occluded colour is pulled
+    toward `tint` x colour (lavender-violet, like Ref A's shadowed rock).
+    """
+    from mathutils.bvhtree import BVHTree
+
+    tris = []
+    for f in mb.faces:
+        for k in range(1, len(f) - 1):
+            tris.append((f[0], f[k], f[k + 1]))
+    bvh = BVHTree.FromPolygons([tuple(v) for v in mb.verts], tris, all_triangles=True)
+    normals = [Vector((0.0, 0.0, 0.0)) for _ in mb.verts]
+    for f in mb.faces[start_face:]:
+        p0, p1, p2 = mb.verts[f[0]], mb.verts[f[1]], mb.verts[f[2]]
+        n = (p1 - p0).cross(p2 - p0)  # area-weighted
+        for i in f:
+            normals[i] += n
+    r = random.Random(seed)
+    samples = []
+    for _ in range(rays):  # cosine-weighted hemisphere around +Y
+        u, v = r.random(), r.random()
+        rad, th = math.sqrt(u), math.tau * v
+        samples.append(Vector((rad * math.cos(th), math.sqrt(max(0.0, 1.0 - u)), rad * math.sin(th))))
+    ao = {}
+    up = Vector((0.0, 1.0, 0.0))
+    for f in mb.faces[start_face:]:
+        for i in f:
+            if i in ao or normals[i].length < 1e-9:
+                continue
+            n = normals[i].normalized()
+            rot = up.rotation_difference(n)
+            origin = mb.verts[i] + n * 0.03
+            occ = 0.0
+            for s in samples:
+                d = rot @ s
+                hit = bvh.ray_cast(origin, d, max_dist)
+                dist = hit[3] if hit[0] is not None else None
+                if ground_y is not None and d.y < -1e-4:
+                    tg = (ground_y - origin.y) / d.y
+                    if 0.0 < tg < max_dist and (dist is None or tg < dist):
+                        dist = tg
+                if dist is not None:
+                    occ += 1.0 - (dist / max_dist) ** 0.5 * 0.5
+            ao[i] = occ / rays
+    for fi in range(start_face, len(mb.faces)):
+        cols = []
+        for i, c in zip(mb.faces[fi], mb.face_cols[fi]):
+            k = min(1.0, ao.get(i, 0.0) * strength * 1.6)
+            dark = (c[0] * tint[0], c[1] * tint[1], c[2] * tint[2])
+            cols.append((c[0] + (dark[0] - c[0]) * k, c[1] + (dark[1] - c[1]) * k,
+                         c[2] + (dark[2] - c[2]) * k, c[3]))
+        mb.face_cols[fi] = cols
 
 
 def rng(seed: int) -> random.Random:
