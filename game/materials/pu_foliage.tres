@@ -1,0 +1,12 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://shaders/stylized_vc_foliage.gdshader" id="1"]
+
+[resource]
+shader = ExtResource("1")
+shader_parameter/sway_strength = 0.35
+shader_parameter/flutter_strength = 1.0
+shader_parameter/translucency = 0.12
+shader_parameter/backface_darken = 0.55
+shader_parameter/roughness_value = 0.7
+shader_parameter/specular_value = 0.35

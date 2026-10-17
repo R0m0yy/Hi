@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Environment" path="res://materials/daylight_environment.tres" id="1_env"]
+
+[node name="DaylightRig" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("1_env")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.91706, -0.314219, 0.245494, 0, 0.615662, 0.788011, -0.398749, 0.722653, -0.564599, 0, 30, 0)
+light_color = Color(1, 0.91, 0.78, 1)
+light_energy = 1.9
+shadow_enabled = true
+shadow_bias = 0.04
+shadow_normal_bias = 1.2
+shadow_blur = 1.8
+directional_shadow_mode = 2
+directional_shadow_split_1 = 0.12
+directional_shadow_split_2 = 0.3
+directional_shadow_split_3 = 0.6
+directional_shadow_blend_splits = true
+directional_shadow_max_distance = 140.0

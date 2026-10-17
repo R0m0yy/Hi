@@ -1,0 +1,19 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/world/daylight_rig.tscn" id="1_day"]
+[ext_resource type="PackedScene" path="res://scenes/world/haven_island.tscn" id="2_haven"]
+[ext_resource type="Script" path="res://scripts/world/water_system.gd" id="3_water"]
+[ext_resource type="PackedScene" path="res://scenes/camera/isometric_camera.tscn" id="4_cam"]
+
+[node name="Main" type="Node3D"]
+
+[node name="DaylightRig" parent="." instance=ExtResource("1_day")]
+
+[node name="HavenIsland" parent="." instance=ExtResource("2_haven")]
+
+[node name="Ocean" type="MeshInstance3D" parent="."]
+script = ExtResource("3_water")
+
+[node name="IsometricCamera" parent="." instance=ExtResource("4_cam")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 0.5, 23)
+zoom_size = 17.0

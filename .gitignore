@@ -1,0 +1,9 @@
+# Godot cache / imported data (regenerated on import)
+game/.godot/
+*.translation
+# Python
+__pycache__/
+*.pyc
+# OS / editor
+.DS_Store
+*.swp

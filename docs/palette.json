@@ -1,0 +1,754 @@
+{
+  "reference_A.jpg": {
+    "palm_canopy_front": [
+      {
+        "hex": "#89b6bb",
+        "share": 0.402
+      },
+      {
+        "hex": "#d7efcc",
+        "share": 0.179
+      },
+      {
+        "hex": "#3c6f5b",
+        "share": 0.154
+      },
+      {
+        "hex": "#aace9e",
+        "share": 0.145
+      },
+      {
+        "hex": "#72a27b",
+        "share": 0.121
+      }
+    ],
+    "palm_canopy_right": [
+      {
+        "hex": "#74a3aa",
+        "share": 0.443
+      },
+      {
+        "hex": "#d8efc8",
+        "share": 0.171
+      },
+      {
+        "hex": "#97bc8b",
+        "share": 0.153
+      },
+      {
+        "hex": "#bad9aa",
+        "share": 0.131
+      },
+      {
+        "hex": "#688d68",
+        "share": 0.102
+      }
+    ],
+    "palm_trunk": [
+      {
+        "hex": "#b44e63",
+        "share": 0.29
+      },
+      {
+        "hex": "#95b3a5",
+        "share": 0.232
+      },
+      {
+        "hex": "#e8dcd6",
+        "share": 0.206
+      },
+      {
+        "hex": "#d57a83",
+        "share": 0.193
+      },
+      {
+        "hex": "#5a8766",
+        "share": 0.079
+      }
+    ],
+    "palm_trunk_right": [
+      {
+        "hex": "#6d9ba2",
+        "share": 0.269
+      },
+      {
+        "hex": "#bf6473",
+        "share": 0.246
+      },
+      {
+        "hex": "#eaa1a3",
+        "share": 0.176
+      },
+      {
+        "hex": "#f2d7d1",
+        "share": 0.162
+      },
+      {
+        "hex": "#b3a3a4",
+        "share": 0.147
+      }
+    ],
+    "rock_main": [
+      {
+        "hex": "#5b4666",
+        "share": 0.413
+      },
+      {
+        "hex": "#7b5e77",
+        "share": 0.257
+      },
+      {
+        "hex": "#d6c9ba",
+        "share": 0.137
+      },
+      {
+        "hex": "#362b4e",
+        "share": 0.113
+      },
+      {
+        "hex": "#a4918e",
+        "share": 0.08
+      }
+    ],
+    "rock_left_slab": [
+      {
+        "hex": "#d4bfb5",
+        "share": 0.297
+      },
+      {
+        "hex": "#5f5174",
+        "share": 0.281
+      },
+      {
+        "hex": "#463c64",
+        "share": 0.166
+      },
+      {
+        "hex": "#856b7b",
+        "share": 0.13
+      },
+      {
+        "hex": "#a88f91",
+        "share": 0.127
+      }
+    ],
+    "grass_patches": [
+      {
+        "hex": "#a8be92",
+        "share": 0.257
+      },
+      {
+        "hex": "#5c5870",
+        "share": 0.25
+      },
+      {
+        "hex": "#363e58",
+        "share": 0.221
+      },
+      {
+        "hex": "#869079",
+        "share": 0.169
+      },
+      {
+        "hex": "#d7d3ba",
+        "share": 0.104
+      }
+    ],
+    "grass_top": [
+      {
+        "hex": "#d7ddc3",
+        "share": 0.271
+      },
+      {
+        "hex": "#98b992",
+        "share": 0.218
+      },
+      {
+        "hex": "#454e5f",
+        "share": 0.214
+      },
+      {
+        "hex": "#66856f",
+        "share": 0.161
+      },
+      {
+        "hex": "#846676",
+        "share": 0.135
+      }
+    ],
+    "sand_front": [
+      {
+        "hex": "#dcc7bf",
+        "share": 0.273
+      },
+      {
+        "hex": "#2a4a61",
+        "share": 0.23
+      },
+      {
+        "hex": "#bea5ab",
+        "share": 0.186
+      },
+      {
+        "hex": "#5d5081",
+        "share": 0.163
+      },
+      {
+        "hex": "#96798f",
+        "share": 0.148
+      }
+    ],
+    "sand_right": [
+      {
+        "hex": "#e2c9c1",
+        "share": 0.474
+      },
+      {
+        "hex": "#d4a393",
+        "share": 0.22
+      },
+      {
+        "hex": "#ad716e",
+        "share": 0.133
+      },
+      {
+        "hex": "#635963",
+        "share": 0.091
+      },
+      {
+        "hex": "#7ca9a1",
+        "share": 0.083
+      }
+    ],
+    "raft": [
+      {
+        "hex": "#b47261",
+        "share": 0.318
+      },
+      {
+        "hex": "#673543",
+        "share": 0.235
+      },
+      {
+        "hex": "#55978f",
+        "share": 0.218
+      },
+      {
+        "hex": "#284f6e",
+        "share": 0.116
+      },
+      {
+        "hex": "#d4b3ad",
+        "share": 0.112
+      }
+    ],
+    "ladder": [
+      {
+        "hex": "#543953",
+        "share": 0.374
+      },
+      {
+        "hex": "#734657",
+        "share": 0.336
+      },
+      {
+        "hex": "#332a49",
+        "share": 0.155
+      },
+      {
+        "hex": "#aa7b7b",
+        "share": 0.076
+      },
+      {
+        "hex": "#e0c5b7",
+        "share": 0.058
+      }
+    ],
+    "boat_ribs": [
+      {
+        "hex": "#e5c7bf",
+        "share": 0.385
+      },
+      {
+        "hex": "#7aaaa6",
+        "share": 0.218
+      },
+      {
+        "hex": "#b97165",
+        "share": 0.183
+      },
+      {
+        "hex": "#d6a08f",
+        "share": 0.175
+      },
+      {
+        "hex": "#7f5157",
+        "share": 0.038
+      }
+    ],
+    "campfire_stones": [
+      {
+        "hex": "#644356",
+        "share": 0.272
+      },
+      {
+        "hex": "#e2cdc4",
+        "share": 0.211
+      },
+      {
+        "hex": "#886b72",
+        "share": 0.192
+      },
+      {
+        "hex": "#ad9291",
+        "share": 0.171
+      },
+      {
+        "hex": "#37233e",
+        "share": 0.154
+      }
+    ],
+    "shelter_leaves": [
+      {
+        "hex": "#294350",
+        "share": 0.352
+      },
+      {
+        "hex": "#aeb797",
+        "share": 0.172
+      },
+      {
+        "hex": "#495755",
+        "share": 0.168
+      },
+      {
+        "hex": "#dccfbd",
+        "share": 0.158
+      },
+      {
+        "hex": "#71727a",
+        "share": 0.15
+      }
+    ],
+    "water_far": [
+      {
+        "hex": "#3f618e",
+        "share": 0.242
+      },
+      {
+        "hex": "#799cb2",
+        "share": 0.219
+      },
+      {
+        "hex": "#314982",
+        "share": 0.203
+      },
+      {
+        "hex": "#577da0",
+        "share": 0.181
+      },
+      {
+        "hex": "#9ec4c2",
+        "share": 0.154
+      }
+    ],
+    "water_mid_left": [
+      {
+        "hex": "#3e767e",
+        "share": 0.306
+      },
+      {
+        "hex": "#2f6778",
+        "share": 0.248
+      },
+      {
+        "hex": "#24586e",
+        "share": 0.23
+      },
+      {
+        "hex": "#4b8587",
+        "share": 0.213
+      },
+      {
+        "hex": "#d5bbb0",
+        "share": 0.004
+      }
+    ],
+    "water_near": [
+      {
+        "hex": "#1a6071",
+        "share": 0.332
+      },
+      {
+        "hex": "#266e7c",
+        "share": 0.285
+      },
+      {
+        "hex": "#145065",
+        "share": 0.256
+      },
+      {
+        "hex": "#367f89",
+        "share": 0.113
+      },
+      {
+        "hex": "#d2c1b6",
+        "share": 0.014
+      }
+    ]
+  },
+  "reference_B.jpg": {
+    "palm_canopy": [
+      {
+        "hex": "#e3ba6f",
+        "share": 0.404
+      },
+      {
+        "hex": "#365502",
+        "share": 0.31
+      },
+      {
+        "hex": "#543816",
+        "share": 0.12
+      },
+      {
+        "hex": "#728230",
+        "share": 0.083
+      },
+      {
+        "hex": "#d3e3b8",
+        "share": 0.083
+      }
+    ],
+    "palm_trunk": [
+      {
+        "hex": "#d6a765",
+        "share": 0.306
+      },
+      {
+        "hex": "#5c3706",
+        "share": 0.27
+      },
+      {
+        "hex": "#e4b76e",
+        "share": 0.252
+      },
+      {
+        "hex": "#48520e",
+        "share": 0.158
+      },
+      {
+        "hex": "#a48543",
+        "share": 0.014
+      }
+    ],
+    "grass": [
+      {
+        "hex": "#433802",
+        "share": 0.318
+      },
+      {
+        "hex": "#e7b86b",
+        "share": 0.21
+      },
+      {
+        "hex": "#505612",
+        "share": 0.189
+      },
+      {
+        "hex": "#ca9956",
+        "share": 0.16
+      },
+      {
+        "hex": "#647524",
+        "share": 0.123
+      }
+    ],
+    "sand": [
+      {
+        "hex": "#daab67",
+        "share": 0.4
+      },
+      {
+        "hex": "#e5b86d",
+        "share": 0.268
+      },
+      {
+        "hex": "#eec572",
+        "share": 0.192
+      },
+      {
+        "hex": "#c4945c",
+        "share": 0.101
+      },
+      {
+        "hex": "#564418",
+        "share": 0.039
+      }
+    ],
+    "pebbles": [
+      {
+        "hex": "#daaa66",
+        "share": 0.324
+      },
+      {
+        "hex": "#bf905c",
+        "share": 0.286
+      },
+      {
+        "hex": "#cc9c61",
+        "share": 0.224
+      },
+      {
+        "hex": "#705d59",
+        "share": 0.089
+      },
+      {
+        "hex": "#443639",
+        "share": 0.077
+      }
+    ],
+    "rock_big": [
+      {
+        "hex": "#503e38",
+        "share": 0.456
+      },
+      {
+        "hex": "#856654",
+        "share": 0.212
+      },
+      {
+        "hex": "#c0e6ca",
+        "share": 0.15
+      },
+      {
+        "hex": "#46bdc3",
+        "share": 0.137
+      },
+      {
+        "hex": "#cda26c",
+        "share": 0.045
+      }
+    ],
+    "rock_top_left": [
+      {
+        "hex": "#513f3e",
+        "share": 0.58
+      },
+      {
+        "hex": "#8a6b5a",
+        "share": 0.158
+      },
+      {
+        "hex": "#48320a",
+        "share": 0.118
+      },
+      {
+        "hex": "#d7a769",
+        "share": 0.116
+      },
+      {
+        "hex": "#6d5420",
+        "share": 0.029
+      }
+    ],
+    "raft": [
+      {
+        "hex": "#382206",
+        "share": 0.247
+      },
+      {
+        "hex": "#d9ae69",
+        "share": 0.216
+      },
+      {
+        "hex": "#9c6014",
+        "share": 0.203
+      },
+      {
+        "hex": "#6e4514",
+        "share": 0.182
+      },
+      {
+        "hex": "#8e6851",
+        "share": 0.152
+      }
+    ],
+    "sail": [
+      {
+        "hex": "#8e6959",
+        "share": 0.361
+      },
+      {
+        "hex": "#dcc276",
+        "share": 0.291
+      },
+      {
+        "hex": "#3e2504",
+        "share": 0.19
+      },
+      {
+        "hex": "#7c552c",
+        "share": 0.134
+      },
+      {
+        "hex": "#fdf6d4",
+        "share": 0.024
+      }
+    ],
+    "rowboat": [
+      {
+        "hex": "#4c2807",
+        "share": 0.308
+      },
+      {
+        "hex": "#2d1503",
+        "share": 0.304
+      },
+      {
+        "hex": "#724619",
+        "share": 0.192
+      },
+      {
+        "hex": "#cbcd9c",
+        "share": 0.133
+      },
+      {
+        "hex": "#9b8862",
+        "share": 0.063
+      }
+    ],
+    "chest": [
+      {
+        "hex": "#44260b",
+        "share": 0.419
+      },
+      {
+        "hex": "#4a3433",
+        "share": 0.276
+      },
+      {
+        "hex": "#be8753",
+        "share": 0.128
+      },
+      {
+        "hex": "#734619",
+        "share": 0.092
+      },
+      {
+        "hex": "#6c514a",
+        "share": 0.086
+      }
+    ],
+    "character": [
+      {
+        "hex": "#efc175",
+        "share": 0.418
+      },
+      {
+        "hex": "#dd9755",
+        "share": 0.272
+      },
+      {
+        "hex": "#b56530",
+        "share": 0.176
+      },
+      {
+        "hex": "#82391e",
+        "share": 0.067
+      },
+      {
+        "hex": "#4a1505",
+        "share": 0.067
+      }
+    ],
+    "foam_line": [
+      {
+        "hex": "#e6b86d",
+        "share": 0.44
+      },
+      {
+        "hex": "#eac673",
+        "share": 0.201
+      },
+      {
+        "hex": "#c4ae68",
+        "share": 0.181
+      },
+      {
+        "hex": "#fefcdc",
+        "share": 0.142
+      },
+      {
+        "hex": "#7f7457",
+        "share": 0.036
+      }
+    ],
+    "water_shallow": [
+      {
+        "hex": "#b3bb81",
+        "share": 0.33
+      },
+      {
+        "hex": "#c4b770",
+        "share": 0.306
+      },
+      {
+        "hex": "#a0b88e",
+        "share": 0.233
+      },
+      {
+        "hex": "#b6c999",
+        "share": 0.115
+      },
+      {
+        "hex": "#fcfbdb",
+        "share": 0.016
+      }
+    ],
+    "water_mid": [
+      {
+        "hex": "#b7c393",
+        "share": 0.31
+      },
+      {
+        "hex": "#a0cdb3",
+        "share": 0.221
+      },
+      {
+        "hex": "#c8dcb4",
+        "share": 0.185
+      },
+      {
+        "hex": "#c4c482",
+        "share": 0.159
+      },
+      {
+        "hex": "#e5f5d6",
+        "share": 0.126
+      }
+    ],
+    "water_deep": [
+      {
+        "hex": "#083b7a",
+        "share": 0.426
+      },
+      {
+        "hex": "#0c4993",
+        "share": 0.224
+      },
+      {
+        "hex": "#1059aa",
+        "share": 0.172
+      },
+      {
+        "hex": "#1773bb",
+        "share": 0.116
+      },
+      {
+        "hex": "#28a2c7",
+        "share": 0.062
+      }
+    ]
+  }
+}
