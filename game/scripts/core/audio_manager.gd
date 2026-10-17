@@ -1,0 +1,123 @@
+extends Node
+## Sound effects, ambience and music (autoload "AudioManager").
+## Effects live in res://assets/audio/sfx/<name>.wav, optionally with
+## variants <name>_1.wav, <name>_2.wav... picked at random. Missing sounds
+## are ignored so gameplay never depends on audio.
+
+const SFX_DIR := "res://assets/audio/sfx/"
+const LOOP_DIR := "res://assets/audio/loops/"
+const BUSES := ["Music", "SFX", "Ambience"]
+
+var _cache := {}
+var _pool3d: Array[AudioStreamPlayer3D] = []
+var _pool2d: Array[AudioStreamPlayer] = []
+var _loops := {}
+var _rng := RandomNumberGenerator.new()
+
+
+func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	for bus in BUSES:
+		if AudioServer.get_bus_index(bus) == -1:
+			AudioServer.add_bus()
+			var i := AudioServer.bus_count - 1
+			AudioServer.set_bus_name(i, bus)
+			AudioServer.set_bus_send(i, "Master")
+	for i in 16:
+		var p := AudioStreamPlayer3D.new()
+		p.bus = "SFX"
+		p.unit_size = 6.0
+		p.max_distance = 60.0
+		p.attenuation_filter_cutoff_hz = 12000.0
+		add_child(p)
+		_pool3d.append(p)
+	for i in 6:
+		var p := AudioStreamPlayer.new()
+		p.bus = "SFX"
+		add_child(p)
+		_pool2d.append(p)
+
+
+func _variants(name: String) -> Array:
+	if _cache.has(name):
+		return _cache[name]
+	var out := []
+	for path in [SFX_DIR + name + ".wav"]:
+		if ResourceLoader.exists(path):
+			out.append(load(path))
+	for i in range(1, 6):
+		var path := "%s%s_%d.wav" % [SFX_DIR, name, i]
+		if ResourceLoader.exists(path):
+			out.append(load(path))
+	_cache[name] = out
+	return out
+
+
+## Plays a one-shot. With a position it is spatial; otherwise it is UI-level.
+func play(name: String, pos = null, volume_db: float = 0.0, pitch_jitter: float = 0.08) -> void:
+	var vars := _variants(name)
+	if vars.is_empty():
+		return
+	var stream: AudioStream = vars[_rng.randi() % vars.size()]
+	var pitch := 1.0 + _rng.randf_range(-pitch_jitter, pitch_jitter)
+	if pos is Vector3:
+		var p := _free3d()
+		p.stream = stream
+		p.global_position = pos
+		p.volume_db = volume_db
+		p.pitch_scale = pitch
+		p.play()
+	else:
+		var p := _free2d()
+		p.stream = stream
+		p.volume_db = volume_db
+		p.pitch_scale = pitch
+		p.play()
+
+
+func _free3d() -> AudioStreamPlayer3D:
+	for p in _pool3d:
+		if not p.playing:
+			return p
+	return _pool3d[_rng.randi() % _pool3d.size()]
+
+
+func _free2d() -> AudioStreamPlayer:
+	for p in _pool2d:
+		if not p.playing:
+			return p
+	return _pool2d[0]
+
+
+## Starts (or retargets the volume of) a looping track by name.
+func set_loop(name: String, volume_db: float, bus: String = "Ambience", fade: float = 1.5) -> void:
+	var path := LOOP_DIR + name + ".ogg"
+	if not ResourceLoader.exists(path):
+		path = LOOP_DIR + name + ".wav"
+	if not ResourceLoader.exists(path):
+		return
+	var p: AudioStreamPlayer = _loops.get(name)
+	if p == null:
+		p = AudioStreamPlayer.new()
+		p.bus = bus
+		p.stream = load(path)
+		p.volume_db = -60.0
+		add_child(p)
+		_loops[name] = p
+		p.play()
+	var tw := create_tween()
+	tw.tween_property(p, "volume_db", volume_db, fade)
+
+
+func stop_loop(name: String, fade: float = 1.0) -> void:
+	var p: AudioStreamPlayer = _loops.get(name)
+	if p:
+		var tw := create_tween()
+		tw.tween_property(p, "volume_db", -60.0, fade)
+
+
+func set_bus_volume(bus: String, linear: float) -> void:
+	var i := AudioServer.get_bus_index(bus)
+	if i >= 0:
+		AudioServer.set_bus_volume_db(i, linear_to_db(maxf(linear, 0.0001)))
+		AudioServer.set_bus_mute(i, linear <= 0.001)

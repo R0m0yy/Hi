@@ -34,7 +34,9 @@ func _process(_delta: float) -> bool:
 		_check(scatter.size() == 11, "11 scatter fields")
 		var mmi := 0
 		for s in scatter:
-			mmi += s.get_child_count(true)
+			for c in s.get_children(true):
+				if c is MultiMeshInstance3D:
+					mmi += 1
 		_check(mmi > 0, "scatter built %d multimeshes" % mmi)
 	if water:
 		_check(absf(water.surface_height_at(Vector3(50, 0, 50))) < 0.2, "water surface near 0")

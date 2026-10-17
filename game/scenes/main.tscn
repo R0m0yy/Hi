@@ -1,5 +1,6 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
+[ext_resource type="Script" path="res://scripts/gameplay/game_world.gd" id="0_world"]
 [ext_resource type="PackedScene" path="res://scenes/world/daylight_rig.tscn" id="1_day"]
 [ext_resource type="PackedScene" path="res://scenes/world/haven_island.tscn" id="2_haven"]
 [ext_resource type="Script" path="res://scripts/world/water_system.gd" id="3_water"]
@@ -7,6 +8,7 @@
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="5_player"]
 
 [node name="Main" type="Node3D"]
+script = ExtResource("0_world")
 
 [node name="DaylightRig" parent="." instance=ExtResource("1_day")]
 

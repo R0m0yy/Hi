@@ -1,7 +1,11 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scripts/player/player_controller.gd" id="1_player"]
 [ext_resource type="PackedScene" path="res://assets/models/characters/castaway.glb" id="2_model"]
+[ext_resource type="Script" path="res://scripts/player/held_item.gd" id="3_held"]
+[ext_resource type="Script" path="res://scripts/player/fishing_rod.gd" id="4_rod"]
+[ext_resource type="Script" path="res://scripts/player/spear_attack.gd" id="5_spear"]
+[ext_resource type="Script" path="res://scripts/player/builder.gd" id="6_builder"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.28
@@ -16,3 +20,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
 shape = SubResource("CapsuleShape3D_body")
 
 [node name="Model" parent="." instance=ExtResource("2_model")]
+
+[node name="HeldItem" type="Node" parent="."]
+script = ExtResource("3_held")
+
+[node name="FishingRod" type="Node" parent="."]
+script = ExtResource("4_rod")
+
+[node name="SpearAttack" type="Node" parent="."]
+script = ExtResource("5_spear")
+
+[node name="Builder" type="Node" parent="."]
+script = ExtResource("6_builder")

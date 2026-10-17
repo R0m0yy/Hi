@@ -6,6 +6,10 @@ extends Node3D
 ## heightmap, and answers terrain queries for gameplay systems.
 
 @export var island_name := "Haven Island"
+## Id used for discovery objectives and saves.
+@export var island_id := "haven"
+## Reaching this distance from the island origin discovers it.
+@export var discover_radius := 60.0
 @export_file("*.json") var heightmap_json := "res://assets/terrain/haven_heightmap.json"
 ## Gentle terrain needs no self-shadowing, and casting from it causes
 ## acne-like blotches on the near-flat facets; props still shadow it.
@@ -42,4 +46,14 @@ func height_at(world_x: float, world_z: float) -> float:
 	if heightmap == null:
 		return 0.0
 	var local := to_local(Vector3(world_x, 0.0, world_z))
+	return heightmap.height_at(local.x, local.z) + global_position.y
+
+
+## Terrain height, or NAN outside this island's heightmap.
+func height_or_nan(world_x: float, world_z: float) -> float:
+	if heightmap == null:
+		return NAN
+	var local := to_local(Vector3(world_x, 0.0, world_z))
+	if not heightmap.contains(local.x, local.z):
+		return NAN
 	return heightmap.height_at(local.x, local.z) + global_position.y

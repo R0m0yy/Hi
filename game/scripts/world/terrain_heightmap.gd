@@ -30,6 +30,12 @@ static func load_from(json_path: String) -> TerrainHeightmap:
 	return hm
 
 
+## True when (x, z) in the heightmap's own space lies inside the sampled area.
+func contains(x: float, z: float) -> bool:
+	return x >= origin.x and z >= origin.y \
+			and x <= origin.x + (width - 1) * spacing and z <= origin.y + (depth - 1) * spacing
+
+
 ## Bilinear terrain height at world XZ.
 func height_at(x: float, z: float) -> float:
 	var fx := clampf((x - origin.x) / spacing, 0.0, width - 1.001)

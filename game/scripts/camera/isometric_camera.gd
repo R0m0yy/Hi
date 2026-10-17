@@ -77,6 +77,14 @@ func set_target(node: Node3D) -> void:
 	_target = node
 
 
+## Jumps straight to the target (after teleports and loading).
+func snap_to_target() -> void:
+	if _target:
+		_focus = _target.global_position
+		_size = zoom_size
+		_apply()
+
+
 func _apply() -> void:
 	global_position = _focus
 	rotation_degrees = Vector3(pitch_degrees, yaw_degrees, 0.0)

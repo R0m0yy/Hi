@@ -60,6 +60,11 @@ def build_character() -> list[str]:
     return assets_character.export_all()
 
 
+def build_items() -> list[str]:
+    import assets_items
+    return assets_items.export_all()
+
+
 GROUPS = {
     "palms": build_palms,
     "rocks": build_rocks,
@@ -67,6 +72,7 @@ GROUPS = {
     "foliage": build_foliage,
     "terrain": build_terrain,
     "character": build_character,
+    "items": build_items,
 }
 
 
