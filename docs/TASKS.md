@@ -32,8 +32,8 @@ Legend: [x] done and verified · [~] partial · [ ] not started
 - [x] Captures: island / beach / cave / water + reference comparisons
 
 ## Phase 2: Environment assets
-- [x] Palms ×5 variants (incl. twin), wind sway and flutter shader
-- [x] Rocks: 3 boulders, 6 pebbles, landmark rock stack (cave, ladder, grass caps)
+- [x] Palms: 7 variants plus twin and trio, wind sway and flutter shader
+- [x] Rocks: 4 boulders, 2 clusters, 6 pebbles, landmark rock stack (cave, ladder, grass caps)
 - [x] Props: campfire (flicker light + sparks), lean-to, chest, barrel, crate, log seat,
       drying rack, raft with sail, rowboat, wreck ribs, planks, starfish ×2
 - [x] Coral ×4 types, seaweed, grass tufts, ferns (MultiMesh scatter)

@@ -7,3 +7,5 @@ __pycache__/
 # OS / editor
 .DS_Store
 *.swp
+# Generated HTML package (tools/package/build_package.py)
+build/

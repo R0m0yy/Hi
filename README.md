@@ -24,6 +24,7 @@ docs/
 tools/
   blender/           bpy asset generators (palms, rocks, props, foliage, terrain, layout)
   palette/           reference colour sampler
+  package/           builds the HTML project package (build/package/)
   build_all.sh       rebuild assets -> Godot import -> Haven scene
 game/                the Godot project (open game/project.godot)
   assets/models/     generated GLBs (do not hand-edit; rebuild instead)
@@ -68,3 +69,14 @@ godot --path game -- --capture=/abs/out.png --view=26,0.5,21.5,18,18,-40,38   # 
 
 `--view` is `focus_x,focus_y,focus_z,view_size,yaw,pitch[,fov]` (fov 0 = orthographic). See
 `game/scripts/debug/screenshot_capture.gd` for batch captures.
+
+## Project package (HTML)
+
+```sh
+python3 tools/package/build_package.py   # writes build/package/ (gitignored)
+```
+
+Builds one HTML page with the captures, reference comparisons, research,
+art bible, asset manifest, roadmap and a three.js viewer for every generated
+GLB. The page's text lives in `tools/package/template.html`. The script fills
+in `docs/ASSET_MANIFEST.csv`, `docs/palette.json` and the model list.

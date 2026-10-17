@@ -1,0 +1,1494 @@
+<title>Paradise Untamed</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Project package for Paradise Untamed: Haven Island captures, the castaway character, every generated 3D asset, research, art bible and roadmap.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Figtree:ital,wght@0,400..700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a builder's logbook for one island. Wide capture bands, a 68ch reading column, a sticky section rail. */
+:root {
+  /* colour: lavender rock paper, deep-water ink, lagoon accent, golden sand highlight */
+  --paper: #F2EFF2;
+  --card: #FBFAFB;
+  --ink: #1A2233;
+  --muted: #5D5868;
+  --line: #DAD3D9;
+  --lagoon: #0D7584;
+  --lagoon-soft: #D3EEEB;
+  --sand: #E9C48A;
+  --sand-soft: #F5E6CB;
+  --sand-ink: #6A4914;
+  --rock: #9C9099;
+  --stage-top: #E6E1F2;
+  --stage-bottom: #F6EEE0;
+  --ok: #2D7649;
+  --ok-soft: #DAEEDF;
+  --warn: #8F5C0C;
+  --warn-soft: #F6E7CC;
+  --bad: #A23442;
+  --bad-soft: #F5DCDF;
+  --todo: #6A6573;
+  --todo-soft: #E6E2E7;
+  --swatch-edge: rgba(26, 34, 51, 0.14);
+  --scrim: rgba(6, 12, 22, 0.86);
+  --scrim-ink: #EEF2F6;
+  /* type */
+  --f-display: "Bricolage Grotesque", "Arial Narrow", "Helvetica Neue", system-ui, sans-serif;
+  --f-body: "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --t-xs: 0.8125rem;
+  --t-sm: 0.9375rem;
+  --t-md: 1.0625rem;
+  --t-lg: 1.3125rem;
+  --t-xl: clamp(1.9rem, 4.2vw, 2.75rem);
+  --t-hero: clamp(3.4rem, 13vw, 8.5rem);
+  --wrap: 74rem;
+  --measure: 68ch;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0A1524; --card: #0F1F34; --ink: #E5EAF0; --muted: #A59EAF; --line: #22344B;
+    --lagoon: #5AD2CC; --lagoon-soft: #0E3540; --sand: #E9C48A; --sand-soft: #3A2F1E; --sand-ink: #F0D3A2;
+    --rock: #B4A9B3; --stage-top: #1A2A46; --stage-bottom: #0E1A2C;
+    --ok: #74D39C; --ok-soft: #12321F; --warn: #F0BD62; --warn-soft: #3A2C12; --bad: #F2909B; --bad-soft: #3B1A21;
+    --todo: #A7A1B1; --todo-soft: #1C2A3D; --swatch-edge: rgba(229, 234, 240, 0.18);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0A1524; --card: #0F1F34; --ink: #E5EAF0; --muted: #A59EAF; --line: #22344B;
+  --lagoon: #5AD2CC; --lagoon-soft: #0E3540; --sand: #E9C48A; --sand-soft: #3A2F1E; --sand-ink: #F0D3A2;
+  --rock: #B4A9B3; --stage-top: #1A2A46; --stage-bottom: #0E1A2C;
+  --ok: #74D39C; --ok-soft: #12321F; --warn: #F0BD62; --warn-soft: #3A2C12; --bad: #F2909B; --bad-soft: #3B1A21;
+  --todo: #A7A1B1; --todo-soft: #1C2A3D; --swatch-edge: rgba(229, 234, 240, 0.18);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 4rem); }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 1rem/1.6 var(--f-body);
+  -webkit-font-smoothing: antialiased;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+  z-index: 30; background: var(--paper);
+}
+img { display: block; max-width: 100%; height: auto; }
+[hidden] { display: none !important; }
+a { color: var(--lagoon); text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--lagoon); outline-offset: 2px; border-radius: 3px; }
+code, kbd { font-family: var(--f-mono); font-size: 0.9em; }
+:not(pre) > code { overflow-wrap: anywhere; }
+p { margin: 0; }
+ul, ol { margin: 0; padding-left: 1.2em; }
+
+.wrap {
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.prose { max-width: var(--measure); display: grid; gap: 0.9rem; }
+.muted { color: var(--muted); }
+.mono { font-family: var(--f-mono); font-size: var(--t-xs); }
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* hero */
+.hero { padding-block: 3.5rem 2.5rem; }
+.hero-head { display: grid; gap: 1.1rem; }
+.eyebrow, .kicker {
+  font: 500 var(--t-xs)/1.3 var(--f-mono);
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--lagoon);
+}
+.hero h1 {
+  margin: 0;
+  font-family: var(--f-display);
+  font-size: var(--t-hero);
+  font-weight: 800;
+  font-stretch: 75%;
+  font-variation-settings: "wdth" 75, "opsz" 96;
+  line-height: 0.86;
+  letter-spacing: -0.015em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+.hero h1 .tail { color: var(--lagoon); }
+.lede { font-size: var(--t-lg); line-height: 1.45; max-width: 46ch; text-wrap: pretty; }
+.chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.hero-shot { margin: 2.25rem 0 0; display: grid; gap: 0.6rem; }
+.hero-shot .frame { border-radius: 10px; overflow: hidden; box-shadow: 0 18px 40px -24px rgba(11, 61, 126, 0.55); }
+
+/* nav */
+.topnav {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  background: var(--paper);
+  background: color-mix(in srgb, var(--paper) 90%, transparent);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-block: 1px solid var(--line);
+}
+.topnav .wrap { display: flex; align-items: center; gap: 1rem; min-width: 0; }
+.brand { font: 800 var(--t-sm)/1 var(--f-display); font-stretch: 75%; font-variation-settings: "wdth" 75; letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; color: var(--ink); text-decoration: none; }
+@media (max-width: 640px) { .brand { display: none; } }
+.navlist { display: flex; gap: 0.15rem; list-style: none; margin: 0; padding: 0; overflow-x: auto; scrollbar-width: thin; min-width: 0; }
+.navlist a {
+  display: block; padding: 0.85rem 0.6rem; white-space: nowrap;
+  font: 500 var(--t-sm)/1 var(--f-body); color: var(--muted); text-decoration: none;
+  border-bottom: 2px solid transparent;
+}
+.navlist a:hover { color: var(--ink); }
+.navlist a[aria-current="true"] { color: var(--ink); border-bottom-color: var(--lagoon); }
+
+/* sections */
+.sec { padding-block: 4.5rem; border-top: 1px solid var(--line); }
+.sec-head { display: grid; gap: 0.6rem; margin-bottom: 2rem; max-width: var(--measure); }
+.sec-head h2, h2 {
+  margin: 0; font-family: var(--f-display); font-size: var(--t-xl); font-weight: 750;
+  font-stretch: 85%; font-variation-settings: "wdth" 85, "opsz" 72;
+  line-height: 1.04; letter-spacing: -0.01em; text-wrap: balance;
+}
+h3 {
+  margin: 0; font-family: var(--f-display); font-size: var(--t-lg); font-weight: 700;
+  font-stretch: 90%; font-variation-settings: "wdth" 90, "opsz" 32; line-height: 1.2; text-wrap: balance;
+}
+h4 { margin: 0; font: 600 var(--t-xs)/1.3 var(--f-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.sec-lede { font-size: var(--t-md); color: var(--muted); text-wrap: pretty; }
+.stack { display: grid; gap: 2.5rem; }
+.split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem; align-items: start; }
+@media (max-width: 760px) { .split { grid-template-columns: minmax(0, 1fr); } }
+
+/* pills: shape and colour both carry state */
+.pill {
+  display: inline-flex; align-items: center; gap: 0.45em; white-space: nowrap;
+  font: 500 var(--t-xs)/1 var(--f-mono); padding: 0.4em 0.7em; border-radius: 999px;
+  background: var(--todo-soft); color: var(--todo);
+}
+.pill::before { content: ""; flex: none; width: 0.6em; height: 0.6em; border-radius: 50%; box-shadow: inset 0 0 0 1.5px currentColor; }
+.pill.ok { background: var(--ok-soft); color: var(--ok); }
+.pill.ok::before { background: currentColor; }
+.pill.warn { background: var(--warn-soft); color: var(--warn); }
+.pill.warn::before { background: linear-gradient(90deg, currentColor 50%, transparent 50%); }
+.pill.bad { background: var(--bad-soft); color: var(--bad); }
+.pill.bad::before { content: "✕"; width: auto; height: auto; border-radius: 0; box-shadow: none; font-size: 0.95em; line-height: 1; }
+.pill.info { background: var(--lagoon-soft); color: var(--lagoon); }
+.pill.info::before { border-radius: 1px; transform: rotate(45deg) scale(0.85); background: currentColor; box-shadow: none; }
+
+/* status board */
+.board { display: grid; border-top: 1px solid var(--line); }
+.board-row {
+  display: grid; grid-template-columns: minmax(0, 15rem) 11.5rem minmax(0, 1fr);
+  gap: 0.4rem 1.25rem; align-items: baseline; padding-block: 0.85rem; border-bottom: 1px solid var(--line);
+}
+.board-row .area { font-weight: 600; }
+.board-row .note { color: var(--muted); font-size: var(--t-sm); }
+@media (max-width: 760px) {
+  .board-row { grid-template-columns: minmax(0, 1fr) auto; }
+  .board-row .note { grid-column: 1 / -1; }
+}
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 1.25rem 2rem; margin: 0; }
+.facts div { display: grid; gap: 0.2rem; align-content: start; }
+.facts dt { font: 500 var(--t-xs)/1.3 var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.facts dd { margin: 0; font-size: var(--t-sm); }
+.facts dd strong { font-family: var(--f-display); font-size: var(--t-lg); font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* code */
+.code {
+  margin: 0; font: 400 var(--t-xs)/1.65 var(--f-mono);
+  background: var(--card); border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.9rem 1rem; overflow-x: auto; white-space: pre;
+}
+.code .okline { color: var(--ok); }
+.code .pass { color: var(--ok); font-weight: 600; }
+.cmd { display: flex; align-items: flex-start; gap: 0.5rem; min-width: 0; }
+.cmd .code { flex: 1; min-width: 0; padding-block: 0.65rem; }
+.btn {
+  font: 500 var(--t-xs)/1 var(--f-mono); letter-spacing: 0.04em;
+  padding: 0.55rem 0.8rem; border-radius: 6px; cursor: pointer;
+  border: 1px solid var(--line); background: var(--card); color: var(--ink);
+}
+.btn:hover { border-color: var(--lagoon); color: var(--lagoon); }
+.btn[aria-pressed="true"], .btn[aria-selected="true"] { background: var(--lagoon-soft); border-color: var(--lagoon); color: var(--lagoon); }
+.cmd .btn { margin-top: 0.3rem; }
+
+/* galleries */
+.shots { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.75rem 1.25rem; }
+.shots.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 900px) { .shots.three { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .shots, .shots.three { grid-template-columns: minmax(0, 1fr); } }
+figure { margin: 0; display: grid; gap: 0.55rem; align-content: start; min-width: 0; }
+figcaption { font-size: var(--t-sm); color: var(--muted); }
+figcaption b { color: var(--ink); font-weight: 600; }
+.zoom { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: 8px; overflow: hidden; }
+.zoom img { width: 100%; transition: transform 0.4s ease; }
+.zoom:hover img { transform: scale(1.015); }
+@media (prefers-reduced-motion: reduce) { .zoom img { transition: none; } .zoom:hover img { transform: none; } }
+.wide { grid-column: 1 / -1; }
+.label-3p { font: 500 var(--t-xs)/1.3 var(--f-mono); color: var(--warn); }
+
+/* character */
+.char-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 2rem; align-items: start; }
+@media (max-width: 860px) { .char-grid { grid-template-columns: minmax(0, 1fr); } }
+.spec { display: grid; gap: 0; margin: 0; border-top: 1px solid var(--line); }
+.spec div { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); gap: 1rem; padding-block: 0.6rem; border-bottom: 1px solid var(--line); }
+.spec dt { font: 500 var(--t-xs)/1.5 var(--f-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.spec dd { margin: 0; font-size: var(--t-sm); min-width: 0; }
+kbd { display: inline-block; padding: 0.1em 0.45em; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; background: var(--card); font-size: 0.82em; }
+
+/* compare */
+.tabs { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.25rem; }
+.notes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 2rem; margin-top: 1.25rem; }
+@media (max-width: 700px) { .notes { grid-template-columns: minmax(0, 1fr); } }
+.notes ul { display: grid; gap: 0.4rem; font-size: var(--t-sm); }
+
+/* viewer */
+.viewer { display: grid; grid-template-columns: minmax(0, 1fr) 17.5rem; gap: 1.25rem; align-items: start; }
+@media (max-width: 860px) { .viewer { grid-template-columns: minmax(0, 1fr); } }
+.stage {
+  position: relative; aspect-ratio: 4 / 3; max-width: 100%; border-radius: 10px; overflow: hidden;
+  background: linear-gradient(180deg, var(--stage-top), var(--stage-bottom));
+  border: 1px solid var(--line);
+}
+.stage canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; }
+.stage canvas:active { cursor: grabbing; }
+.stage-msg {
+  position: absolute; inset: auto 0.75rem 0.75rem; padding: 0.6rem 0.8rem; border-radius: 6px;
+  background: var(--card); border: 1px solid var(--line); font-size: var(--t-sm); color: var(--muted);
+}
+.stage-tools { position: absolute; top: 0.6rem; right: 0.6rem; display: flex; gap: 0.35rem; }
+.stage-tools .btn { background: var(--card); }
+.vinfo { display: grid; gap: 0.9rem; margin-top: 0.9rem; }
+.vtitle { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem 0.9rem; }
+.vtitle h3 { font-size: var(--t-lg); }
+.vstats { display: grid; grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr)); gap: 0.6rem 1rem; margin: 0; }
+.vstats div { display: grid; gap: 0.1rem; }
+.vstats dt { font: 500 var(--t-xs)/1.3 var(--f-mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.vstats dd { margin: 0; font: 600 var(--t-md)/1.3 var(--f-body); font-variant-numeric: tabular-nums; }
+.anims { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.picker {
+  display: grid; gap: 1rem; max-height: 41rem; overflow-y: auto; padding: 0.9rem;
+  border: 1px solid var(--line); border-radius: 10px; background: var(--card);
+}
+@media (max-width: 860px) { .picker { max-height: 22rem; } }
+.pgroup { display: grid; gap: 0.15rem; }
+.pgroup h4 { margin-bottom: 0.3rem; }
+.mbtn {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 0.6rem; width: 100%;
+  padding: 0.38rem 0.55rem; border: 0; border-radius: 5px; background: transparent; color: var(--ink);
+  font: 400 var(--t-sm)/1.3 var(--f-body); text-align: left; cursor: pointer;
+}
+.mbtn:hover { background: var(--paper); }
+.mbtn[aria-pressed="true"] { background: var(--lagoon-soft); color: var(--lagoon); font-weight: 600; }
+.mbtn .kb { font: 400 var(--t-xs)/1 var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* research */
+.refcards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; }
+@media (max-width: 860px) { .refcards { grid-template-columns: minmax(0, 1fr); } }
+.refcard { display: grid; gap: 1rem; align-content: start; min-width: 0; }
+.callout {
+  display: grid; gap: 0.5rem; padding: 1rem 1.15rem; border-radius: 8px;
+  background: var(--sand-soft); color: var(--ink); border: 1px solid var(--line);
+  max-width: var(--measure);
+}
+.callout h4 { color: var(--sand-ink); }
+.table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--card); }
+table { border-collapse: collapse; width: 100%; font-size: var(--t-sm); }
+th, td { padding: 0.65rem 0.8rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+th { font: 500 var(--t-xs)/1.3 var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+tbody tr:last-child td { border-bottom: 0; }
+td.path { font: 400 var(--t-xs)/1.5 var(--f-mono); color: var(--muted); }
+.sources { columns: 2 22rem; column-gap: 2rem; font-size: var(--t-sm); }
+.sources li { break-inside: avoid; margin-bottom: 0.4rem; }
+
+/* art bible */
+.swatch-groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1.75rem 2rem; }
+.swatches { display: grid; gap: 0.55rem; list-style: none; padding: 0; margin: 0.6rem 0 0; }
+.swatch { display: grid; grid-template-columns: 2.4rem minmax(0, 1fr); gap: 0.7rem; align-items: center; }
+.swatch .chip { width: 2.4rem; height: 2.4rem; border-radius: 7px; box-shadow: inset 0 0 0 1px var(--swatch-edge); }
+.swatch .nm { font-size: var(--t-sm); line-height: 1.25; }
+.swatch .hx { display: block; font: 400 var(--t-xs)/1.3 var(--f-mono); color: var(--muted); }
+.ramp-wrap { display: grid; gap: 0.4rem; }
+.ramp { display: flex; height: 3.25rem; border-radius: 8px; overflow: hidden; box-shadow: inset 0 0 0 1px var(--swatch-edge); }
+.ramp span { display: block; }
+.axis { position: relative; height: 2.2rem; font: 400 var(--t-xs)/1 var(--f-mono); color: var(--muted); }
+.axis span { position: absolute; top: 0; transform: translateX(-50%); padding-top: 0.55rem; white-space: nowrap; }
+.axis span::before { content: ""; position: absolute; top: 0; left: 50%; width: 1px; height: 0.4rem; background: var(--muted); }
+.axis span:first-child { transform: none; }
+.axis span:first-child::before { left: 0; }
+.axis span.end::before { left: auto; right: 0; }
+.ramp-legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: 0.6rem 1.25rem; list-style: none; padding: 0; margin: 0.5rem 0 0; font-size: var(--t-sm); }
+.ramp-legend li { display: grid; grid-template-columns: 1rem minmax(0, 1fr); gap: 0.55rem; align-items: start; }
+.ramp-legend i { width: 1rem; height: 1rem; border-radius: 3px; margin-top: 0.2rem; box-shadow: inset 0 0 0 1px var(--swatch-edge); }
+.clusters { display: grid; gap: 0.5rem; }
+.cl-row { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr) 4.6rem; gap: 0.75rem; align-items: center; font-size: var(--t-xs); }
+.cl-row .rn { color: var(--ink); }
+.cl-row .dom { font-family: var(--f-mono); color: var(--muted); }
+.cl-bar { display: flex; height: 1.1rem; border-radius: 4px; overflow: hidden; box-shadow: inset 0 0 0 1px var(--swatch-edge); }
+.cl-bar span { display: block; height: 100%; }
+@media (max-width: 480px) { .cl-row { grid-template-columns: 7rem minmax(0, 1fr); } .cl-row .dom { display: none; } }
+.checklist { list-style: none; padding: 0; display: grid; gap: 0.45rem; font-size: var(--t-sm); }
+.checklist li { display: grid; grid-template-columns: 1.2rem minmax(0, 1fr); gap: 0.5rem; }
+.checklist li::before { content: "☐"; color: var(--lagoon); }
+
+/* manifest */
+.toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; align-items: center; margin-bottom: 1rem; }
+.toolbar .filters { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.search { display: flex; align-items: center; gap: 0.5rem; margin-left: auto; }
+.search input {
+  font: 400 var(--t-sm)/1.2 var(--f-body); padding: 0.5rem 0.7rem; width: 15rem; max-width: 100%;
+  border: 1px solid var(--line); border-radius: 6px; background: var(--card); color: var(--ink);
+}
+@media (max-width: 640px) { .search { margin-left: 0; width: 100%; } .search input { flex: 1; width: auto; } }
+.count { font: 400 var(--t-xs)/1 var(--f-mono); color: var(--muted); margin-top: 0.6rem; }
+#manifest-table { min-width: 70rem; }
+#manifest-table td:first-child { font-weight: 600; min-width: 11rem; }
+#manifest-table td.kb { white-space: nowrap; }
+
+/* build */
+.steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 1.25rem; counter-reset: step; }
+.steps > li { display: grid; grid-template-columns: 2.4rem minmax(0, 1fr); gap: 0.9rem; counter-increment: step; }
+.steps > li::before {
+  content: counter(step); display: grid; place-items: center; width: 2.4rem; height: 2.4rem; border-radius: 50%;
+  font: 700 var(--t-md)/1 var(--f-display); background: var(--lagoon-soft); color: var(--lagoon);
+}
+.steps .body { display: grid; gap: 0.45rem; min-width: 0; }
+
+/* roadmap */
+.phases { display: grid; grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); gap: 1.25rem; }
+@media (max-width: 400px) { .phases { grid-template-columns: minmax(0, 1fr); } }
+.phase { display: grid; gap: 0.8rem; align-content: start; padding: 1.1rem 1.15rem; border: 1px solid var(--line); border-radius: 10px; background: var(--card); min-width: 0; }
+.phase-head { display: flex; justify-content: space-between; align-items: baseline; gap: 0.75rem; }
+.phase-head .tag { font: 500 var(--t-xs)/1 var(--f-mono); color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+.phase-head .frac { font: 500 var(--t-xs)/1 var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.prog { display: flex; height: 0.4rem; border-radius: 999px; overflow: hidden; background: var(--todo-soft); }
+.prog .d { background: var(--ok); }
+.prog .p { background: var(--warn); }
+.items { list-style: none; padding: 0; display: grid; gap: 0.4rem; font-size: var(--t-sm); }
+.items li { display: grid; grid-template-columns: 0.65rem minmax(0, 1fr); gap: 0.7rem; }
+.items li::before { content: ""; width: 0.65rem; height: 0.65rem; margin-top: 0.42em; border-radius: 50%; color: var(--todo); box-shadow: inset 0 0 0 1.5px currentColor; }
+.items li.x::before { color: var(--ok); background: currentColor; }
+.items li.p::before { color: var(--warn); background: linear-gradient(90deg, currentColor 50%, transparent 50%); }
+.items li.t { color: var(--muted); }
+
+/* changelog & decisions */
+.log { display: grid; gap: 2.25rem; }
+.release { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: 1.5rem; }
+@media (max-width: 700px) { .release { grid-template-columns: minmax(0, 1fr); gap: 0.75rem; } }
+.release ul { display: grid; gap: 0.45rem; font-size: var(--t-sm); max-width: var(--measure); }
+.release .ver { font: 800 var(--t-lg)/1 var(--f-display); font-stretch: 80%; font-variation-settings: "wdth" 80; }
+.decisions { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; }
+.decision { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.5rem 1.5rem; padding: 1.1rem 1.2rem; border: 1px solid var(--line); border-radius: 10px; background: var(--card); }
+.decision p { grid-column: 1 / -1; color: var(--muted); font-size: var(--t-sm); max-width: var(--measure); }
+@media (max-width: 560px) { .decision { grid-template-columns: minmax(0, 1fr); } }
+
+footer { padding-block: 3rem 4rem; border-top: 1px solid var(--line); color: var(--muted); font-size: var(--t-sm); }
+footer .wrap { display: grid; gap: 0.6rem; max-width: var(--wrap); }
+
+/* lightbox */
+dialog.lightbox { padding: 0; border: 0; background: transparent; max-width: min(96vw, 2240px); max-height: 94vh; overflow: visible; }
+dialog.lightbox::backdrop { background: var(--scrim); }
+dialog.lightbox figure { gap: 0.7rem; }
+dialog.lightbox img { max-height: 84vh; width: auto; max-width: 100%; margin-inline: auto; border-radius: 6px; }
+dialog.lightbox figcaption { color: var(--scrim-ink); text-align: center; }
+dialog.lightbox .lb-close { position: fixed; top: calc(env(safe-area-inset-top, 0px) + 0.75rem); right: calc(env(safe-area-inset-right, 0px) + 0.75rem); background: var(--card); }
+</style>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-head">
+      <p class="eyebrow">Haven Island · build v0.2 · 17 October 2026</p>
+      <h1>Paradise <span class="tail">Untamed</span></h1>
+      <p class="lede">A 2.5D tropical survival, fishing and spearfishing game in Godot 4.4. This page collects everything built so far: in-engine captures, the castaway, all 48 generated 3D models, the source research, the art bible and the plan.</p>
+      <div class="chips">
+        <span class="pill warn">Environment v0.2: awaiting your review</span>
+        <span class="pill ok">Castaway: 11 animations, controller tested</span>
+        <span class="pill ok">Tests: smoke 11/11, player 14/14</span>
+        <span class="pill">Fishing and survival systems: not started</span>
+      </div>
+    </div>
+    <figure class="hero-shot">
+      <button class="zoom frame" type="button" data-full="img/v0.2_beach.jpg" data-cap="Beach and camp at the default gameplay zoom. Godot 4.4 capture, v0.2.">
+        <img src="img/v0.2_beach.jpg" width="1600" height="900" alt="Haven Island beach and camp from the elevated three-quarter gameplay camera: golden sand, a campfire, palms, and turquoise shallows.">
+      </button>
+      <figcaption><b>Beach and camp, default zoom.</b> An unedited Godot 4.4 capture from the gameplay camera (perspective, FOV 38°, pitch −40°, yaw 18°). Every image of the game on this page is a real engine render.</figcaption>
+    </figure>
+  </div>
+</header>
+
+<nav class="topnav" aria-label="Sections">
+  <div class="wrap">
+    <a class="brand" href="#top">Paradise Untamed</a>
+    <ul class="navlist">
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#captures">Captures</a></li>
+      <li><a href="#character">Character</a></li>
+      <li><a href="#compare">Compare</a></li>
+      <li><a href="#models">3D models</a></li>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#art">Art bible</a></li>
+      <li><a href="#manifest">Manifest</a></li>
+      <li><a href="#build">Build</a></li>
+      <li><a href="#roadmap">Roadmap</a></li>
+      <li><a href="#changelog">Changelog</a></li>
+      <li><a href="#decisions">Decisions</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+<section class="sec" id="overview">
+  <div class="wrap stack">
+    <div class="sec-head">
+      <p class="kicker">Overview</p>
+      <h2>Where the project stands</h2>
+      <p class="sec-lede">Haven Island and the player character are built and tested. Gameplay systems (fishing, spearfishing, gathering, cooking) come next. They have animations but no code yet.</p>
+    </div>
+
+    <div class="board" role="list">
+      <div class="board-row" role="listitem"><span class="area">Reference research</span><span><span class="pill ok">Done</span></span><span class="note">Exact originals are not legally obtainable from here. Purchases are on hold, as you decided.</span></div>
+      <div class="board-row" role="listitem"><span class="area">Art bible and sampled palette</span><span><span class="pill ok">Done</span></span><span class="note">Colours sampled from both references by k-means, then checked in the engine.</span></div>
+      <div class="board-row" role="listitem"><span class="area">Engine foundation</span><span><span class="pill ok">Done</span></span><span class="note">Camera, daylight rig, water, terrain, set-dressing scatter, collision.</span></div>
+      <div class="board-row" role="listitem"><span class="area">Haven Island environment v0.2</span><span><span class="pill warn">Awaiting review</span></span><span class="note">Camera, rock stack, palms, set dressing, sand and lighting reworked from your notes. Water kept.</span></div>
+      <div class="board-row" role="listitem"><span class="area">Castaway and controller</span><span><span class="pill ok">Done, tested</span></span><span class="note">Walk, run, swim and dive work. The controller test passes 14 of 14 checks.</span></div>
+      <div class="board-row" role="listitem"><span class="area">Held tools, interaction prompts</span><span><span class="pill">Not started</span></span><span class="note">Rod, spear and machete will attach to the hand bone.</span></div>
+      <div class="board-row" role="listitem"><span class="area">Underwater: fog, fish, breath</span><span><span class="pill">Not started</span></span><span class="note">Diving movement already works.</span></div>
+      <div class="board-row" role="listitem"><span class="area">Fishing and spearfishing</span><span><span class="pill">Not started</span></span><span class="note">Cast, reel and throw animations are ready.</span></div>
+      <div class="board-row" role="listitem"><span class="area">Inventory, crafting, building, saving</span><span><span class="pill">Not started</span></span><span class="note">Gather, cook and chop animations are ready.</span></div>
+      <div class="board-row" role="listitem"><span class="area">Audio, real-GPU performance pass</span><span><span class="pill">Not started</span></span><span class="note">All renders so far ran on a software Vulkan device.</span></div>
+    </div>
+
+    <dl class="facts">
+      <div><dt>3D assets</dt><dd><strong>48</strong> GLB files, every one generated by Blender Python in the repo. No downloaded or AI-generated assets.</dd></div>
+      <div><dt>Code</dt><dd><strong class="tnum">3,152</strong> lines of Blender Python, <span class="tnum">1,066</span> lines of GDScript in 16 files, <span class="tnum">377</span> lines of shaders.</dd></div>
+      <div><dt>Haven Island</dt><dd><strong>110 m</strong> across, with 97 placed layout items and 11 scatter sets drawn as 37 multimeshes.</dd></div>
+      <div><dt>Castaway</dt><dd><strong>1.45 m</strong> tall, 17 bones, 11 animations, about 3.6k triangles.</dd></div>
+      <div><dt>Engine</dt><dd>Godot 4.4.1, Forward+ renderer, GDScript. Assets built with Blender 5.2.2 (bpy).</dd></div>
+      <div><dt>Repository</dt><dd><a href="https://github.com/R0m0yy/Hi/tree/@BRANCH@">R0m0yy/Hi</a>, branch <code>@BRANCH@</code>, 3 commits pushed.</dd></div>
+    </dl>
+
+    <div class="split">
+      <div class="stack" style="gap:0.7rem">
+        <h3>World test</h3>
+        <p class="muted" style="font-size:var(--t-sm)">Re-run for this package: <code>godot --headless --path game --script res://tools/smoke_test.gd</code></p>
+<pre class="code"><span class="okline">  [ok] island present
+  [ok] water present
+  [ok] heightmap loaded
+  [ok] camp ground above water (1.17)
+  [ok] open ocean is deep (-18.78)
+  [ok] terrain collision matches heightmap
+  [ok] rock stack has collision (top 6.74)
+  [ok] 11 scatter fields
+  [ok] scatter built 37 multimeshes
+  [ok] water surface near 0
+  [ok] campfire wrapper instanced</span>
+<span class="pass">smoke_test: PASS (0 failure(s))</span></pre>
+      </div>
+      <div class="stack" style="gap:0.7rem">
+        <h3>Player controller test</h3>
+        <p class="muted" style="font-size:var(--t-sm)">Drives the real main scene with simulated input: <code>res://tools/player_test.gd</code></p>
+<pre class="code"><span class="okline">  [ok] player lands on terrain (y=0.69)
+  [ok] idle animation at rest (idle)
+  [ok] walking moves the player (1.94 m)
+  [ok] walk animation while walking (walk)
+  [ok] run animation while sprinting (run)
+  [ok] entered swimming at x=39.5 z=22.5
+  [ok] swim animation in deep water (swim)
+  [ok] floats at chest depth (y=-1.04)
+  [ok] dive mode while holding dive
+  [ok] dives down (y=-3.19)
+  [ok] dive animation underwater (dive)
+  [ok] back to swimming after releasing dive
+  [ok] resurfaced (y=-1.02)
+  [ok] camera follows the player (0.00 m behind)</span>
+<span class="pass">player_test: PASS (0 failure(s))</span></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="captures">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="kicker">Captures</p>
+      <h2>Haven Island from the gameplay camera</h2>
+      <p class="sec-lede">The four views you asked for after the refinement pass. Each one is a Godot 4.4 Forward+ render from <code>screenshot_capture.gd</code>, using the same camera the game uses. Select an image to see it full size.</p>
+    </div>
+    <div class="shots">
+      <figure>
+        <button class="zoom" type="button" data-full="img/v0.2_island.jpg" data-cap="Complete island: gameplay camera, zoomed out.">
+          <img src="img/v0.2_island.jpg" width="1600" height="900" loading="lazy" alt="The whole of Haven Island ringed by turquoise shallows and a reef, with the rock stack inland.">
+        </button>
+        <figcaption><b>Complete island.</b> Same camera angle, zoomed out to show the reef ring, the lagoon and the rock stack inland.</figcaption>
+      </figure>
+      <figure>
+        <button class="zoom" type="button" data-full="img/v0.2_beach.jpg" data-cap="Beach and camp at the default zoom.">
+          <img src="img/v0.2_beach.jpg" width="1600" height="900" loading="lazy" alt="Beach camp with campfire, lean-to, chest, barrel and palms by the shore.">
+        </button>
+        <figcaption><b>Beach and camp.</b> Default zoom (17 m of view at the focus), matched to Ref B's framing.</figcaption>
+      </figure>
+      <figure>
+        <button class="zoom" type="button" data-full="img/v0.2_cave.jpg" data-cap="Rock stack and cave.">
+          <img src="img/v0.2_cave.jpg" width="1600" height="900" loading="lazy" alt="Lavender-grey stacked rock formation with a grass cap, a dark cave mouth and palms around its base.">
+        </button>
+        <figcaption><b>Rock stack and cave.</b> Lavender-grey slabs with baked occlusion, a two-chamber cave facing the camera, and a sandy trail leading in.</figcaption>
+      </figure>
+      <figure>
+        <button class="zoom" type="button" data-full="img/v0.2_water.jpg" data-cap="Water: lagoon, reef and drop-off.">
+          <img src="img/v0.2_water.jpg" width="1600" height="900" loading="lazy" alt="Clear turquoise lagoon over sand and coral, deepening to royal blue past the reef.">
+        </button>
+        <figcaption><b>Water.</b> The approved water system: lagoon, coral reef and the drop-off into deep blue.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="character">
+  <div class="wrap stack">
+    <div class="sec-head">
+      <p class="kicker">Character</p>
+      <h2>The castaway</h2>
+      <p class="sec-lede">An original character modelled on Ref B's protagonist, rigged and animated in Blender, then driven by a tested controller in Godot.</p>
+    </div>
+    <div class="char-grid">
+      <figure>
+        <button class="zoom" type="button" data-full="img/v0.2_player_closeup.jpg" data-cap="Castaway close-up.">
+          <img src="img/v0.2_player_closeup.jpg" width="1600" height="900" loading="lazy" alt="Close-up of the castaway: brown hair, yellow bandana, cream shirt, terracotta trousers, boots.">
+        </button>
+        <figcaption><b>Close-up.</b> Vertex-coloured, no textures, about 3.6k triangles.</figcaption>
+      </figure>
+      <div class="stack" style="gap:1.25rem">
+        <dl class="spec">
+          <div><dt>Height</dt><dd>About 1.45 m, with chibi proportions</dd></div>
+          <div><dt>Outfit</dt><dd>Messy brown hair, yellow bandana with a red stripe and knot tails, cream shirt with rolled sleeves, terracotta trousers with cuffs, belt, buckled boots</dd></div>
+          <div><dt>Rig</dt><dd>17-bone armature with rigid skinning. Overlapping joint spheres keep elbows and knees closed.</dd></div>
+          <div><dt>Animations</dt><dd>idle, walk, run, swim, dive, fish_cast, fish_reel, spear_throw, gather, cook, chop</dd></div>
+          <div><dt>Source</dt><dd><code>tools/blender/assets_character.py</code> → <code>castaway.glb</code></dd></div>
+        </dl>
+        <div><button class="btn" type="button" data-view="models/characters/castaway.glb">Open the castaway in the 3D viewer</button></div>
+      </div>
+    </div>
+
+    <div class="shots three">
+      <figure>
+        <button class="zoom" type="button" data-full="img/v0.2_player_camp.jpg" data-cap="Castaway at camp, gameplay camera.">
+          <img src="img/v0.2_player_camp.jpg" width="1600" height="900" loading="lazy" alt="The castaway standing by the campfire, seen from the gameplay camera.">
+        </button>
+        <figcaption><b>At camp.</b> Readable at the default zoom.</figcaption>
+      </figure>
+      <figure>
+        <button class="zoom" type="button" data-full="img/v0.2_player_swim.jpg" data-cap="Swimming in the shallows.">
+          <img src="img/v0.2_player_swim.jpg" width="1600" height="900" loading="lazy" alt="The castaway swimming in turquoise water near the beach.">
+        </button>
+        <figcaption><b>Swimming.</b> Switches to swimming automatically past 1 m of water.</figcaption>
+      </figure>
+      <figure>
+        <button class="zoom" type="button" data-full="img/v0.2_player_cave.jpg" data-cap="Walking the trail to the cave.">
+          <img src="img/v0.2_player_cave.jpg" width="1600" height="900" loading="lazy" alt="The castaway walking along the sandy trail toward the rock stack cave.">
+        </button>
+        <figcaption><b>On the trail.</b> Walking from camp toward the cave.</figcaption>
+      </figure>
+      <figure class="wide">
+        <button class="zoom" type="button" data-full="img/v0.2_player_animations.jpg" data-cap="All 11 animations, one frame each.">
+          <img src="img/v0.2_player_animations.jpg" width="1600" height="667" loading="lazy" alt="A labelled lineup of the castaway in 11 poses, one per animation.">
+        </button>
+        <figcaption><b>All 11 animations, one frame each.</b> The fishing, spear, gathering and cooking clips are ready for systems that don't exist yet.</figcaption>
+      </figure>
+    </div>
+
+    <div class="split">
+      <div class="stack" style="gap:0.9rem">
+        <h3>Controls</h3>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Input</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td><kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> or arrows</td><td>Move, relative to the camera</td></tr>
+              <tr><td><kbd>Shift</kbd></td><td>Run</td></tr>
+              <tr><td><kbd>Ctrl</kbd> or <kbd>C</kbd>, held in deep water</td><td>Dive; release to resurface</td></tr>
+              <tr><td>Mouse wheel, <kbd>+</kbd> <kbd>−</kbd></td><td>Zoom (9 to 110 m)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="stack" style="gap:0.9rem">
+        <h3>What the controller does</h3>
+        <ul style="display:grid;gap:0.45rem;font-size:var(--t-sm)">
+          <li>Walks and runs relative to the camera on the terrain's collision heightmap.</li>
+          <li>Starts swimming once the water is deeper than 1 m and floats chest-deep.</li>
+          <li>Dives while the dive key is held, keeping clear of the seabed, and resurfaces on release.</li>
+          <li>Crossfades animations and matches playback speed to movement speed.</li>
+          <li>The camera follows with damping and a small look-ahead. It never rotates on its own.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="compare">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="kicker">Compare</p>
+      <h2>Side by side with the references</h2>
+      <p class="sec-lede">Each pair puts one of your references next to the closest in-engine view. The references are third-party images you supplied. They appear here for comparison only and none of their content is in the game.</p>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Comparisons" id="compare-tabs"></div>
+    <div id="compare-panel" role="tabpanel"></div>
+  </div>
+</section>
+
+<section class="sec" id="models">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="kicker">3D models</p>
+      <h2>Every generated model, in 3D</h2>
+      <p class="sec-lede">These are the exact GLB files the game loads, shown in a browser preview with plain lighting and their vertex colours. In the game, Godot shaders add stone mottling, wind sway, caustics and the water. Drag to orbit, scroll or pinch to zoom.</p>
+    </div>
+    <div class="viewer">
+      <div>
+        <div class="stage" id="viewer-stage">
+          <canvas id="viewer-canvas" aria-label="3D model preview"></canvas>
+          <div class="stage-tools">
+            <button class="btn" type="button" id="v-gameplay">Gameplay angle</button>
+            <button class="btn" type="button" id="v-spin" aria-pressed="true">Spin</button>
+          </div>
+          <p class="stage-msg" id="viewer-msg">Loading the 3D viewer…</p>
+        </div>
+        <div class="vinfo">
+          <div class="vtitle"><h3 id="v-name">castaway</h3><span class="pill info" id="v-group">Character</span></div>
+          <dl class="vstats" id="v-stats"></dl>
+          <div class="anims" id="v-anims" role="group" aria-label="Animations"></div>
+        </div>
+      </div>
+      <div class="picker" id="v-picker" aria-label="Models"></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="research">
+  <div class="wrap stack">
+    <div class="sec-head">
+      <p class="kicker">Research</p>
+      <h2>Where the references come from</h2>
+      <p class="sec-lede">Phase 0 tried to find the original assets behind both references and whether they can be licensed. No candidate could be confirmed, because image search and the asset marketplaces are blocked from this environment. Every classification rests on text sources.</p>
+    </div>
+
+    <div class="callout">
+      <h4>Research limits</h4>
+      <p>Reverse image search (Google Lens, TinEye, Bing) was unavailable. Superhive, itch.io, Kenney, Quaternius, Poly Pizza, Sketchfab, BlenderKit, ambientCG, ArtStation and YouTube pages were refused by the network proxy. Server-side text search worked and supplied every finding below. Both reference files carry the same 138-byte EXIF block with no creator, software or copyright tags.</p>
+    </div>
+
+    <div class="refcards">
+      <article class="refcard">
+        <figure>
+          <button class="zoom" type="button" data-full="img/ref_a.jpg" data-cap="Reference A, supplied by you (third-party image, comparison only).">
+            <img src="img/ref_a.jpg" width="1600" height="1200" loading="lazy" alt="Reference A: a handcrafted Blender diorama of a small tropical island with a rock stack, cave, raft and shelter.">
+          </button>
+          <figcaption><span class="label-3p">Third-party reference, not project art</span></figcaption>
+        </figure>
+        <div class="vtitle"><h3>Reference A: island diorama</h3><span class="pill warn">Possible match, strong</span></div>
+        <dl class="spec">
+          <div><dt>Likely source</dt><dd>Polygon Runway, "Survival Island in Blender: 3D Modeling Process" (YouTube R3X3418gUsU). Their paid Polygon Hangar library lists a scene named "379-survival-island".</dd></div>
+          <div><dt>Evidence</dt><dd>Title and description match the subject and props. The channel's other diorama videos use the same title format. Pastel rocks, pink palm trunks, tilt-shift depth of field and 1600 × 1200 framing match their published style.</dd></div>
+          <div><dt>Kind of image</dt><dd>A Blender render of a handcrafted scene. Rope lashings, ladder rungs and the fire teepee are all consistent, so AI generation is unlikely.</dd></div>
+          <div><dt>Obtainable</dt><dd>Probably, as a .blend file in a paid membership. Price not visible.</dd></div>
+          <div><dt>Licence</dt><dd><span class="pill bad">Unknown</span> Use in a commercial game must be checked first.</dd></div>
+        </dl>
+      </article>
+      <article class="refcard">
+        <figure>
+          <button class="zoom" type="button" data-full="img/ref_b.jpg" data-cap="Reference B, supplied by you (third-party image, comparison only).">
+            <img src="img/ref_b.jpg" width="1600" height="1000" loading="lazy" alt="Reference B: a low-poly game screenshot of a child castaway by a campfire on a beach, with a raft and rowboat.">
+          </button>
+          <figcaption><span class="label-3p">Third-party reference, not project art</span></figcaption>
+        </figure>
+        <div class="vtitle"><h3>Reference B: playable beach</h3><span class="pill warn">Possible match, moderate</span></div>
+        <dl class="spec">
+          <div><dt>Likely source</dt><dd>Gameplay from <i>Stranded Sails: Explorers of the Cursed Islands</i> (Lemonbomb Entertainment, 2019).</dd></div>
+          <div><dt>Evidence</dt><dd>Reviews describe a low-poly adventure where the captain's child wakes on a debris-covered beach, builds a camp and travels by rowboat and raft, with characters more detailed than the smooth background.</dd></div>
+          <div><dt>Kind of image</dt><dd>A real-time game frame: cascade shadows, screen-space water with caustics, depth-based foam, 1920 × 1200.</dd></div>
+          <div><dt>Obtainable</dt><dd><span class="pill bad">No</span> Assets of a commercial game are proprietary. Extracting them would breach copyright, so it is used as a style target only.</dd></div>
+        </dl>
+      </article>
+    </div>
+
+    <div class="stack" style="gap:1rem">
+      <h3>Candidate packs and sources</h3>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Candidate</th><th>Classification</th><th>Price</th><th>Licence</th><th>State</th></tr></thead>
+          <tbody>
+            <tr><td><a href="https://polygonrunway.com/p/polygon-hangar">Polygon Runway, scene 379 "Survival Island"</a></td><td><span class="pill warn">Possible match, Ref A</span></td><td>Paid membership</td><td>Unknown</td><td>On hold by your decision</td></tr>
+            <tr><td><a href="https://superhivemarket.com/products/survival-island-low-poly-3d-asset-pack">GGART-BCN, Survival Island Low Poly pack</a></td><td><span class="pill info">Similar alternative, unverified</span></td><td class="tnum">US$20</td><td>Not shown; sibling packs are royalty-free</td><td>On hold by your decision</td></tr>
+            <tr><td><a href="https://justcreate3d.itch.io/stylized-tropical-island-with-ruins">JustCreate3D, Stylized Tropical Island with Ruins</a></td><td><span class="pill bad">Not a match</span></td><td class="tnum">US$15</td><td>Compiled projects only, no redistribution</td><td>Not pursued: ruins theme, style mismatch</td></tr>
+            <tr><td><a href="https://www.pcgamingwiki.com/wiki/Stranded_Sails_-_Explorers_of_the_Cursed_Islands">Stranded Sails (game)</a></td><td><span class="pill warn">Possible match, Ref B</span></td><td>n/a</td><td>Proprietary</td><td>Not obtainable</td></tr>
+            <tr><td><a href="https://github.com/KenneyNL/Starter-Kit-3D-Platformer">Kenney Starter Kit 3D Platformer</a></td><td><span class="pill bad">Not suitable</span></td><td>Free</td><td>CC0 models, MIT code</td><td>Evaluated: robot mascot, nothing tropical. Not imported.</td></tr>
+            <tr><td>Quaternius, Poly Pizza, kenney.nl</td><td><span class="pill">Not evaluated</span></td><td>Free</td><td>CC0 / CC-BY</td><td>Blocked by the network proxy</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="stack" style="gap:0.8rem">
+      <h3>Sources</h3>
+      <ul class="sources">
+        <li><a href="https://www.youtube.com/watch?v=R3X3418gUsU">Survival Island in Blender: 3D Modeling Process (YouTube)</a></li>
+        <li><a href="https://polygonrunway.com/p/polygon-hangar">Polygon Runway: Polygon Hangar</a></li>
+        <li><a href="https://www.classcentral.com/course/youtube-spooky-flying-island-in-blender-3d-modeling-process-polygon-runway-262261">Class Central: Spooky Flying Island in Blender (Polygon Runway)</a></li>
+        <li><a href="https://superhivemarket.com/products/survival-island-low-poly-3d-asset-pack">Superhive: Survival Island Low Poly 3D Asset Pack</a></li>
+        <li><a href="https://superhivemarket.com/creators/ggart3d">Superhive: GGART-BCN creator page</a></li>
+        <li><a href="https://superhivemarket.com/products/low-poly-swamp-environment-pack">Superhive: Low Poly Swamp pack (same creator, royalty-free)</a></li>
+        <li><a href="https://justcreate3d.itch.io/stylized-tropical-island-with-ruins">itch.io: Stylized Tropical Island with Ruins</a></li>
+        <li><a href="https://www.fab.com/listings/39476fa2-2e34-4978-9150-796588b32aab">Fab: Stylized Tropical Island (JustCreate)</a></li>
+        <li><a href="https://www.indiedb.com/games/stranded-sails-explorers-of-the-cursed-islands">IndieDB: Stranded Sails</a></li>
+        <li><a href="https://www.pcgamingwiki.com/wiki/Stranded_Sails_-_Explorers_of_the_Cursed_Islands">PCGamingWiki: Stranded Sails</a></li>
+        <li><a href="https://gamingtrend.com/feature/previews/what-do-you-do-with-a-shipwrecked-sailor-stranded-sails-preview-at-pax-west">Gaming Trend: Stranded Sails PAX West preview</a></li>
+        <li><a href="https://intoindiegames.com/pc/stranded-sails-explorers-of-the-cursed-islands-a-farming-sim-with-a-twist/">Into Indie Games: Stranded Sails review</a></li>
+        <li><a href="https://www.thesixthaxis.com/?p=345031">TheSixthAxis: Stranded Sails walkthrough</a></li>
+        <li><a href="https://sketchfab.com/3d-models/island-stylized-diorama-a4d750dc44ca419a92fd422b8cc1436a">Sketchfab: Island_Stylized_Diorama (Elkandar)</a></li>
+        <li><a href="https://www.blenderkit.com/asset-gallery-detail/0d524e66-c63d-4148-a65f-be832d70bfc9/">BlenderKit: Lowpoly Beach (Morgane DANO)</a></li>
+        <li><a href="https://github.com/KenneyNL/Starter-Kit-3D-Platformer">GitHub: KenneyNL/Starter-Kit-3D-Platformer</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="art">
+  <div class="wrap stack">
+    <div class="sec-head">
+      <p class="kicker">Art bible</p>
+      <h2>A sunlit, handcrafted miniature world</h2>
+      <p class="sec-lede">Islands read as sculpted dioramas, as in Ref A: soft sand slabs, chunky bevelled rock stacks, exaggerated curvy palms, props tied from driftwood and rope. Framing, colour temperature and water clarity come from Ref B: golden sand, crystal turquoise shallows, a cream foam line, deep blue past the reef, and a small readable hero.</p>
+    </div>
+
+    <div class="stack" style="gap:1rem">
+      <h3>Target albedo palette</h3>
+      <div class="swatch-groups" id="swatches"></div>
+    </div>
+
+    <div class="ramp-wrap">
+      <h3>Water colour by depth below the surface</h3>
+      <p class="muted" style="font-size:var(--t-sm);margin-bottom:0.6rem">Drawn to scale from 0 to 16 m. Water stays clear rather than milky, so the real seabed shows through down to about 3 m.</p>
+      <div class="ramp" id="ramp" role="img" aria-label="Water colour bands: mint to 0.4 m, turquoise to 2 m, lagoon teal to 5 m, ocean blue to 12 m, deep blue beyond."></div>
+      <div class="axis" id="ramp-axis"></div>
+      <ul class="ramp-legend" id="ramp-legend"></ul>
+    </div>
+
+    <div class="split">
+      <div class="stack" style="gap:0.9rem">
+        <h3>Lighting</h3>
+        <dl class="spec">
+          <div><dt>Sun</dt><dd>Warm <code>#FFE7C2</code>, energy about 1.75, about 48° high, from the east (screen right), so camera-facing walls are lit</dd></div>
+          <div><dt>Shadows</dt><dd>Soft PCF, shadow opacity 0.72, so shaded sand stays warm and readable</dd></div>
+          <div><dt>Ambient</dt><dd>Sky plus <code>#B8B0EB</code> at 0.95. Shade reads lavender, never grey or black.</dd></div>
+          <div><dt>Occlusion</dt><dd>SSAO, radius about 1.5 m, plus ambient occlusion baked into rock vertex colours</dd></div>
+          <div><dt>Tonemap, glow</dt><dd>Filmic tonemap. Glow only on foam, sun glints and fire.</dd></div>
+        </dl>
+      </div>
+      <div class="stack" style="gap:0.9rem">
+        <h3>Camera</h3>
+        <dl class="spec">
+          <div><dt>Projection</dt><dd>Narrow perspective, FOV 38°, measured from Ref B and chosen over three other candidates in an A/B test. Orthographic is one setting away.</dd></div>
+          <div><dt>Angle</dt><dd>Pitch −40°, yaw 18°, so props face the camera almost square-on</dd></div>
+          <div><dt>Zoom</dt><dd>9 to 110 m of view at the focus; 17 m by default</dd></div>
+          <div><dt>Tracking</dt><dd>Critically damped follow with a small look-ahead. Never rotates by itself.</dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="stack" style="gap:1rem">
+      <h3>Colours sampled from the references</h3>
+      <p class="muted" style="font-size:var(--t-sm);max-width:var(--measure)">K-means clusters for each object region, from <code>tools/palette/sample_palette.py</code>. Bar widths are each cluster's share of the region. The hex value is the largest cluster.</p>
+      <div class="split" id="clusters"></div>
+    </div>
+
+    <div class="split">
+      <div class="stack" style="gap:0.9rem">
+        <h3>Screenshot acceptance checklist</h3>
+        <ul class="checklist">
+          <li>Sand reads golden in sun and lavender in shadow.</li>
+          <li>The seabed shows through the shallows, with a clear turquoise-to-blue gradient.</li>
+          <li>A crisp, animated cream foam line follows the shore.</li>
+          <li>Palms are curved and chunky, in recognisable variants, with shadows on the sand.</li>
+          <li>Rocks are rounded, bevelled and lavender-grey, with grass caps where flat.</li>
+          <li>Props look handcrafted, with lashings and irregularity.</li>
+          <li>The hero is readable at the default zoom.</li>
+          <li>Nothing looks like a placeholder primitive.</li>
+        </ul>
+      </div>
+      <div class="stack" style="gap:0.9rem">
+        <h3>Not allowed</h3>
+        <ul style="display:grid;gap:0.45rem;font-size:var(--t-sm)">
+          <li>Pixel art, sprites, billboarded scenery or painted backgrounds.</li>
+          <li>Photoreal scanned textures, realistic humans, military gear.</li>
+          <li>Mixed packs that break the palette or the facet rules.</li>
+          <li>Pure white foam, pure black shadows, grey untextured materials.</li>
+          <li>Primitive boxes and spheres left as final art.</li>
+          <li>AI-generated images used as assets or shown as gameplay.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="manifest">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="kicker">Manifest</p>
+      <h2>Asset manifest</h2>
+      <p class="sec-lede">Every asset in the project, with its origin, licence and review state, read from <code>docs/ASSET_MANIFEST.csv</code>. All game assets are project-owned originals. The bottom rows are outside packs that were researched but not acquired.</p>
+    </div>
+    <div class="toolbar">
+      <div class="filters" id="manifest-filters" role="group" aria-label="Filter by category"></div>
+      <div class="search">
+        <label for="manifest-q" class="mono muted">Search</label>
+        <input id="manifest-q" type="search" placeholder="palm, rock, licence…" autocomplete="off">
+      </div>
+    </div>
+    <div class="table-scroll">
+      <table id="manifest-table">
+        <thead><tr><th>Asset</th><th>3D</th><th>Category</th><th>Review state</th><th>Format</th><th>Size</th><th>Licence</th><th>Path or link</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="count" id="manifest-count"></p>
+  </div>
+</section>
+
+<section class="sec" id="build">
+  <div class="wrap stack">
+    <div class="sec-head">
+      <p class="kicker">Build</p>
+      <h2>How the game is made and checked</h2>
+      <p class="sec-lede">Every model is generated by a script, so any asset can be rebuilt from source. Rebuilds are byte-identical: face order is canonicalised before export.</p>
+    </div>
+    <ol class="steps">
+      <li><div class="body"><h3>Generate the assets in Blender</h3><p class="muted" style="font-size:var(--t-sm)">Python generators in <code>tools/blender/</code> build palms, rocks, props, foliage, the terrain and the castaway, bake ambient occlusion into vertex colours, and export GLB files. Material names choose the Godot shader.</p></div></li>
+      <li><div class="body"><h3>Design the island</h3><p class="muted" style="font-size:var(--t-sm)">The island shape is a signed distance field. The terrain step writes a faceted mesh, a 261 × 261 collision heightmap and <code>haven_layout.json</code> with hand-composed vignettes.</p></div></li>
+      <li><div class="body"><h3>Import into Godot and assemble the scene</h3><p class="muted" style="font-size:var(--t-sm)">A headless import, then <code>tools/build_haven_scene.gd</code> writes <code>scenes/world/haven_island.tscn</code> from the layout.</p>
+        <div class="cmd"><pre class="code"><code>tools/build_all.sh               # all groups
+tools/build_all.sh palms rocks   # palms rocks props foliage terrain character</code></pre><button class="btn copy" type="button">Copy</button></div></div></li>
+      <li><div class="body"><h3>Validate</h3><p class="muted" style="font-size:var(--t-sm)">World checks, the controller test with simulated input, and screenshots from the real renderer.</p>
+        <div class="cmd"><pre class="code"><code>godot --headless --path game --script res://tools/smoke_test.gd
+godot --headless --path game --script res://tools/player_test.gd
+godot --path game -- --capture=/abs/out.png --view=26,0.5,21.5,18,18,-40,38</code></pre><button class="btn copy" type="button">Copy</button></div>
+        <p class="muted" style="font-size:var(--t-xs)"><code>--view</code> is focus x, y, z, view size, yaw, pitch and an optional FOV (0 for orthographic).</p></div></li>
+      <li><div class="body"><h3>Package this page</h3>
+        <div class="cmd"><pre class="code"><code>python3 tools/package/build_package.py</code></pre><button class="btn copy" type="button">Copy</button></div></div></li>
+    </ol>
+
+    <div class="split">
+      <div class="stack" style="gap:0.9rem">
+        <h3>Repository layout</h3>
+<pre class="code">references/          the two visual references
+docs/                research, art bible, manifest, tasks,
+                     toolchain, reviews, screenshots/
+tools/
+  blender/           bpy asset generators and island layout
+  palette/           reference colour sampler
+  package/           builds this page
+  build_all.sh       assets → Godot import → Haven scene
+game/                the Godot project (project.godot)
+  assets/models/     generated GLBs (rebuild, don't edit)
+  assets/terrain/    heightmap + set-dressing layout
+  shaders/           water, terrain, stylised vertex colour
+  materials/         shader materials, daylight environment
+  scenes/            main, world, player, camera, props
+  scripts/           camera, world, player, props, debug
+  tools/             scene builder, smoke and player tests</pre>
+      </div>
+      <div class="stack" style="gap:0.9rem">
+        <h3>Toolchain</h3>
+        <dl class="spec">
+          <div><dt>Godot</dt><dd>4.4.1 stable from the Ubuntu archive. The official download was blocked here.</dd></div>
+          <div><dt>Blender</dt><dd>5.2.2 as the <code>bpy</code> Python module (PyPI wheel, Python 3.13)</dd></div>
+          <div><dt>Renderer</dt><dd>Vulkan through Mesa llvmpipe under Xvfb. There is no GPU in this environment, so frames take 10 to 20 s, but they are genuine engine renders.</dd></div>
+          <div><dt>On your machine</dt><dd>Install Godot 4.4 or newer, open <code>game/project.godot</code> and press Play.</dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="roadmap">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="kicker">Roadmap</p>
+      <h2>Task list by phase</h2>
+      <p class="sec-lede">From <code>docs/TASKS.md</code>. A filled dot is done and verified, a half dot is partial, an empty dot is not started.</p>
+    </div>
+    <div class="phases" id="phases"></div>
+  </div>
+</section>
+
+<section class="sec" id="changelog">
+  <div class="wrap stack">
+    <div class="sec-head">
+      <p class="kicker">Changelog</p>
+      <h2>What changed in each build</h2>
+    </div>
+    <div class="log">
+      <div class="release">
+        <div><p class="ver">v0.2.0</p><p class="mono muted">Environment refinement</p></div>
+        <ul>
+          <li><b>Camera:</b> narrow perspective (FOV 38°, pitch −40°, yaw 18°) measured from Ref B and A/B-tested; orthographic still available; zoom out to 110 m for whole-island views.</li>
+          <li><b>Rock stack:</b> rebuilt with chamfered lavender-grey slabs, bevel rims, pits, inlays and a basin; baked vertex AO; stone mottling material; a deeper cave with a boulder arch and dark floor; grass caps with planted tufts; Ref A-style vegetation around the base.</li>
+          <li><b>Palms:</b> trunks lean out and recover toward vertical; 7 variants plus twin and trio; two-layer crowns; richer greens.</li>
+          <li><b>Set dressing:</b> designed vignettes (groves, shrub, flower and broadleaf corners, dune grass, coastal rocks, driftwood, tide-line shells) with new bushes, agaves, banana plants, flowering shrubs, beach grass, driftwood, shells, coconuts and rock clusters.</li>
+          <li><b>Terrain:</b> fixed a bug that left the interior with no vertices; real dunes, a camp-to-cave trail, grass in patches.</li>
+          <li><b>Sand and lighting:</b> ripples, mottling and sparkles; sun moved to the east; shadow opacity 0.72; warmer ambient.</li>
+          <li><b>Water:</b> kept as approved. Glints fade at distance, and a deep floor plane hides the terrain edge.</li>
+          <li><b>Castaway:</b> original character with a 17-bone rig and 11 animations; PlayerController passes 14 of 14 checks.</li>
+          <li><b>Reproducible builds:</b> every asset is now byte-identical across rebuilds.</li>
+        </ul>
+      </div>
+      <div class="release">
+        <div><p class="ver">v0.1.0</p><p class="mono muted">Visual foundation</p></div>
+        <ul>
+          <li><b>Research:</b> reference forensics and origin research; art bible with a k-means palette.</li>
+          <li><b>Engine:</b> Godot 4.4 Forward+ project with shader globals; three-quarter camera; daylight rig with SSAO, glow and filmic tonemap.</li>
+          <li><b>Water:</b> depth colour ramp, seabed refraction, shoreline foam, travelling wave lines, sun glints, gentle swell.</li>
+          <li><b>Terrain and props:</b> faceted sand, wet band, grass, caustics; island manager, water system, scatter, campfire with flicker light and sparks.</li>
+          <li><b>Assets:</b> Haven Island terrain and heightmap; palms, boulders, pebbles, the rock stack, 16 props, 4 corals, grass, ferns and seaweed.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="stack" style="gap:1rem">
+      <h3>v0.1 captures, for reference</h3>
+      <div class="shots three">
+        <figure><button class="zoom" type="button" data-full="img/v0.1_gameplay_camp.jpg" data-cap="v0.1: gameplay camp (orthographic camera)."><img src="img/v0.1_gameplay_camp.jpg" width="1600" height="900" loading="lazy" alt="v0.1 camp view with the earlier orthographic camera."></button><figcaption>Camp, v0.1 orthographic camera</figcaption></figure>
+        <figure><button class="zoom" type="button" data-full="img/v0.1_diorama_rockstack.jpg" data-cap="v0.1: rock stack diorama view."><img src="img/v0.1_diorama_rockstack.jpg" width="1600" height="900" loading="lazy" alt="v0.1 rock stack seen as a diorama."></button><figcaption>Rock stack, v0.1</figcaption></figure>
+        <figure><button class="zoom" type="button" data-full="img/v0.1_lagoon_reef.jpg" data-cap="v0.1: lagoon and reef."><img src="img/v0.1_lagoon_reef.jpg" width="1600" height="900" loading="lazy" alt="v0.1 lagoon and reef water."></button><figcaption>Lagoon and reef, v0.1</figcaption></figure>
+        <figure><button class="zoom" type="button" data-full="img/v0.1_overview.jpg" data-cap="v0.1: island overview."><img src="img/v0.1_overview.jpg" width="1600" height="900" loading="lazy" alt="v0.1 overview of the island."></button><figcaption>Overview, v0.1</figcaption></figure>
+        <figure><button class="zoom" type="button" data-full="img/compare_refA_vs_rockstack.jpg" data-cap="v0.1 comparison: Ref A against the rock stack."><img src="img/compare_refA_vs_rockstack.jpg" width="2038" height="700" loading="lazy" alt="v0.1 comparison of Reference A and the rock stack."></button><figcaption>v0.1 against Ref A</figcaption></figure>
+        <figure><button class="zoom" type="button" data-full="img/compare_refB_vs_gameplay.jpg" data-cap="v0.1 comparison: Ref B against the gameplay view."><img src="img/compare_refB_vs_gameplay.jpg" width="2209" height="700" loading="lazy" alt="v0.1 comparison of Reference B and the gameplay view."></button><figcaption>v0.1 against Ref B</figcaption></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="decisions">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="kicker">Decisions</p>
+      <h2>What I need from you</h2>
+      <p class="sec-lede">Nothing below blocks the next build step except the first item.</p>
+    </div>
+    <ul class="decisions">
+      <li class="decision"><h3>Review v0.2 and the castaway</h3><span class="pill warn">Waiting on you</span><p>Approve the environment pass and the character, or tell me what still needs to change. The captures, comparisons and 3D viewer above cover everything.</p></li>
+      <li class="decision"><h3>Choose the next phase</h3><span class="pill info">Proposal</span><p>I suggest underwater first (colour grade, breath meter, three animated fish species), then the fishing and spearfishing systems that use them. Rod and spear would attach to the castaway's hand as part of fishing.</p></li>
+      <li class="decision"><h3>Polygon Hangar membership (probable Ref A source)</h3><span class="pill">On hold</span><p>You asked me not to buy it yet. Its licence for use in a commercial game is still unknown.</p></li>
+      <li class="decision"><h3>GGART-BCN Survival Island pack, US$20</h3><span class="pill">On hold</span><p>Same kind of props as Ref B, but its licence isn't shown in search results. You asked me not to buy it yet.</p></li>
+      <li class="decision"><h3>Network allow-list, optional</h3><span class="pill">Optional</span><p>Allowing quaternius.com, kenney.nl and poly.pizza in this environment's network settings would let me evaluate their free CC0 animated fish and characters.</p></li>
+    </ul>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Built on 17 October 2026 from branch <code>@BRANCH@</code> at commit <code>@COMMIT@</code> by <code>tools/package/build_package.py</code>.</p>
+    <p>Every game image is an unedited Godot capture rendered on a software Vulkan device. No image on this page is AI-generated. The two references are third-party images, used only for comparison.</p>
+  </div>
+</footer>
+
+<dialog class="lightbox" id="lightbox" aria-label="Full-size image">
+  <button class="btn lb-close" type="button">Close</button>
+  <figure>
+    <img id="lb-img" src="data:," alt="">
+    <figcaption id="lb-cap"></figcaption>
+  </figure>
+</dialog>
+
+<script>
+window.PU_MANIFEST = /*@MANIFEST@*/[];
+window.PU_MODELS = /*@MODELS@*/[];
+window.PU_PALETTE = /*@PALETTE@*/{};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function () {
+  "use strict";
+  const $ = (s, el) => (el || document).querySelector(s);
+  const h = (tag, attrs, ...kids) => {
+    const el = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs || {})) {
+      if (v == null || v === false) continue;
+      if (k === "class") el.className = v;
+      else if (k === "text") el.textContent = v;
+      else if (k === "style") el.style.cssText = v;
+      else el.setAttribute(k, v === true ? "" : v);
+    }
+    for (const kid of kids.flat()) if (kid != null) el.append(kid);
+    return el;
+  };
+  const safely = (name, fn) => { try { fn(); } catch (err) { console.error(name, err); } };
+
+  /* ---------- lightbox ---------- */
+  safely("lightbox", () => {
+    const dlg = $("#lightbox"), img = $("#lb-img"), cap = $("#lb-cap");
+    document.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-full]");
+      if (!b) return;
+      img.src = b.dataset.full;
+      img.alt = (b.querySelector("img") || {}).alt || "";
+      cap.textContent = b.dataset.cap || "";
+      if (typeof dlg.showModal === "function") dlg.showModal(); else dlg.setAttribute("open", "");
+    });
+    dlg.addEventListener("click", () => { if (dlg.close) dlg.close(); else dlg.removeAttribute("open"); });
+  });
+
+  /* ---------- copy buttons ---------- */
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest(".copy");
+    if (!b) return;
+    const code = b.parentElement.querySelector("code");
+    const done = (t) => { b.textContent = t; setTimeout(() => { b.textContent = "Copy"; }, 1600); };
+    const select = () => {
+      const r = document.createRange(); r.selectNodeContents(code);
+      const s = getSelection(); s.removeAllRanges(); s.addRange(r); done("Selected");
+    };
+    try {
+      navigator.clipboard.writeText(code.textContent).then(() => done("Copied"), select);
+    } catch (err) { select(); }
+  });
+
+  /* ---------- nav highlight ---------- */
+  safely("nav", () => {
+    const links = [...document.querySelectorAll(".navlist a")];
+    const byId = new Map(links.map((a) => [a.getAttribute("href").slice(1), a]));
+    if (!("IntersectionObserver" in window)) return;
+    const io = new IntersectionObserver((entries) => {
+      for (const en of entries) {
+        if (!en.isIntersecting) continue;
+        links.forEach((a) => a.removeAttribute("aria-current"));
+        const a = byId.get(en.target.id);
+        if (a) {
+          a.setAttribute("aria-current", "true");
+          const list = a.closest(".navlist");
+          const lr = list.getBoundingClientRect(), ar = a.getBoundingClientRect();
+          if (ar.left < lr.left) list.scrollLeft += ar.left - lr.left - 16;
+          else if (ar.right > lr.right) list.scrollLeft += ar.right - lr.right + 16;
+        }
+      }
+    }, { rootMargin: "-30% 0px -65% 0px" });
+    document.querySelectorAll("main > section[id]").forEach((s) => io.observe(s));
+  });
+
+  /* ---------- comparisons ---------- */
+  safely("compare", () => {
+    const PAIRS = [
+      { id: "b-beach", label: "Ref B · beach", img: "img/compare_v0.2_refB_vs_beach.jpg", w: 2209,
+        title: "Reference B against the v0.2 beach",
+        closer: ["Camera height and angle, with a gentle perspective.", "Golden faceted sand with palm shadows.", "Clear turquoise shallows over visible seabed, deepening to blue.", "Camp props facing the camera almost square-on."],
+        diff: ["Ref B's foam line is a bolder, brighter white; ours is thinner and cream.", "Ref B has more dark pebbles and brown coastal boulders. Ours are lavender, as you decided."] },
+      { id: "b-player", label: "Ref B · castaway", img: "img/compare_v0.2_refB_vs_player_camp.jpg", w: 2209,
+        title: "Reference B against the castaway at camp",
+        closer: ["Outfit palette: bandana, cream shirt, terracotta trousers.", "Character size and readability at the default zoom.", "Camp layout: fire, chest, barrel, raft by the water."],
+        diff: ["Ref B's kid holds a machete or torch. Held tools come with the gathering and fishing systems.", "Ref B's camp is busier, with more clutter around the fire.", "The foam line difference noted above."] },
+      { id: "a-cave", label: "Ref A · cave", img: "img/compare_v0.2_refA_vs_cave.jpg", w: 2038,
+        title: "Reference A against the rock stack and cave",
+        closer: ["Lavender-grey stacked slabs with lighter bevel rims.", "Pits, inlaid stones, grass caps with tufts.", "A cave mouth with a dark interior, framed by boulders.", "Palms and plants around the base."],
+        diff: ["Ref A's rock is darker, with painted texture and many more pits. A normal-mapped or texture-painted stone material would close the gap.", "Ref A's palm trunks are coral pink. Ours are terracotta brown, between the two references."] },
+      { id: "a-island", label: "Ref A · island", img: "img/compare_v0.2_refA_vs_island.jpg", w: 2038,
+        title: "Reference A against the whole island",
+        closer: ["A thick sand slab with a rounded rim at the water.", "A turquoise ring of shallows around the island.", "The rock stack reads as the landmark."],
+        diff: ["Ref A is a compact islet. Haven is a 110 m playable island, so the rock stack sits inland.", "Ref A uses tilt-shift depth of field. The art bible allows only a subtle far blur, so gameplay stays sharp."] },
+    ];
+    const tabs = $("#compare-tabs"), panel = $("#compare-panel");
+    const show = (pair) => {
+      tabs.querySelectorAll("button").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.id === pair.id)));
+      panel.replaceChildren(
+        h("figure", {},
+          h("button", { class: "zoom", type: "button", "data-full": pair.img, "data-cap": pair.title },
+            h("img", { src: pair.img, width: pair.w, height: 700, alt: pair.title + ". The reference is on the left, the in-engine capture on the right." })),
+          h("figcaption", {}, h("b", { text: pair.title + "." }), " Reference on the left, Godot capture on the right.")),
+        h("div", { class: "notes" },
+          h("div", { class: "stack", style: "gap:0.6rem" }, h("h4", { text: "Closer now" }), h("ul", {}, pair.closer.map((t) => h("li", { text: t })))),
+          h("div", { class: "stack", style: "gap:0.6rem" }, h("h4", { text: "Still different" }), h("ul", {}, pair.diff.map((t) => h("li", { text: t }))))));
+    };
+    PAIRS.forEach((p) => {
+      const b = h("button", { class: "btn", type: "button", role: "tab", "data-id": p.id, text: p.label });
+      b.addEventListener("click", () => show(p));
+      tabs.append(b);
+    });
+    show(PAIRS[0]);
+  });
+
+  /* ---------- palette ---------- */
+  safely("palette", () => {
+    const GROUPS = [
+      ["Sand", [["Dry sand", "#E9C48A"], ["Wet band at the waterline", "#C99D68"], ["Sand in shadow (lit result)", "#9C7C86"], ["Foam, never pure white", "#FFF8E3"]]],
+      ["Vegetation", [["Grass caps", "#97C77A"], ["Grass highlight", "#CFE6A8"], ["Jungle green", "#4E9A4A"], ["Jungle dark", "#2C6A3F"], ["Palm frond", "#74B85A"], ["Frond tip", "#C6E8A2"], ["Frond underside", "#2F6B48"]]],
+      ["Rock, lavender-grey", [["Wall", "#9C9099"], ["Top", "#D3C5C0"], ["Bevel rim", "#C7B8B6"], ["Pit", "#776A78"], ["Inlay", "#958794"], ["Cave", "#231C2E"], ["Pebbles", "#5E5468"]]],
+      ["Wood, rope, cloth", [["Palm trunk", "#A8674F"], ["Trunk ring", "#CF9378"], ["Driftwood, raft logs", "#A8693F"], ["End grain", "#6B4021"], ["Planks, ladder", "#C98B5E"], ["Rope", "#D8BE8A"], ["Sail, cloth", "#EADCBC"]]],
+      ["Accents", [["Starfish red", "#D9475A"], ["Starfish blue", "#2B3560"]]],
+    ];
+    $("#swatches").replaceChildren(...GROUPS.map(([name, list]) => h("div", {},
+      h("h4", { text: name }),
+      h("ul", { class: "swatches" }, list.map(([nm, hx]) => h("li", { class: "swatch" },
+        h("span", { class: "chip", style: "background:" + hx }),
+        h("span", { class: "nm" }, nm, h("span", { class: "hx", text: hx }))))))));
+
+    const MAX = 16;
+    const BANDS = [[0, 0.4, "#BFEBD0", "Almost clear, faint mint", "0 to 0.4 m"], [0.4, 2, "#4FD6D0", "Turquoise", "0.4 to 2 m"], [2, 5, "#1FA6BE", "Lagoon teal", "2 to 5 m"], [5, 12, "#1468B4", "Ocean blue", "5 to 12 m"], [12, MAX, "#0B3D7E", "Deep blue", "beyond 12 m"]];
+    $("#ramp").replaceChildren(...BANDS.map(([a, b, c, n]) => h("span", { title: n, style: "flex:" + (b - a) + " 0 0;background:" + c })));
+    $("#ramp-axis").replaceChildren(...[0, 2, 5, 12, 16].map((m) => h("span", { style: "left:" + (m / MAX * 100) + "%", text: m === 16 ? "16 m" : m + (m === 0 ? " m" : "") })));
+    const last = $("#ramp-axis").lastElementChild; last.style.transform = "translateX(-100%)";
+    last.classList.add("end");
+    $("#ramp-legend").replaceChildren(...BANDS.map(([, , c, n, r]) => h("li", {}, h("i", { style: "background:" + c }), h("span", {}, h("b", { text: n }), h("br"), h("span", { class: "mono muted", text: r + " · " + c })))));
+
+    const P = window.PU_PALETTE || {};
+    const pretty = (s) => { const t = s.replace(/_/g, " "); return t.charAt(0).toUpperCase() + t.slice(1); };
+    const cols = [["reference_A.jpg", "Reference A"], ["reference_B.jpg", "Reference B"]].filter(([k]) => P[k]);
+    $("#clusters").replaceChildren(...cols.map(([k, label]) => h("div", { class: "stack", style: "gap:0.7rem" },
+      h("h4", { text: label + " · " + Object.keys(P[k]).length + " regions" }),
+      h("div", { class: "clusters" }, Object.entries(P[k]).map(([region, list]) => {
+        const sorted = [...list].sort((a, b) => b.share - a.share);
+        return h("div", { class: "cl-row" },
+          h("span", { class: "rn", text: pretty(region) }),
+          h("span", { class: "cl-bar", role: "img", "aria-label": pretty(region) + ": " + sorted.map((c) => c.hex + " " + Math.round(c.share * 100) + "%").join(", ") },
+            sorted.map((c) => h("span", { title: c.hex + " · " + Math.round(c.share * 100) + "%", style: "flex:" + c.share + " 0 0;background:" + c.hex }))),
+          h("span", { class: "dom", text: sorted[0] ? sorted[0].hex : "" }));
+      })))));
+  });
+
+  /* ---------- roadmap ---------- */
+  safely("roadmap", () => {
+    const R = [
+      ["Phase 0", "Reference and asset research", [["x", "Inspect references A and B: forensics and visual classification"], ["x", "Investigate origins (text search only; image search and marketplaces blocked)"], ["x", "Superhive Survival Island pack: similar alternative, unverified"], ["x", "JustCreate3D Stylized Tropical Island with Ruins: not a match for Ref A"], ["x", "Investigation report and asset manifest"], ["x", "Your decision: no Polygon Hangar or Superhive purchase yet"], ["p", "Free CC0 sources: Kenney GitHub kit evaluated, not suitable; Quaternius, Poly Pizza and kenney.nl blocked"]]],
+      ["Phase 1", "Visual foundation", [["x", "Art bible with a palette sampled from both references"], ["x", "Godot 4.4 Forward+ scaffold, input map, shader globals"], ["x", "Three-quarter camera with smooth follow, zoom and scripted views"], ["x", "Daylight rig: warm sun, lavender ambient, SSAO, glow, tonemap"], ["x", "Water: depth colour ramp, seabed refraction, shoreline foam, wave bands, glints"], ["x", "Caustics on terrain and props below the waterline"], ["x", "Haven Island terrain: SDF design to a faceted Delaunay mesh"], ["x", "Terrain collision from the exported heightmap"], ["t", "Sunrise and sunset lighting variants"], ["t", "Underwater post-process while diving"]]],
+      ["v0.2", "Environment refinement from your notes", [["x", "Gameplay camera matched to Ref B and A/B-tested with captures"], ["x", "Rock stack: sculpted slabs, baked AO, stone material, deeper cave, vegetation"], ["x", "Palms: curved trunks, 9 variants including groves, richer leaves"], ["x", "Handcrafted vignettes, coastal details, dunes, trail, patch grass"], ["x", "Sand variation and softer shadows; water preserved"], ["x", "Island, beach, cave and water captures with reference comparisons"]]],
+      ["Phase 2", "Environment assets", [["x", "Palms: 7 variants plus twin and trio, wind sway and frond flutter"], ["x", "Rocks: 4 boulders, 2 clusters, 6 pebbles and the landmark rock stack"], ["x", "Props: campfire, lean-to, chest, barrel, crate, log seat, drying rack, raft, rowboat, wreck ribs, planks, starfish, driftwood, shells, coconuts"], ["x", "Corals, seaweed, grass, agaves, bushes, flowering shrubs, beach grass"], ["t", "Harvestable coconuts, berry bushes, driftwood pickups"], ["t", "Shelter variants for the building system"]]],
+      ["Phase 3", "Character", [["x", "Rigged castaway with 11 animations"], ["x", "PlayerController: walk, run, auto-swim, dive, crossfades, camera follow (14/14)"], ["t", "Held tools (rod, spear, machete) on the hand bone"], ["t", "Interaction prompts once gathering and fishing exist"], ["t", "Footstep dust and water splashes"]]],
+      ["Phase 4", "Ocean gameplay", [["p", "Swimming and diving movement work; breath meter not started"], ["t", "Underwater fog and colour grade while diving"], ["t", "Three animated fish species: schooling, avoidance, fleeing, depth habitat"]]],
+      ["Phase 5", "Fishing", [["t", "Fishing: cast, line, bobber, bite, hook, reel, escape"], ["t", "Spearfishing: aim, throw, hit, catch"]]],
+      ["Phase 6", "Survival", [["t", "Inventory, crafting, building, cooking at the campfire"], ["t", "Saving and the game UI"]]],
+      ["Phase 7", "Polish", [["t", "Performance pass on a real GPU, LODs, shadow cascade tuning"], ["t", "Audio"]]],
+    ];
+    $("#phases").replaceChildren(...R.map(([tag, title, items]) => {
+      const n = items.length, d = items.filter((i) => i[0] === "x").length, p = items.filter((i) => i[0] === "p").length;
+      return h("article", { class: "phase" },
+        h("div", { class: "phase-head" }, h("span", { class: "tag", text: tag }), h("span", { class: "frac", text: d + " of " + n + " done" + (p ? ", " + p + " partial" : "") })),
+        h("h3", { text: title }),
+        h("div", { class: "prog", role: "img", "aria-label": d + " of " + n + " done" },
+          h("span", { class: "d", style: "width:" + (d / n * 100) + "%" }), h("span", { class: "p", style: "width:" + (p / n * 100) + "%" })),
+        h("ul", { class: "items" }, items.map(([s, t]) => h("li", { class: s, text: t }))));
+    }));
+  });
+
+  /* ---------- manifest ---------- */
+  safely("manifest", () => {
+    const rows = window.PU_MANIFEST || [];
+    const tbody = $("#manifest-table tbody"), count = $("#manifest-count"), q = $("#manifest-q");
+    const cats = ["All", ...new Set(rows.map((r) => r.category))];
+    let cat = "All";
+    const statusPill = (r) => {
+      const s = r.status, t = s.toLowerCase();
+      if (t.startsWith("evaluated") || t.includes("not a match")) return h("span", { class: "pill bad", text: s.startsWith("EVALUATED") ? "Evaluated, not suitable" : "Not acquired, not a match" });
+      if (t.startsWith("not acquired")) return h("span", { class: "pill", text: "Not acquired, on hold" });
+      if (t.startsWith("water approved")) return r.name.startsWith("water") ? h("span", { class: "pill ok", text: "Approved (v0.1)" }) : h("span", { class: "pill warn", text: "v0.2 review pending" });
+      if (t.startsWith("direction approved")) return h("span", { class: "pill warn", text: "v0.2 review pending" });
+      return h("span", { class: "pill warn", text: s.replace("pending review", "review pending") });
+    };
+    const filters = $("#manifest-filters");
+    cats.forEach((c) => {
+      const n = c === "All" ? rows.length : rows.filter((r) => r.category === c).length;
+      const b = h("button", { class: "btn", type: "button", "aria-pressed": String(c === cat), text: c + " " + n });
+      b.addEventListener("click", () => { cat = c; filters.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); render(); });
+      filters.append(b);
+    });
+    const render = () => {
+      const term = q.value.trim().toLowerCase();
+      const shown = rows.filter((r) => (cat === "All" || r.category === cat) &&
+        (!term || [r.name, r.category, r.format, r.license, r.status, r.path, r.creator, r.notes].join(" ").toLowerCase().includes(term)));
+      tbody.replaceChildren(...shown.map((r) => h("tr", {},
+        h("td", { text: r.name }),
+        h("td", {}, r.model ? h("button", { class: "btn", type: "button", "data-view": r.model, text: "View" }) : ""),
+        h("td", { text: r.category }),
+        h("td", {}, statusPill(r)),
+        h("td", { text: r.format }),
+        h("td", { class: "kb tnum", text: r.kb ? r.kb + " KB" : "" }),
+        h("td", { text: r.license + (r.cost && r.cost !== "0" ? " · " + r.cost : "") }),
+        h("td", { class: "path" }, r.path && r.path !== "-" ? r.path : (r.url && r.url.startsWith("http") ? h("a", { href: r.url, text: r.url.replace(/^https?:\/\//, "") }) : "")))));
+      count.textContent = "Showing " + shown.length + " of " + rows.length + " assets";
+    };
+    q.addEventListener("input", render);
+    render();
+  });
+
+  /* ---------- 3D viewer ---------- */
+  safely("viewer", () => {
+    const MODELS = window.PU_MODELS || [];
+    const msg = $("#viewer-msg"), canvas = $("#viewer-canvas"), stage = $("#viewer-stage");
+    const say = (t) => { msg.textContent = t; msg.hidden = !t; };
+    const picker = $("#v-picker");
+    const groups = [];
+    MODELS.forEach((m) => { let g = groups.find((x) => x.label === m.label); if (!g) groups.push(g = { label: m.label, items: [] }); g.items.push(m); });
+    picker.replaceChildren(...groups.map((g) => h("div", { class: "pgroup" },
+      h("h4", { text: g.label + " · " + g.items.length }),
+      g.items.map((m) => h("button", { class: "mbtn", type: "button", "data-view": m.url, "aria-pressed": "false" },
+        h("span", { text: m.name.replace(/_/g, " ") }), h("span", { class: "kb", text: m.kb + " KB" }))))));
+
+    const T = window.THREE;
+    let load = null;
+    document.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-view]");
+      if (!b) return;
+      const url = b.dataset.view;
+      if (!picker.contains(b)) $("#models").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+      if (load) load(url);
+    });
+    if (!T || !T.GLTFLoader || !T.OrbitControls) {
+      say("The 3D viewer needs three.js from cdn.jsdelivr.net, which didn't load. The captures above show the same models in the game.");
+      return;
+    }
+    let renderer;
+    try {
+      renderer = new T.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    } catch (err) {
+      say("This browser couldn't start WebGL, so the 3D preview is unavailable. The captures above show the same models in the game.");
+      return;
+    }
+    T.ColorManagement.legacyMode = false;
+    renderer.outputEncoding = T.sRGBEncoding;
+    renderer.toneMapping = T.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.05;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = T.PCFSoftShadowMap;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+    const scene = new T.Scene();
+    const camera = new T.PerspectiveCamera(38, 4 / 3, 0.05, 2000);
+    const controls = new T.OrbitControls(camera, canvas);
+    controls.enableDamping = true;
+    controls.autoRotateSpeed = 0.9;
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    controls.autoRotate = !reduced;
+    const spinBtn = $("#v-spin");
+    spinBtn.setAttribute("aria-pressed", String(controls.autoRotate));
+    spinBtn.addEventListener("click", () => { controls.autoRotate = !controls.autoRotate; spinBtn.setAttribute("aria-pressed", String(controls.autoRotate)); });
+
+    // Same light directions as the game's daylight rig: lavender sky fill, warm sun from the east.
+    scene.add(new T.HemisphereLight(0xC4BCF0, 0xE9C48A, 0.95));
+    const sun = new T.DirectionalLight(0xFFE7C2, 2.4);
+    const SUN_DIR = new T.Vector3(0.635, 0.743, 0.211).normalize();
+    sun.castShadow = true;
+    sun.shadow.mapSize.set(2048, 2048);
+    sun.shadow.bias = -0.0004;
+    sun.shadow.normalBias = 0.03;
+    scene.add(sun, sun.target);
+    const ground = new T.Mesh(new T.CircleGeometry(1, 72), new T.MeshStandardMaterial({ color: 0xE9C48A, roughness: 1 }));
+    ground.rotation.x = -Math.PI / 2;
+    ground.receiveShadow = true;
+    scene.add(ground);
+    const water = new T.Mesh(new T.PlaneGeometry(1, 1), new T.MeshStandardMaterial({ color: 0x35C3C8, roughness: 0.2, transparent: true, opacity: 0.5, depthWrite: false }));
+    water.rotation.x = -Math.PI / 2;
+    water.visible = false;
+    scene.add(water);
+
+    const lin = (hex) => new T.Color(hex);
+    const TERRAIN = { sand: lin("#EBC383"), wet: lin("#C99D68"), seabed: lin("#E2C690"), deep: lin("#1D5F9E"), grass: lin("#6BA857") };
+    const material = (name) => {
+      const base = { vertexColors: true, roughness: 0.85, metalness: 0 };
+      switch (name) {
+        case "PU_Faceted": return new T.MeshStandardMaterial({ ...base, flatShading: true });
+        case "PU_Rock": return new T.MeshStandardMaterial({ ...base, roughness: 0.95 });
+        case "PU_Foliage": case "PU_Cloth": return new T.MeshStandardMaterial({ ...base, roughness: 0.7, side: T.DoubleSide });
+        case "PU_Emissive": return new T.MeshBasicMaterial({ vertexColors: true });
+        case "PU_Terrain": return new T.MeshStandardMaterial({ vertexColors: true, roughness: 0.95, flatShading: true });
+        default: return new T.MeshStandardMaterial(base);
+      }
+    };
+    // The terrain's vertex colours are masks (R grass, G rock dirt); the game colours it in a shader.
+    const paintTerrain = (geom) => {
+      const pos = geom.attributes.position, mask = geom.attributes.color;
+      const out = new Float32Array(pos.count * 3), c = new T.Color();
+      for (let i = 0; i < pos.count; i++) {
+        const y = pos.getY(i), g = mask ? mask.getX(i) : 0, d = mask ? mask.getY(i) : 0;
+        if (y < 0) c.copy(TERRAIN.seabed).lerp(TERRAIN.deep, Math.min(1, -y / 14));
+        else if (y < 0.4) c.copy(TERRAIN.wet).lerp(TERRAIN.sand, y / 0.4);
+        else c.copy(TERRAIN.sand);
+        if (g > 0.5 && y > 0.15) c.copy(TERRAIN.grass);
+        c.multiplyScalar(1 - d * 0.25);
+        out[i * 3] = c.r; out[i * 3 + 1] = c.g; out[i * 3 + 2] = c.b;
+      }
+      geom.setAttribute("color", new T.BufferAttribute(out, 3));
+    };
+
+    const loader = new T.GLTFLoader();
+    const clock = new T.Clock();
+    let current = null, mixer = null, actions = {}, active = null, framed = null, token = 0;
+    const animBox = $("#v-anims");
+
+    const dispose = (obj) => obj.traverse((o) => {
+      if (o.geometry) o.geometry.dispose();
+      if (o.material) [].concat(o.material).forEach((m) => m.dispose());
+    });
+
+    const frame = (gameplay) => {
+      if (!framed) return;
+      const { center, radius } = framed;
+      const vfov = T.MathUtils.degToRad(camera.fov);
+      const hfov = 2 * Math.atan(Math.tan(vfov / 2) * camera.aspect);
+      const dist = radius / Math.sin(Math.min(vfov, hfov) / 2) * 1.02;
+      const yaw = T.MathUtils.degToRad(18), pitch = T.MathUtils.degToRad(gameplay ? 40 : 22);
+      const dir = new T.Vector3(Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), Math.cos(yaw) * Math.cos(pitch));
+      if (!gameplay) dir.applyAxisAngle(new T.Vector3(0, 1, 0), T.MathUtils.degToRad(14));
+      camera.position.copy(center).addScaledVector(dir, dist);
+      camera.near = Math.max(0.01, dist / 200); camera.far = dist * 30;
+      camera.updateProjectionMatrix();
+      controls.target.copy(center);
+      controls.minDistance = radius * 0.3; controls.maxDistance = dist * 4;
+      controls.update();
+    };
+    $("#v-gameplay").addEventListener("click", () => frame(true));
+
+    const play = (name) => {
+      const a = actions[name];
+      if (!a) return;
+      if (active && active !== a) active.fadeOut(0.25);
+      a.reset().fadeIn(0.25).play();
+      active = a;
+      animBox.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.clip === name)));
+    };
+
+    const stat = (k, v) => h("div", {}, h("dt", { text: k }), h("dd", { text: v }));
+    const fmt = (n) => n.toLocaleString("en-US");
+
+    load = (url) => {
+      const meta = MODELS.find((m) => m.url === url);
+      if (!meta) return;
+      const my = ++token;
+      picker.querySelectorAll(".mbtn").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.view === url)));
+      $("#v-name").textContent = meta.name;
+      $("#v-group").textContent = meta.label;
+      say("Loading " + meta.name + ".glb (" + meta.kb + " KB)…");
+      // Models ship as base64 text of the GLB bytes, because the host doesn't serve .glb files.
+      const fail = () => { if (my === token) say("Couldn't load " + meta.name + ".glb. The captures above show it in the game."); };
+      fetch(url).then((r) => (r.ok ? r.text() : Promise.reject(new Error(r.status)))).then((txt) => {
+        const bin = atob(txt.trim()), bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        loader.parse(bytes.buffer, "", onLoad, fail);
+      }).catch(fail);
+      function onLoad(gltf) {
+        if (my !== token) { dispose(gltf.scene); return; }
+        if (current) { scene.remove(current); dispose(current); }
+        if (mixer) mixer.stopAllAction();
+        mixer = null; actions = {}; active = null;
+        const root = gltf.scene;
+        const mats = new Set();
+        let tris = 0, verts = 0, bones = 0;
+        root.traverse((o) => {
+          if (o.isBone) bones++;
+          if (!o.isMesh) return;
+          const name = o.material && o.material.name;
+          mats.add(name);
+          if (name === "PU_Terrain") paintTerrain(o.geometry);
+          o.material = material(name);
+          o.castShadow = name !== "PU_Terrain" && name !== "PU_Emissive";
+          o.receiveShadow = true;
+          const g = o.geometry;
+          verts += g.attributes.position.count;
+          tris += (g.index ? g.index.count : g.attributes.position.count) / 3;
+        });
+        if (meta.spread) {
+          const kids = [...root.children];
+          const boxes = kids.map((k) => new T.Box3().setFromObject(k));
+          const widths = boxes.map((b) => b.max.x - b.min.x);
+          const gap = Math.max(...widths) * 0.35;
+          let x = -(widths.reduce((s, w) => s + w, 0) + gap * (kids.length - 1)) / 2;
+          kids.forEach((k, i) => {
+            const b = boxes[i];
+            k.position.x += x - b.min.x;
+            k.position.z -= (b.min.z + b.max.z) / 2;
+            x += widths[i] + gap;
+          });
+        }
+        scene.add(root);
+        current = root;
+        root.updateMatrixWorld(true);
+        const box = new T.Box3().setFromObject(root);
+        const size = box.getSize(new T.Vector3());
+        const isTerrain = mats.has("PU_Terrain");
+        // The terrain runs far out under deep water; frame the island and its shallows.
+        const focus = box.clone();
+        if (isTerrain) {
+          const v = new T.Vector3();
+          focus.makeEmpty();
+          root.traverse((o) => {
+            if (!o.isMesh) return;
+            const pa = o.geometry.attributes.position;
+            for (let i = 0; i < pa.count; i++) { v.fromBufferAttribute(pa, i).applyMatrix4(o.matrixWorld); if (v.y > -4) focus.expandByPoint(v); }
+          });
+          if (focus.isEmpty()) focus.copy(box);
+        }
+        const center = focus.getCenter(new T.Vector3());
+        const radius = Math.max(focus.getSize(new T.Vector3()).length() / 2, 0.05);
+        framed = { center, radius };
+        ground.visible = !isTerrain;
+        ground.position.set(center.x, box.min.y, center.z);
+        ground.scale.setScalar(Math.max(size.x, size.z) * 0.9 + radius * 0.6);
+        water.visible = isTerrain;
+        water.position.set((box.min.x + box.max.x) / 2, 0, (box.min.z + box.max.z) / 2);
+        water.scale.set(size.x, size.z, 1);
+        sun.position.copy(center).addScaledVector(SUN_DIR, radius * 4);
+        sun.target.position.copy(center);
+        const sc = sun.shadow.camera;
+        sc.left = sc.bottom = -radius * 1.2; sc.right = sc.top = radius * 1.2;
+        sc.near = radius * 0.5; sc.far = radius * 8;
+        sc.updateProjectionMatrix();
+        frame(false);
+
+        animBox.replaceChildren();
+        if (gltf.animations.length) {
+          mixer = new T.AnimationMixer(root);
+          gltf.animations.forEach((clip) => {
+            actions[clip.name] = mixer.clipAction(clip);
+            const b = h("button", { class: "btn", type: "button", "data-clip": clip.name, "aria-pressed": "false", text: clip.name.replace(/_/g, " ") });
+            b.addEventListener("click", () => play(clip.name));
+            animBox.append(b);
+          });
+          play(actions.idle ? "idle" : gltf.animations[0].name);
+        }
+        const dims = size.x.toFixed(1) + " × " + size.y.toFixed(1) + " × " + size.z.toFixed(1) + " m";
+        const stats = [stat("Triangles", fmt(Math.round(tris))), stat("Vertices", fmt(verts)), stat("Size", dims), stat("File", meta.kb + " KB"),
+          stat("Materials", [...mats].filter(Boolean).map((m) => m.replace("PU_", "")).join(", ") || "none")];
+        if (bones) stats.push(stat("Bones", String(bones)));
+        if (gltf.animations.length) stats.push(stat("Animations", String(gltf.animations.length)));
+        $("#v-stats").replaceChildren(...stats);
+        say(isTerrain ? "Terrain coloured from its height and grass mask. The flat water plane stands in for the game's water shader." : "");
+      }
+    };
+
+    const resize = () => {
+      const w = stage.clientWidth, hgt = stage.clientHeight;
+      if (!w || !hgt) return;
+      renderer.setSize(w, hgt, false);
+      camera.aspect = w / hgt;
+      camera.updateProjectionMatrix();
+    };
+    if ("ResizeObserver" in window) new ResizeObserver(resize).observe(stage); else window.addEventListener("resize", resize);
+    resize();
+
+    let visible = true;
+    if ("IntersectionObserver" in window) new IntersectionObserver((es) => { visible = es[0].isIntersecting; }).observe(stage);
+    const tick = () => {
+      requestAnimationFrame(tick);
+      const dt = Math.min(clock.getDelta(), 0.1);
+      if (!visible) return;
+      if (mixer) mixer.update(dt);
+      controls.update();
+      renderer.render(scene, camera);
+    };
+    tick();
+    const first = MODELS.find((m) => m.name === "castaway") || MODELS[0];
+    if (first) load(first.url);
+  });
+})();
+</script>
