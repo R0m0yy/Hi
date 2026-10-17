@@ -40,12 +40,16 @@ Legend: [x] done and verified · [~] partial · [ ] not started
 - [ ] Coconuts as harvestable items, bushes with berries, driftwood pickups
 - [ ] Shelter variants for the building system
 
-## Phase 3: Character (next, after approval)
-- [ ] Rigged stylised player (Ref B proportions) with idle/walk/run/swim/dive/fish/spear/gather/cook
-- [ ] PlayerController (walk/run, slopes, interaction), camera follow target
+## Phase 3: Character
+- [x] Rigged stylised castaway (Ref B) with idle/walk/run/swim/dive/fish_cast/fish_reel/spear_throw/gather/cook/chop
+- [x] PlayerController: walk/run, auto-swim, dive, animation crossfades, camera follow (player_test 14/14)
+- [ ] Held tools (rod, spear, machete) attached to the hand bone
+- [ ] Interaction prompts (E) once gathering/fishing systems exist
+- [ ] Footstep dust / water splash effects
 
 ## Phase 4: Ocean gameplay
-- [ ] SwimmingController (surface swim, dive, breath), underwater fog/grade
+- [~] Swimming and diving movement (in PlayerController); breath meter not started
+- [ ] Underwater fog/colour grade while diving
 - [ ] FishController + 3 animated species (schooling, avoidance, fleeing, depth habitat)
 
 ## Phase 5: Fishing

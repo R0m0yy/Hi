@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/world/daylight_rig.tscn" id="1_day"]
 [ext_resource type="PackedScene" path="res://scenes/world/haven_island.tscn" id="2_haven"]
 [ext_resource type="Script" path="res://scripts/world/water_system.gd" id="3_water"]
 [ext_resource type="PackedScene" path="res://scenes/camera/isometric_camera.tscn" id="4_cam"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="5_player"]
 
 [node name="Main" type="Node3D"]
 
@@ -14,6 +15,9 @@
 [node name="Ocean" type="MeshInstance3D" parent="."]
 script = ExtResource("3_water")
 
+[node name="Player" parent="." instance=ExtResource("5_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.5, 1.5, 22.5)
+
 [node name="IsometricCamera" parent="." instance=ExtResource("4_cam")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0.5, 21)
-zoom_size = 17.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.5, 1, 22.5)
+target_path = NodePath("../Player")

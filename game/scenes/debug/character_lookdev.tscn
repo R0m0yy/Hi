@@ -1,0 +1,25 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/debug/character_lookdev.gd" id="1_look"]
+[ext_resource type="PackedScene" path="res://scenes/world/daylight_rig.tscn" id="2_day"]
+[ext_resource type="PackedScene" path="res://scenes/camera/isometric_camera.tscn" id="3_cam"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sand"]
+albedo_color = Color(0.913, 0.769, 0.541, 1)
+roughness = 0.95
+
+[sub_resource type="BoxMesh" id="BoxMesh_slab"]
+material = SubResource("StandardMaterial3D_sand")
+size = Vector3(40, 1, 12)
+
+[node name="CharacterLookdev" type="Node3D"]
+script = ExtResource("1_look")
+
+[node name="DaylightRig" parent="." instance=ExtResource("2_day")]
+
+[node name="IsometricCamera" parent="." instance=ExtResource("3_cam")]
+zoom_size = 4.0
+
+[node name="Slab" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+mesh = SubResource("BoxMesh_slab")

@@ -19,6 +19,13 @@ Direction approved by the user on v0.1. This pass works through their feedback.
   shadow opacity 0.72; warmer ambient.
 - **Water (kept):** glints fade at distance; deep floor plane hides the terrain edge.
 - Kenney GitHub starter-kit character evaluated (CC0) and rejected as off-style; other free sources still blocked.
+- **Player character:** original castaway kid (Ref B) built in Blender with a 17-bone rig and 11 skeletal
+  animations (idle, walk, run, swim, dive, fish_cast, fish_reel, spear_throw, gather, cook, chop).
+- **PlayerController:** camera-relative walk/run, automatic swimming, diving, animation crossfades, camera
+  follow; `tools/player_test.gd` (simulated input) passes 14/14.
+- Screenshot tool can pose the player per shot; character lookdev scene for animation reviews.
+- **Reproducible builds:** bmesh emitted faces in memory-address order, so rebuilds changed GLB bytes;
+  `MeshBuilder.canonicalize()` fixes face order, and all assets are now byte-identical across rebuilds.
 
 ## v0.1.0: Haven Island visual foundation (2026-10-17)
 

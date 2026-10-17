@@ -69,11 +69,47 @@ plane that hides the terrain's outer edge.
      longer harsh.
 6. **Water.** Unchanged except as noted above.
 
+## Player character (started after the environment pass)
+
+| View | File |
+|---|---|
+| Castaway at camp, gameplay camera | `screenshots/v0.2_player_camp.png` |
+| vs Ref B | `screenshots/compare_v0.2_refB_vs_player_camp.jpg` |
+| Close-up | `screenshots/v0.2_player_closeup.png` |
+| Swimming in the shallows | `screenshots/v0.2_player_swim.png` |
+| Walking the trail to the cave | `screenshots/v0.2_player_cave.png` |
+| All 11 animations (one frame each) | `screenshots/v0.2_player_animations.png` |
+
+- **Model** (`tools/blender/assets_character.py` → `characters/castaway.glb`):
+  - A stylised castaway kid modelled on Ref B, ~1.45 m tall with chibi
+    proportions.
+  - Messy brown hair, a yellow bandana with a red stripe and knot tails, a
+    cream shirt with rolled sleeves and open collar, terracotta trousers with
+    cuffs, a belt, and buckled boots.
+  - ~3.6k triangles in vertex colours.
+- **Rig:**
+  - A real 17-bone armature with rigid skinning; overlapping joint spheres
+    keep elbows and knees closed.
+  - Every bone's local Z points forward, so animation data reads intuitively.
+- **Animations** (skeletal glTF clips): idle, walk, run, swim, dive, fish_cast,
+  fish_reel, spear_throw, gather, cook, chop. The fishing, spearfishing,
+  gathering and cooking clips are ready for the gameplay systems of Phases 5–6,
+  which **aren't implemented yet**.
+- **`PlayerController`** (`scripts/player/player_controller.gd`):
+  - Camera-relative WASD movement, Shift to run.
+  - Automatic swimming once water is deeper than 1 m, floating chest-deep.
+  - Hold Ctrl or C to dive, with seabed clearance; release to resurface.
+  - Animations crossfade, with playback speed matched to movement.
+  - The camera follows with damping and look-ahead.
+- **Test:** `tools/player_test.gd` drives the real main scene with simulated
+  input. It passes 14/14: lands, idles, walks, runs, enters swimming, floats,
+  dives ~3 m, resurfaces, and the camera follows.
+
 ## Remaining differences (honest)
 
 ### vs Reference B
-- **No player character yet.** It's the next task, now that the environment is in
-  place.
+- The character is in, but carries no tool yet. Ref B's kid holds a
+  machete/torch, which will come with the tool and gathering systems.
 - Ref B's foam line is a bolder, brighter white. Ours is a thinner cream line.
 - Ref B's beach has more dark pebbles and large brown coastal boulders. The
   boulders are lavender here, per your decision.

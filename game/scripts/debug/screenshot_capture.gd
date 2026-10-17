@@ -7,6 +7,8 @@ extends Node
 ##   godot --path game -- --shots=/abs/shots.json
 ## shots.json: [{"file": "/abs/a.png", "view": [x, y, z, size, yaw, pitch, fov?], "frames": 40}, ...]
 ## The view is applied to the first node in group "camera_rig" (IsometricCamera).
+## Optional "player": [x, z, facing_deg, "anim", anim_time_0_to_1, y?] poses the
+## player for the shot (physics paused so the pose holds).
 
 var _shots: Array = []
 var _index := 0
@@ -39,6 +41,8 @@ func _process(_delta: float) -> void:
 	_frame += 1
 	if _frame == 2 and shot.has("view"):
 		_apply_view(shot["view"])
+	if _frame == 2 and shot.has("player"):
+		_pose_player(shot["player"])
 	if _frame >= int(shot.get("frames", 40)):
 		_busy = true
 		_capture(shot)
@@ -65,6 +69,22 @@ func _apply_view(view: Array) -> void:
 		return
 	var fov: float = view[6] if view.size() > 6 else -1.0
 	rig.set_view(Vector3(view[0], view[1], view[2]), view[3], view[4], view[5], fov)
+
+
+func _pose_player(p: Array) -> void:
+	var player := get_tree().get_first_node_in_group("player") as Node3D
+	var island := get_tree().get_first_node_in_group("island")
+	if player == null:
+		return
+	player.set_physics_process(false)
+	var y: float = p[5] if p.size() > 5 else (island.height_at(p[0], p[1]) if island else 0.0)
+	player.global_position = Vector3(p[0], y, p[1])
+	var model := player.get_node("Model") as Node3D
+	model.rotation.y = deg_to_rad(p[2])
+	var ap := model.find_children("*", "AnimationPlayer", true, false)[0] as AnimationPlayer
+	ap.play(p[3])
+	ap.seek(float(p[4]) * ap.get_animation(p[3]).length, true)
+	ap.pause()
 
 
 static func _parse_args(raw: PackedStringArray) -> Dictionary:

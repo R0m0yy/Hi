@@ -198,7 +198,22 @@ class MeshBuilder:
         return mb
 
     # -- output -----------------------------------------------------------
+    def canonicalize(self) -> None:
+        """Deterministic face order. bmesh ops emit faces in memory-address order,
+        which changes between runs; rotating each face to start at its lowest
+        vertex index (winding kept) and sorting makes rebuilds byte-stable."""
+        recs = []
+        for f, c, m, s in zip(self.faces, self.face_cols, self.face_mats, self.face_smooth):
+            k = f.index(min(f))
+            recs.append((f[k:] + f[:k], c[k:] + c[:k], m, s))
+        recs.sort(key=lambda r: r[0])
+        self.faces = [r[0] for r in recs]
+        self.face_cols = [r[1] for r in recs]
+        self.face_mats = [r[2] for r in recs]
+        self.face_smooth = [r[3] for r in recs]
+
     def to_object(self, name: str, sharp_angle_deg: float | None = None) -> bpy.types.Object:
+        self.canonicalize()
         mesh = bpy.data.meshes.new(name)
         # Godot (x, y, z) -> Blender (x, -z, y)
         mesh.from_pydata([(p.x, -p.z, p.y) for p in self.verts], [], self.faces)
@@ -341,6 +356,8 @@ def bake_vertex_ao(mb: MeshBuilder, rays: int = 24, max_dist: float = 2.5, stren
     """
     from mathutils.bvhtree import BVHTree
 
+    if start_face == 0:
+        mb.canonicalize()  # stable accumulation order -> reproducible colours
     tris = []
     for f in mb.faces:
         for k in range(1, len(f) - 1):

@@ -37,13 +37,22 @@ game/                the Godot project (open game/project.godot)
 
 ## Running
 
-Open `game/project.godot` in Godot 4.4+ and press Play. The mouse wheel (or `+`/`-`) zooms the camera.
+Open `game/project.godot` in Godot 4.4+ and press Play.
+
+| Input | Action |
+|---|---|
+| WASD / arrows | Move (camera-relative) |
+| Shift | Run |
+| Ctrl / C (hold, in deep water) | Dive |
+| Mouse wheel, `+` / `-` | Zoom |
+
+Walk into water deeper than about 1 m to swim.
 
 ## Rebuilding assets
 
 ```sh
 tools/build_all.sh               # all groups
-tools/build_all.sh palms rocks   # selected groups (palms rocks props foliage terrain)
+tools/build_all.sh palms rocks   # selected groups (palms rocks props foliage terrain character)
 ```
 
 This needs Blender's `bpy` module (`pip install bpy==5.2.2` on Python 3.13)
@@ -53,6 +62,7 @@ and Godot 4.4 on `PATH`. Override with `BPY_PYTHON` / `GODOT`.
 
 ```sh
 godot --headless --path game --script res://tools/smoke_test.gd      # world checks
+godot --headless --path game --script res://tools/player_test.gd     # controller with simulated input
 godot --path game -- --capture=/abs/out.png --view=26,0.5,21.5,18,18,-40,38   # screenshot
 ```
 
