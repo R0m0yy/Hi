@@ -20,6 +20,19 @@ uniform float stone_noise : hint_range(0.0, 1.0) = 0.0;
 
 varying vec3 world_pos;
 
+#ifdef OCCLUSION_FADE
+// Leaves between the camera and the player dissolve so the player stays
+// visible. GameWorld sets both globals; occlusion_fade is 0 outside play.
+global uniform vec3 diver_pos;
+global uniform float occlusion_fade;
+
+float pu_bayer4(vec2 p) {
+	ivec2 i = ivec2(mod(p, 4.0));
+	int m[16] = int[](0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5);
+	return (float(m[i.y * 4 + i.x]) + 0.5) / 16.0;
+}
+#endif
+
 void vertex() {
 	if (sway_strength > 0.0 || flutter_strength > 0.0) {
 		VERTEX += pu_wind_offset(VERTEX, COLOR.a, MODEL_MATRIX, TIME, sway_strength, flutter_strength);
@@ -28,6 +41,20 @@ void vertex() {
 }
 
 void fragment() {
+#ifdef OCCLUSION_FADE
+	if (occlusion_fade > 0.0) {
+		vec3 pv = (VIEW_MATRIX * vec4(diver_pos + vec3(0.0, 0.7, 0.0), 1.0)).xyz;
+		if (VERTEX.z > pv.z + 0.6) {  // nearer the camera than the player
+			vec4 pc = PROJECTION_MATRIX * vec4(pv, 1.0);
+			vec4 fc = PROJECTION_MATRIX * vec4(VERTEX, 1.0);
+			vec2 d = (fc.xy / fc.w - pc.xy / pc.w) * vec2(VIEWPORT_SIZE.x / VIEWPORT_SIZE.y, 1.0);
+			float hole = (1.0 - smoothstep(0.13, 0.24, length(d))) * occlusion_fade;
+			if (hole > pu_bayer4(FRAGCOORD.xy)) {
+				discard;
+			}
+		}
+	}
+#endif
 	vec3 albedo = COLOR.rgb * albedo_tint.rgb;
 #ifdef TWO_SIDED
 	if (!FRONT_FACING) {

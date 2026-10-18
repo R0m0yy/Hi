@@ -69,6 +69,10 @@ caustics_strength={
 "type": "float",
 "value": 1.0
 }
+occlusion_fade={
+"type": "float",
+"value": 0.0
+}
 daylight={
 "type": "float",
 "value": 1.0

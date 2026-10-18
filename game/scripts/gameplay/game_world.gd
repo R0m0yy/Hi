@@ -148,6 +148,7 @@ func _respawn() -> void:
 
 
 func _process(delta: float) -> void:
+	RenderingServer.global_shader_parameter_set("occlusion_fade", 1.0 if Game.is_playing() else 0.0)
 	if Game.state == "menu":
 		_title_yaw += delta * 3.0
 		camera.set_view(Vector3(8.0, 0.0, 6.0), 64.0, 18.0 + _title_yaw, -34.0)

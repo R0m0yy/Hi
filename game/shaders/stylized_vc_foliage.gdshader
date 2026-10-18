@@ -3,4 +3,5 @@ shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_burley, specular_schlick_ggx;
 
 #define TWO_SIDED
+#define OCCLUSION_FADE
 #include "res://shaders/include/stylized_vc_body.gdshaderinc"

@@ -54,6 +54,8 @@ Test results are in `docs/TEST_RESULTS.md`.
   rescue screens. Fonts are Fredoka and Nunito (OFL). The fishing meter sits just below
   the player, clear of the notification feed.
 - **Boats:** the wake is now soft foam instead of rings.
+- **Occlusion fade:** leaves between the camera and the explorer dissolve in a dither
+  pattern, so she stays visible behind palms and big plants.
 - **Audio:** 47 procedural sound effects and 6 loops (ocean, wind, night, underwater,
   fire, theme). The loops are now written as Ogg Vorbis by `tools/audio/make_audio.py`.
 - **Desktop builds:** Linux, Windows and macOS presets plus `tools/export_desktop.sh`.
