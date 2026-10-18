@@ -94,7 +94,7 @@ Legend: [x] done and verified · [~] partial · [ ] not started
 - [~] Footstep and splash sounds, boat wake particles; no footstep dust particles
 
 ## Phase 4: Ocean gameplay
-- [~] Swimming and diving movement (in PlayerController); breath meter not started
+- [x] Swimming, diving and the oxygen (breath) meter (v0.3)
 - [x] Underwater view while diving (v0.3)
 - [x] Fish schools, 4 species, avoidance/fleeing, depth habitat (v0.3)
 

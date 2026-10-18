@@ -27,18 +27,27 @@ func _run() -> void:
 	player = world.player
 	await _frames(40)
 	var drift := _nearest(func(n): return n is Pickup and n.item_id == "wood" and n.is_available())
+	await _stage(drift.global_position, 5.0)
 	await _walk_to(drift.global_position, 1.0)
+	_log("at driftwood %.1f m" % player.global_position.distance_to(drift.global_position))
 	await _tap("interact")
 	await _frames(40)
+	_log("after driftwood")
 	for i in 2:
 		var bush := _nearest(func(n): return n is Pickup and n.item_id == "fiber" and n.is_available())
+		if bush.global_position.distance_to(player.global_position) > 7.0:
+			await _stage(bush.global_position, 4.0)
 		await _walk_to(bush.global_position, 0.9)
 		await _tap("interact")
 		await _frames(30)
 
+	_log("after bushes")
 	# Crafting.
+	# Top up what the hatchet needs so the video stays short.
 	Game.inventory.add("fiber", 4)
 	Game.inventory.add("stone", 2)
+	if Game.inventory.count("wood") < 2:
+		Game.inventory.add("wood", 2 - Game.inventory.count("wood"))
 	await _tap("inventory")
 	await _frames(35)
 	_craft("rope")
@@ -51,12 +60,15 @@ func _run() -> void:
 	# Chop a palm.
 	_select("hatchet")
 	var palm := _nearest(func(n): return n is ResourceNode and n.kind == "palm")
+	if palm.global_position.distance_to(player.global_position) > 7.0:
+		await _stage(palm.global_position, 4.0)
 	await _walk_to(palm.global_position, 1.6)
 	_face(palm.global_position)
 	for i in 3:
 		await _tap("use_tool")
 		await _frames(32)
 
+	_log("after chopping")
 	# Fishing from the shore.
 	Game.inventory.add("fishing_rod", 1)
 	_select("fishing_rod")
@@ -87,14 +99,20 @@ func _run() -> void:
 	Input.action_release("use_tool")
 	await _frames(50)
 
+	_log("after fishing")
 	# Swim out, dive and spear a fish.
 	Game.inventory.add("spear", 1)
 	_select("spear")
-	var school := _nearest_school()
+	var school := _nearest(func(n): return n is FishSchool and n.species == "tang" and not n.fish.is_empty()) as FishSchool
 	if school:
-		await _walk_to(school.global_position, 2.0, 12.0)
+		var sp := school.global_position
+		player.teleport(Vector3(sp.x - 6.0, World.water_level(), sp.z), 90.0)
+		await _frames(20)
+		await _walk_to(sp, 2.5, 5.0)
+	_log("at school (depth %.1f)" % World.depth_at(player.global_position.x, player.global_position.z))
 	Input.action_press("dive")
 	await _frames(70)
+	_log("diving")
 	for attempt in 6:
 		var fish := _nearest_fish()
 		if fish == null:
@@ -109,6 +127,7 @@ func _run() -> void:
 	Input.action_release("dive")
 	await _frames(70)
 
+	_log("after spearing")
 	# Row the repaired rowboat.
 	var boat := _nearest(func(n): return n is Boat and n.title == "rowboat") as Boat
 	boat.needs_repair = false
@@ -117,6 +136,7 @@ func _run() -> void:
 	await _frames(15)
 	await _tap("interact")
 	await _frames(10)
+	_log("boarded? boat driver=%s" % [boat.driver != null])
 	_press("move_forward", 1.0)
 	await _frames(110)
 	_press("move_left", 0.8)
@@ -126,6 +146,7 @@ func _run() -> void:
 	_press("move_forward", 0.0)
 	await _frames(30)
 
+	_log("after rowing")
 	# Evening at camp: time-lapse into the night.
 	await _tap("interact")
 	await _frames(10)
@@ -142,13 +163,22 @@ func _run() -> void:
 	get_tree().quit()
 
 
+func _log(what: String) -> void:
+	print("demo: %-28s pos=%s mode=%d wood=%d fiber=%d rope=%d hatchet=%d fish=%d spear_catch=%d obj=%s" % [
+		what, player.global_position.snapped(Vector3.ONE * 0.1), player.mode, Game.inventory.count("wood"),
+		Game.inventory.count("fiber"), Game.inventory.count("rope"), Game.inventory.count("hatchet"),
+		Game.inventory.count("fish_snapper_raw") + Game.inventory.count("fish_tang_raw"),
+		int(Game.counters.get("spear_catch", 0)), Game.current_objective().get("id", "")])
+
+
 # ---------------------------------------------------------------------------
 # Input helpers
 # ---------------------------------------------------------------------------
 
+## Waits n rendered frames (30 per second of video under --fixed-fps 30).
 func _frames(n: int) -> void:
 	for i in n:
-		await get_tree().physics_frame
+		await get_tree().process_frame
 
 
 func _tap(action: String) -> void:
@@ -198,6 +228,14 @@ func _walk_to(goal: Vector3, stop: float, timeout := 8.0) -> void:
 	await _frames(6)
 
 
+## Cuts to a dry spot `dist` metres from `p` (the short walk after it is real).
+func _stage(p: Vector3, dist: float) -> void:
+	var spot := _dry_spot_near(p, dist)
+	var d := p - spot
+	player.teleport(spot, rad_to_deg(atan2(d.x, d.z)))
+	await _frames(12)
+
+
 func _face(p: Vector3) -> void:
 	var d := p - player.global_position
 	player.face_direction(Vector3(d.x, 0.0, d.z).normalized())
@@ -230,10 +268,6 @@ func _nearest(pred: Callable) -> Node3D:
 				bd = d
 				best = n
 	return best
-
-
-func _nearest_school() -> FishSchool:
-	return _nearest(func(n): return n is FishSchool and not n.fish.is_empty()) as FishSchool
 
 
 func _nearest_fish() -> Fish:

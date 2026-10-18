@@ -1,6 +1,6 @@
 <title>Paradise Untamed</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Project package for Paradise Untamed: Haven Island captures, the castaway character, every generated 3D asset, research, art bible and roadmap.">
+<meta name="description" content="Project package for Paradise Untamed build v0.3: gameplay video and captures, the explorer character, test results, every generated 3D asset, research, art bible and roadmap.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Figtree:ital,wght@0,400..700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -230,6 +230,13 @@ figcaption b { color: var(--ink); font-weight: 600; }
 .wide { grid-column: 1 / -1; }
 .label-3p { font: 500 var(--t-xs)/1.3 var(--f-mono); color: var(--warn); }
 
+/* video and test details */
+.film video { display: block; width: 100%; max-width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: 10px; background: var(--card); box-shadow: 0 18px 40px -24px rgba(11, 61, 126, 0.55); }
+details.checks summary { cursor: pointer; font: 500 var(--t-sm)/1.4 var(--f-body); color: var(--ink); padding-block: 0.35rem; }
+details.checks summary .pass-word { font-family: var(--f-mono); color: var(--ok); }
+details.checks[open] summary { margin-bottom: 0.6rem; }
+details.checks .code { max-height: 28rem; overflow: auto; }
+
 /* character */
 .char-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 2rem; align-items: start; }
 @media (max-width: 860px) { .char-grid { grid-template-columns: minmax(0, 1fr); } }
@@ -400,21 +407,21 @@ dialog.lightbox .lb-close { position: fixed; top: calc(env(safe-area-inset-top, 
 <header class="hero" id="top">
   <div class="wrap">
     <div class="hero-head">
-      <p class="eyebrow">Haven Island · build v0.2 · 17 October 2026</p>
+      <p class="eyebrow">Paradise Untamed · build v0.3 · 18 October 2026</p>
       <h1>Paradise <span class="tail">Untamed</span></h1>
-      <p class="lede">A 2.5D tropical survival, fishing and spearfishing game in Godot 4.4. This page collects everything built so far: in-engine captures, the castaway, all 48 generated 3D models, the source research, the art bible and the plan.</p>
+      <p class="lede">A 2.5D tropical survival game about fishing, spearfishing and exploring, built in Godot 4.4. Build v0.3 plays from the title screen to the rescue ending: the explorer gathers, crafts, fishes, dives, builds a camp, rows to two more islands and lights a signal fire.</p>
       <div class="chips">
-        <span class="pill warn">Environment v0.2: awaiting your review</span>
-        <span class="pill ok">Castaway: 11 animations, controller tested</span>
-        <span class="pill ok">Tests: smoke 11/11, player 14/14</span>
-        <span class="pill">Fishing and survival systems: not started</span>
+        <span class="pill ok">Playable start to finish</span>
+        <span class="pill ok">Explorer: 28 animations</span>
+        <span class="pill ok">Tests: smoke 11/11 · player 14/14 · gameplay 80/80</span>
+        <span class="pill warn">Builds: Linux run here; Windows and macOS not run</span>
       </div>
     </div>
     <figure class="hero-shot">
-      <button class="zoom frame" type="button" data-full="img/v0.2_beach.jpg" data-cap="Beach and camp at the default gameplay zoom. Godot 4.4 capture, v0.2.">
-        <img src="img/v0.2_beach.jpg" width="1600" height="900" alt="Haven Island beach and camp from the elevated three-quarter gameplay camera: golden sand, a campfire, palms, and turquoise shallows.">
+      <button class="zoom frame" type="button" data-full="img/v0.3_fishing.jpg" data-cap="Fishing from Haven Island's beach. Godot 4.4 capture, v0.3.">
+        <img src="img/v0.3_fishing.jpg" width="1600" height="900" alt="The explorer stands at the water's edge on golden sand, holding a fishing rod toward a bobber in turquoise shallows. A line tension meter sits below her; the campfire, chest, crate and barrel are behind her.">
       </button>
-      <figcaption><b>Beach and camp, default zoom.</b> An unedited Godot 4.4 capture from the gameplay camera (perspective, FOV 38°, pitch −40°, yaw 18°). Every image of the game on this page is a real engine render.</figcaption>
+      <figcaption><b>Fishing from the beach.</b> An unedited Godot 4.4 capture from the gameplay camera. The rod points at the bobber and the tension meter sits just below the explorer. Every image of the game on this page is a real engine render.</figcaption>
     </figure>
   </div>
 </header>
@@ -445,103 +452,186 @@ dialog.lightbox .lb-close { position: fixed; top: calc(env(safe-area-inset-top, 
     <div class="sec-head">
       <p class="kicker">Overview</p>
       <h2>Where the project stands</h2>
-      <p class="sec-lede">Haven Island and the player character are built and tested. Gameplay systems (fishing, spearfishing, gathering, cooking) come next. They have animations but no code yet.</p>
+      <p class="sec-lede">Every milestone in your handoff brief now has working, tested code in the game. What is left needs real hardware or real players: a GPU profile, a listen to the sound, balance tuning, and a run of the Windows and macOS builds.</p>
     </div>
 
     <div class="board" role="list">
-      <div class="board-row" role="listitem"><span class="area">Reference research</span><span><span class="pill ok">Done</span></span><span class="note">Exact originals are not legally obtainable from here. Purchases are on hold, as you decided.</span></div>
-      <div class="board-row" role="listitem"><span class="area">Art bible and sampled palette</span><span><span class="pill ok">Done</span></span><span class="note">Colours sampled from both references by k-means, then checked in the engine.</span></div>
-      <div class="board-row" role="listitem"><span class="area">Engine foundation</span><span><span class="pill ok">Done</span></span><span class="note">Camera, daylight rig, water, terrain, set-dressing scatter, collision.</span></div>
-      <div class="board-row" role="listitem"><span class="area">Haven Island environment v0.2</span><span><span class="pill warn">Awaiting review</span></span><span class="note">Camera, rock stack, palms, set dressing, sand and lighting reworked from your notes. Water kept.</span></div>
-      <div class="board-row" role="listitem"><span class="area">Castaway and controller</span><span><span class="pill ok">Done, tested</span></span><span class="note">Walk, run, swim and dive work. The controller test passes 14 of 14 checks.</span></div>
-      <div class="board-row" role="listitem"><span class="area">Held tools, interaction prompts</span><span><span class="pill">Not started</span></span><span class="note">Rod, spear and machete will attach to the hand bone.</span></div>
-      <div class="board-row" role="listitem"><span class="area">Underwater: fog, fish, breath</span><span><span class="pill">Not started</span></span><span class="note">Diving movement already works.</span></div>
-      <div class="board-row" role="listitem"><span class="area">Fishing and spearfishing</span><span><span class="pill">Not started</span></span><span class="note">Cast, reel and throw animations are ready.</span></div>
-      <div class="board-row" role="listitem"><span class="area">Inventory, crafting, building, saving</span><span><span class="pill">Not started</span></span><span class="note">Gather, cook and chop animations are ready.</span></div>
-      <div class="board-row" role="listitem"><span class="area">Audio, real-GPU performance pass</span><span><span class="pill">Not started</span></span><span class="note">All renders so far ran on a software Vulkan device.</span></div>
+      <div class="board-row" role="listitem"><span class="area">Character replacement</span><span><span class="pill ok">Done</span></span><span class="note">Original explorer built from your reference and skinned to the CC0 Quaternius rig. Marketplace research is written up; nothing was bought.</span></div>
+      <div class="board-row" role="listitem"><span class="area">M1 Playable character</span><span><span class="pill ok">Done, tested</span></span><span class="note">Walk, run, jump, camera, collisions, interaction prompts and animation blending, on keyboard or gamepad.</span></div>
+      <div class="board-row" role="listitem"><span class="area">M2 Ocean</span><span><span class="pill ok">Done, tested</span></span><span class="note">Shore to swim, diving with oxygen, four fish species in schools, clear water around the diver.</span></div>
+      <div class="board-row" role="listitem"><span class="area">M3 Survival loop</span><span><span class="pill ok">Done, tested</span></span><span class="note">Gathering, crafting, fishing, spearfishing, cooking, and hunger, thirst, stamina and health.</span></div>
+      <div class="board-row" role="listitem"><span class="area">M4 World progression</span><span><span class="pill ok">Done, tested</span></span><span class="note">Shelter, storage, campfire, rowboat and raft, Palm Key and Lookout Isle, saving and loading, the rescue ending.</span></div>
+      <div class="board-row" role="listitem"><span class="area">Day and night</span><span><span class="pill ok">Done, tested</span></span><span class="note">24-minute days with a warm dawn and dusk, moonlit nights, campfire glow and crickets.</span></div>
+      <div class="board-row" role="listitem"><span class="area">M5 Polish and handoff</span><span><span class="pill warn">Partial</span></span><span class="note">Docs, licences, captures and video are done. The sound has not been listened to here, there is no real-GPU profile, and balance is a first pass.</span></div>
+      <div class="board-row" role="listitem"><span class="area">Desktop builds</span><span><span class="pill warn">Partial</span></span><span class="note">The Linux build runs here. Windows and macOS builds are exported but not run, because there is no machine for them.</span></div>
     </div>
 
     <dl class="facts">
-      <div><dt>3D assets</dt><dd><strong>48</strong> GLB files, every one generated by Blender Python in the repo. No downloaded or AI-generated assets.</dd></div>
-      <div><dt>Code</dt><dd><strong class="tnum">3,152</strong> lines of Blender Python, <span class="tnum">1,066</span> lines of GDScript in 16 files, <span class="tnum">377</span> lines of shaders.</dd></div>
-      <div><dt>Haven Island</dt><dd><strong>110 m</strong> across, with 97 placed layout items and 11 scatter sets drawn as 37 multimeshes.</dd></div>
-      <div><dt>Castaway</dt><dd><strong>1.45 m</strong> tall, 17 bones, 11 animations, about 3.6k triangles.</dd></div>
-      <div><dt>Engine</dt><dd>Godot 4.4.1, Forward+ renderer, GDScript. Assets built with Blender 5.2.2 (bpy).</dd></div>
-      <div><dt>Repository</dt><dd><a href="https://github.com/R0m0yy/Hi/tree/@BRANCH@">R0m0yy/Hi</a>, branch <code>@BRANCH@</code>, 3 commits pushed.</dd></div>
+      <div><dt>3D assets</dt><dd><strong class="tnum">73</strong> GLB files, every one generated by Blender Python in the repo: islands, palms, rocks, props, items, fish and characters.</dd></div>
+      <div><dt>Code</dt><dd><strong class="tnum">6,263</strong> lines of GDScript in 54 game scripts, plus <span class="tnum">1,638</span> in tests and tools; <span class="tnum">4,834</span> lines of Blender Python; <span class="tnum">459</span> lines of shaders.</dd></div>
+      <div><dt>World</dt><dd><strong>3</strong> handcrafted islands: Haven Island, Palm Key with its shipwreck, and Lookout Isle with the signal fire.</dd></div>
+      <div><dt>Explorer</dt><dd><strong>49k</strong> triangles, 53 bones and 28 animation clips on the Quaternius rig (CC0).</dd></div>
+      <div><dt>Sound</dt><dd><strong class="tnum">47</strong> synthesised sound effects and 6 loops (ocean, wind, night, underwater, fire, theme). No recorded samples.</dd></div>
+      <div><dt>Repository</dt><dd><a href="https://github.com/R0m0yy/Hi/tree/@BRANCH@">R0m0yy/Hi</a>, branch <code>@BRANCH@</code>, commit <code>@COMMIT@</code>. Godot 4.4.1 Forward+, Blender 5.2.2 (bpy).</dd></div>
     </dl>
 
     <div class="split">
       <div class="stack" style="gap:0.7rem">
         <h3>World test</h3>
-        <p class="muted" style="font-size:var(--t-sm)">Re-run for this package: <code>godot --headless --path game --script res://tools/smoke_test.gd</code></p>
-<pre class="code"><span class="okline">  [ok] island present
-  [ok] water present
-  [ok] heightmap loaded
-  [ok] camp ground above water (1.17)
-  [ok] open ocean is deep (-18.78)
-  [ok] terrain collision matches heightmap
-  [ok] rock stack has collision (top 6.74)
-  [ok] 11 scatter fields
-  [ok] scatter built 37 multimeshes
-  [ok] water surface near 0
-  [ok] campfire wrapper instanced</span>
+        <p class="muted" style="font-size:var(--t-sm)"><code>godot --headless --path game --script res://tools/smoke_test.gd</code></p>
+<pre class="code"><span class="okline">@TESTS_SMOKE@</span>
 <span class="pass">smoke_test: PASS (0 failure(s))</span></pre>
       </div>
       <div class="stack" style="gap:0.7rem">
         <h3>Player controller test</h3>
         <p class="muted" style="font-size:var(--t-sm)">Drives the real main scene with simulated input: <code>res://tools/player_test.gd</code></p>
-<pre class="code"><span class="okline">  [ok] player lands on terrain (y=0.69)
-  [ok] idle animation at rest (idle)
-  [ok] walking moves the player (1.94 m)
-  [ok] walk animation while walking (walk)
-  [ok] run animation while sprinting (run)
-  [ok] entered swimming at x=39.5 z=22.5
-  [ok] swim animation in deep water (swim)
-  [ok] floats at chest depth (y=-1.04)
-  [ok] dive mode while holding dive
-  [ok] dives down (y=-3.19)
-  [ok] dive animation underwater (dive)
-  [ok] back to swimming after releasing dive
-  [ok] resurfaced (y=-1.02)
-  [ok] camera follows the player (0.00 m behind)</span>
+<pre class="code"><span class="okline">@TESTS_PLAYER@</span>
 <span class="pass">player_test: PASS (0 failure(s))</span></pre>
       </div>
+    </div>
+    <div class="stack" style="gap:0.7rem">
+      <h3>Gameplay test</h3>
+      <p class="muted" style="font-size:var(--t-sm); max-width:var(--measure)">Plays the real main scene from a new game to the rescue, then saves, loads, dies and respawns. It sends input events, so menus receive them just as they would from a player: <code>res://tools/gameplay_test.gd</code></p>
+      <details class="checks">
+        <summary>All 80 checks: <span class="pass-word">PASS</span></summary>
+<pre class="code"><span class="okline">@TESTS_GAMEPLAY@</span>
+<span class="pass">gameplay_test: PASS (0 failure(s))</span></pre>
+      </details>
     </div>
   </div>
 </section>
 
 <section class="sec" id="captures">
-  <div class="wrap">
+  <div class="wrap stack">
     <div class="sec-head">
       <p class="kicker">Captures</p>
-      <h2>Haven Island from the gameplay camera</h2>
-      <p class="sec-lede">The four views you asked for after the refinement pass. Each one is a Godot 4.4 Forward+ render from <code>screenshot_capture.gd</code>, using the same camera the game uses. Select an image to see it full size.</p>
+      <h2>Build v0.3 in play</h2>
+      <p class="sec-lede">A recorded run and fifteen screenshots of the real game. <code>tools/capture_gameplay.gd</code> sets up each moment through the same systems a player uses, then saves the frame. Select an image to see it full size.</p>
     </div>
-    <div class="shots">
+<!--@VIDEO@-->
+    <div class="shots three">
       <figure>
-        <button class="zoom" type="button" data-full="img/v0.2_island.jpg" data-cap="Complete island: gameplay camera, zoomed out.">
-          <img src="img/v0.2_island.jpg" width="1600" height="900" loading="lazy" alt="The whole of Haven Island ringed by turquoise shallows and a reef, with the rock stack inland.">
+        <button class="zoom" type="button" data-full="img/v0.3_title.jpg" data-cap="Title screen. The menu sits over a live, slowly orbiting view of Haven Island. Continue appears when a save exists.">
+          <img src="img/v0.3_title.jpg" width="1600" height="900" loading="lazy" alt="Title screen with the Paradise Untamed logo and menu buttons over an aerial view of Haven Island, its rock stack, palms, beach camp, raft and rowboat.">
         </button>
-        <figcaption><b>Complete island.</b> Same camera angle, zoomed out to show the reef ring, the lagoon and the rock stack inland.</figcaption>
+        <figcaption><b>Title screen.</b> The menu sits over a live, slowly orbiting view of Haven Island. Continue appears when a save exists.</figcaption>
       </figure>
       <figure>
-        <button class="zoom" type="button" data-full="img/v0.2_beach.jpg" data-cap="Beach and camp at the default zoom.">
-          <img src="img/v0.2_beach.jpg" width="1600" height="900" loading="lazy" alt="Beach camp with campfire, lean-to, chest, barrel and palms by the shore.">
+        <button class="zoom" type="button" data-full="img/v0.3_start.jpg" data-cap="First morning. A new game at camp: the objective panel, the clock, survival bars and the hotbar.">
+          <img src="img/v0.3_start.jpg" width="1600" height="900" loading="lazy" alt="The explorer standing by the campfire on the beach, with driftwood, rocks, a chest, crate and barrel nearby and the HUD around the edges.">
         </button>
-        <figcaption><b>Beach and camp.</b> Default zoom (17 m of view at the focus), matched to Ref B's framing.</figcaption>
+        <figcaption><b>First morning.</b> A new game at camp: the objective panel, the clock, survival bars and the hotbar.</figcaption>
       </figure>
       <figure>
-        <button class="zoom" type="button" data-full="img/v0.2_cave.jpg" data-cap="Rock stack and cave.">
-          <img src="img/v0.2_cave.jpg" width="1600" height="900" loading="lazy" alt="Lavender-grey stacked rock formation with a grass cap, a dark cave mouth and palms around its base.">
+        <button class="zoom" type="button" data-full="img/v0.3_gather.jpg" data-cap="Gathering. At a driftwood log on the shore the prompt offers E: Collect Wood ×3, the first objective.">
+          <img src="img/v0.3_gather.jpg" width="1600" height="900" loading="lazy" alt="The explorer beside a driftwood log at the water&#x27;s edge with a Collect Wood ×3 prompt above the hotbar.">
         </button>
-        <figcaption><b>Rock stack and cave.</b> Lavender-grey slabs with baked occlusion, a two-chamber cave facing the camera, and a sandy trail leading in.</figcaption>
+        <figcaption><b>Gathering.</b> At a driftwood log on the shore the prompt offers E: Collect Wood ×3, the first objective.</figcaption>
       </figure>
       <figure>
-        <button class="zoom" type="button" data-full="img/v0.2_water.jpg" data-cap="Water: lagoon, reef and drop-off.">
-          <img src="img/v0.2_water.jpg" width="1600" height="900" loading="lazy" alt="Clear turquoise lagoon over sand and coral, deepening to royal blue past the reef.">
+        <button class="zoom" type="button" data-full="img/v0.3_inventory.jpg" data-cap="Pack and crafting. Recipes list what they need against what you carry. The selected item shows its effect.">
+          <img src="img/v0.3_inventory.jpg" width="1600" height="900" loading="lazy" alt="Inventory screen with a pack grid on the left and a crafting list of rope, hatchet, spear, fishing rod, campfire and storage chest on the right.">
         </button>
-        <figcaption><b>Water.</b> The approved water system: lagoon, coral reef and the drop-off into deep blue.</figcaption>
+        <figcaption><b>Pack and crafting.</b> Recipes list what they need against what you carry. The selected item shows its effect.</figcaption>
       </figure>
+      <figure>
+        <button class="zoom" type="button" data-full="img/v0.3_chop.jpg" data-cap="Chopping. The stone hatchet in hand mid-swing. The palm offers both Shake palm and Chop wood.">
+          <img src="img/v0.3_chop.jpg" width="1600" height="900" loading="lazy" alt="The explorer swinging a stone hatchet at a palm trunk, with a prompt showing E Shake palm and LMB Chop wood.">
+        </button>
+        <figcaption><b>Chopping.</b> The stone hatchet in hand mid-swing. The palm offers both Shake palm and Chop wood.</figcaption>
+      </figure>
+      <figure>
+        <button class="zoom" type="button" data-full="img/v0.3_fishing.jpg" data-cap="Fishing. The rod points at the bobber while the tension and reel meter sits below the explorer.">
+          <img src="img/v0.3_fishing.jpg" width="1600" height="900" loading="lazy" alt="The explorer fishing from the beach toward a bobber in the shallows, with the line tension meter below her.">
+        </button>
+        <figcaption><b>Fishing.</b> The rod points at the bobber while the tension and reel meter sits below the explorer.</figcaption>
+      </figure>
+      <figure>
+        <button class="zoom" type="button" data-full="img/v0.3_dive.jpg" data-cap="Diving. The water clears around the explorer and her spear, with a school of blue tangs nearby.">
+          <img src="img/v0.3_dive.jpg" width="1600" height="900" loading="lazy" alt="View down through the water at the explorer swimming underwater with a spear, her shadow on the sandy seabed and small blue fish near a rock.">
+        </button>
+        <figcaption><b>Diving.</b> The water clears around the explorer and her spear, with a school of blue tangs nearby.</figcaption>
+      </figure>
+      <figure>
+        <button class="zoom" type="button" data-full="img/v0.3_build.jpg" data-cap="Building. A green ghost marks a valid spot for the lean-to. LMB places, R rotates, RMB cancels.">
+          <img src="img/v0.3_build.jpg" width="1600" height="900" loading="lazy" alt="A translucent green lean-to shelter ghost on grass near the explorer, with placement hints at the top and right.">
+        </button>
+        <figcaption><b>Building.</b> A green ghost marks a valid spot for the lean-to. LMB places, R rotates, RMB cancels.</figcaption>
+      </figure>
+      <figure>
+        <button class="zoom" type="button" data-full="img/v0.3_camp.jpg" data-cap="At the campfire. The prompt offers to cook the raw snapper in the pack.">
+          <img src="img/v0.3_camp.jpg" width="1600" height="900" loading="lazy" alt="The explorer at the lit campfire with a Cook Raw Sunny Snapper prompt above the hotbar.">
+        </button>
+        <figcaption><b>At the campfire.</b> The prompt offers to cook the raw snapper in the pack.</figcaption>
+      </figure>
+      <figure>
+        <button class="zoom" type="button" data-full="img/v0.3_cook.jpg" data-cap="Cooking. A progress bar runs while the snapper cooks, and the explorer waits by the fire.">
+          <img src="img/v0.3_cook.jpg" width="1600" height="900" loading="lazy" alt="The explorer at the campfire with a Cooking Raw Sunny Snapper progress bar beside her.">
+        </button>
+        <figcaption><b>Cooking.</b> A progress bar runs while the snapper cooks, and the explorer waits by the fire.</figcaption>
+      </figure>
+      <figure>
+        <button class="zoom" type="button" data-full="img/v0.3_storage.jpg" data-cap="Camp chest. Move a stack by selecting it, or take everything at once.">
+          <img src="img/v0.3_storage.jpg" width="1600" height="900" loading="lazy" alt="Camp chest window with chest slots on the left, the pack on the right and a Take all button.">
+        </button>
+        <figcaption><b>Camp chest.</b> Move a stack by selecting it, or take everything at once.</figcaption>
+      </figure>
+      <figure>
+        <button class="zoom" type="button" data-full="img/v0.3_boat.jpg" data-cap="Rowing. The repaired rowboat heads out from the shallows, leaving a foam wake.">
+          <img src="img/v0.3_boat.jpg" width="1600" height="900" loading="lazy" alt="The explorer rowing a small white rowboat from turquoise shallows into deep blue water, with a trail of foam behind it.">
+        </button>
+        <figcaption><b>Rowing.</b> The repaired rowboat heads out from the shallows, leaving a foam wake.</figcaption>
+      </figure>
+      <figure>
+        <button class="zoom" type="button" data-full="img/v0.3_dusk.jpg" data-cap="Dusk. 18:32 at camp: the light turns low and warm.">
+          <img src="img/v0.3_dusk.jpg" width="1600" height="900" loading="lazy" alt="The beach camp in warm, low evening light at 18:32, with the explorer near the fire.">
+        </button>
+        <figcaption><b>Dusk.</b> 18:32 at camp: the light turns low and warm.</figcaption>
+      </figure>
+      <figure>
+        <button class="zoom" type="button" data-full="img/v0.3_night.jpg" data-cap="Night. 22:32: cool moonlight, with the campfire lighting the explorer.">
+          <img src="img/v0.3_night.jpg" width="1600" height="900" loading="lazy" alt="The camp at night in cool blue moonlight, with the campfire casting warm light on the explorer.">
+        </button>
+        <figcaption><b>Night.</b> 22:32: cool moonlight, with the campfire lighting the explorer.</figcaption>
+      </figure>
+      <figure>
+        <button class="zoom" type="button" data-full="img/v0.3_pause.jpg" data-cap="Pause menu. Resume, save, load the last save, controls, settings, or save and leave.">
+          <img src="img/v0.3_pause.jpg" width="1600" height="900" loading="lazy" alt="Pause menu with Resume, Save game, Load last save, Controls, Settings, Save and return to title, and Save and quit.">
+        </button>
+        <figcaption><b>Pause menu.</b> Resume, save, load the last save, controls, settings, or save and leave.</figcaption>
+      </figure>
+    </div>
+    <div class="stack" style="gap:1rem">
+      <div class="sec-head" style="margin-bottom:0">
+        <h3>Haven Island in v0.2</h3>
+        <p class="muted" style="font-size:var(--t-sm)">The environment views from the refinement pass, before the gameplay systems existed.</p>
+      </div>
+      <div class="shots">
+        <figure>
+          <button class="zoom" type="button" data-full="img/v0.2_island.jpg" data-cap="v0.2: Complete island.">
+            <img src="img/v0.2_island.jpg" width="1600" height="900" loading="lazy" alt="The whole of Haven Island ringed by turquoise shallows and a reef, with the rock stack inland.">
+          </button>
+          <figcaption><b>Complete island.</b> Zoomed out to show the reef ring, the lagoon and the rock stack inland.</figcaption>
+        </figure>
+        <figure>
+          <button class="zoom" type="button" data-full="img/v0.2_beach.jpg" data-cap="v0.2: Beach and camp.">
+            <img src="img/v0.2_beach.jpg" width="1600" height="900" loading="lazy" alt="Beach camp with campfire, lean-to, chest, barrel and palms by the shore.">
+          </button>
+          <figcaption><b>Beach and camp.</b> The v0.2 default zoom (17 m of view at the focus), matched to Ref B's framing.</figcaption>
+        </figure>
+        <figure>
+          <button class="zoom" type="button" data-full="img/v0.2_cave.jpg" data-cap="v0.2: Rock stack and cave.">
+            <img src="img/v0.2_cave.jpg" width="1600" height="900" loading="lazy" alt="Lavender-grey stacked rock formation with a grass cap, a dark cave mouth and palms around its base.">
+          </button>
+          <figcaption><b>Rock stack and cave.</b> Lavender-grey slabs with baked occlusion and a two-chamber cave facing the camera.</figcaption>
+        </figure>
+        <figure>
+          <button class="zoom" type="button" data-full="img/v0.2_water.jpg" data-cap="v0.2: Water.">
+            <img src="img/v0.2_water.jpg" width="1600" height="900" loading="lazy" alt="Clear turquoise lagoon over sand and coral, deepening to royal blue past the reef.">
+          </button>
+          <figcaption><b>Water.</b> The approved water: lagoon, coral reef and the drop-off into deep blue.</figcaption>
+        </figure>
+      </div>
     </div>
   </div>
 </section>
@@ -550,52 +640,49 @@ dialog.lightbox .lb-close { position: fixed; top: calc(env(safe-area-inset-top, 
   <div class="wrap stack">
     <div class="sec-head">
       <p class="kicker">Character</p>
-      <h2>The castaway</h2>
-      <p class="sec-lede">An original character modelled on Ref B's protagonist, rigged and animated in Blender, then driven by a tested controller in Godot.</p>
+      <h2>The explorer</h2>
+      <p class="sec-lede">The player character, rebuilt for v0.3 from your official character reference. The mesh, clothing and skin weights are original. The skeleton and animation clips come from Quaternius' free Universal Animation Library (CC0). No marketplace model was bought.</p>
     </div>
     <div class="char-grid">
       <figure>
-        <button class="zoom" type="button" data-full="img/v0.2_player_closeup.jpg" data-cap="Castaway close-up.">
-          <img src="img/v0.2_player_closeup.jpg" width="1600" height="900" loading="lazy" alt="Close-up of the castaway: brown hair, yellow bandana, cream shirt, terracotta trousers, boots.">
+        <button class="zoom" type="button" data-full="img/v0.3_chop.jpg" data-cap="The explorer chopping a palm with the stone hatchet.">
+          <img src="img/v0.3_chop.jpg" width="1600" height="900" loading="lazy" alt="The explorer, in a beige cap with a sage brim, tan vest and teal shorts, swinging a stone hatchet at a palm trunk on the beach.">
         </button>
-        <figcaption><b>Close-up.</b> Vertex-coloured, no textures, about 3.6k triangles.</figcaption>
+        <figcaption><b>Chopping a palm.</b> The stone hatchet follows her right-hand bone through the swing. The 3D viewer below shows her up close.</figcaption>
       </figure>
       <div class="stack" style="gap:1.25rem">
         <dl class="spec">
-          <div><dt>Height</dt><dd>About 1.45 m, with chibi proportions</dd></div>
-          <div><dt>Outfit</dt><dd>Messy brown hair, yellow bandana with a red stripe and knot tails, cream shirt with rolled sleeves, terracotta trousers with cuffs, belt, buckled boots</dd></div>
-          <div><dt>Rig</dt><dd>17-bone armature with rigid skinning. Overlapping joint spheres keep elbows and knees closed.</dd></div>
-          <div><dt>Animations</dt><dd>idle, walk, run, swim, dive, fish_cast, fish_reel, spear_throw, gather, cook, chop</dd></div>
-          <div><dt>Source</dt><dd><code>tools/blender/assets_character.py</code> → <code>castaway.glb</code></dd></div>
+          <div><dt>Reference</dt><dd><code>references/official_character_reference.jpg</code></dd></div>
+          <div><dt>Look</dt><dd>Beige cap with a sage brim, short auburn bob, big brown eyes, tan utility vest over a light shirt, teal cargo shorts, brown belt with pouches, fingerless gloves, kneepads, socks and boots</dd></div>
+          <div><dt>Mesh</dt><dd>About 49k triangles, vertex-coloured, with custom skin weights</dd></div>
+          <div><dt>Rig</dt><dd>53 bones from the Quaternius Universal Animation Library (CC0), re-proportioned for a stylised build</dd></div>
+          <div><dt>Animations</dt><dd>28 clips: idle, walk, run, sprint, swim, swim_idle, dive, jump, fall, land, gather, interact, eat, drink, chop, spear_thrust, fish_cast, fish_idle, fish_reel, cook, row, sit, hurt, death, roll, push, crouch, dance</dd></div>
+          <div><dt>Held tools</dt><dd>Hatchet, fishing rod and spear attach to the right-hand bone</dd></div>
+          <div><dt>Source</dt><dd><code>tools/blender/assets_explorer.py</code> → <code>explorer.glb</code></dd></div>
         </dl>
-        <div><button class="btn" type="button" data-view="models/characters/castaway.glb">Open the castaway in the 3D viewer</button></div>
+        <div><button class="btn" type="button" data-view="models/characters/explorer.glb.txt">Open the explorer in the 3D viewer</button></div>
+        <p class="muted" style="font-size:var(--t-sm)">The v0.2 castaway stays in the repository and in the 3D viewer, but the game no longer uses it.</p>
       </div>
     </div>
 
     <div class="shots three">
       <figure>
-        <button class="zoom" type="button" data-full="img/v0.2_player_camp.jpg" data-cap="Castaway at camp, gameplay camera.">
-          <img src="img/v0.2_player_camp.jpg" width="1600" height="900" loading="lazy" alt="The castaway standing by the campfire, seen from the gameplay camera.">
+        <button class="zoom" type="button" data-full="img/v0.3_start.jpg" data-cap="The explorer at camp, gameplay camera.">
+          <img src="img/v0.3_start.jpg" width="1600" height="900" loading="lazy" alt="The explorer standing by the campfire on the beach, seen from the gameplay camera.">
         </button>
-        <figcaption><b>At camp.</b> Readable at the default zoom.</figcaption>
+        <figcaption><b>At camp.</b> Readable at the default zoom of 11 m.</figcaption>
       </figure>
       <figure>
-        <button class="zoom" type="button" data-full="img/v0.2_player_swim.jpg" data-cap="Swimming in the shallows.">
-          <img src="img/v0.2_player_swim.jpg" width="1600" height="900" loading="lazy" alt="The castaway swimming in turquoise water near the beach.">
+        <button class="zoom" type="button" data-full="img/v0.3_dive.jpg" data-cap="Diving with the spear.">
+          <img src="img/v0.3_dive.jpg" width="1600" height="900" loading="lazy" alt="The explorer swimming underwater with a spear, seen from above through clear water.">
         </button>
-        <figcaption><b>Swimming.</b> Switches to swimming automatically past 1 m of water.</figcaption>
+        <figcaption><b>Underwater.</b> A soft aqua edge glow and clearer water keep her readable from above.</figcaption>
       </figure>
       <figure>
-        <button class="zoom" type="button" data-full="img/v0.2_player_cave.jpg" data-cap="Walking the trail to the cave.">
-          <img src="img/v0.2_player_cave.jpg" width="1600" height="900" loading="lazy" alt="The castaway walking along the sandy trail toward the rock stack cave.">
+        <button class="zoom" type="button" data-full="img/v0.3_boat.jpg" data-cap="Rowing the rowboat.">
+          <img src="img/v0.3_boat.jpg" width="1600" height="900" loading="lazy" alt="The explorer seated in the rowboat, rowing out from turquoise shallows toward deep water.">
         </button>
-        <figcaption><b>On the trail.</b> Walking from camp toward the cave.</figcaption>
-      </figure>
-      <figure class="wide">
-        <button class="zoom" type="button" data-full="img/v0.2_player_animations.jpg" data-cap="All 11 animations, one frame each.">
-          <img src="img/v0.2_player_animations.jpg" width="1600" height="667" loading="lazy" alt="A labelled lineup of the castaway in 11 poses, one per animation.">
-        </button>
-        <figcaption><b>All 11 animations, one frame each.</b> The fishing, spear, gathering and cooking clips are ready for systems that don't exist yet.</figcaption>
+        <figcaption><b>Rowing.</b> The row clip plays faster as the boat speeds up.</figcaption>
       </figure>
     </div>
 
@@ -604,24 +691,35 @@ dialog.lightbox .lb-close { position: fixed; top: calc(env(safe-area-inset-top, 
         <h3>Controls</h3>
         <div class="table-scroll">
           <table>
-            <thead><tr><th>Input</th><th>Action</th></tr></thead>
+            <thead><tr><th>Action</th><th>Keyboard and mouse</th><th>Gamepad</th></tr></thead>
             <tbody>
-              <tr><td><kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> or arrows</td><td>Move, relative to the camera</td></tr>
-              <tr><td><kbd>Shift</kbd></td><td>Run</td></tr>
-              <tr><td><kbd>Ctrl</kbd> or <kbd>C</kbd>, held in deep water</td><td>Dive; release to resurface</td></tr>
-              <tr><td>Mouse wheel, <kbd>+</kbd> <kbd>−</kbd></td><td>Zoom (9 to 110 m)</td></tr>
+              <tr><td>Move</td><td><kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> or arrows</td><td>Left stick</td></tr>
+              <tr><td>Sprint</td><td><kbd>Shift</kbd></td><td>LT or L3</td></tr>
+              <tr><td>Jump</td><td><kbd>Space</kbd></td><td>A</td></tr>
+              <tr><td>Interact</td><td><kbd>E</kbd></td><td>X</td></tr>
+              <tr><td>Use the selected item</td><td>Left mouse button</td><td>RT</td></tr>
+              <tr><td>Cancel</td><td>Right mouse button or <kbd>Q</kbd></td><td>B</td></tr>
+              <tr><td>Dive (hold in deep water)</td><td><kbd>Ctrl</kbd> or <kbd>C</kbd></td><td>B</td></tr>
+              <tr><td>Inventory and crafting</td><td><kbd>Tab</kbd> or <kbd>I</kbd></td><td>Y</td></tr>
+              <tr><td>Hotbar slot</td><td><kbd>1</kbd> to <kbd>6</kbd></td><td>None</td></tr>
+              <tr><td>Next or previous slot</td><td><kbd>X</kbd> / <kbd>Z</kbd></td><td>RB / LB</td></tr>
+              <tr><td>Rotate placement</td><td><kbd>R</kbd></td><td>D-pad right</td></tr>
+              <tr><td>Zoom</td><td>Mouse wheel, <kbd>+</kbd> <kbd>−</kbd></td><td>D-pad up and down</td></tr>
+              <tr><td>Pause menu</td><td><kbd>Esc</kbd></td><td>Start</td></tr>
+              <tr><td>Quick save and load</td><td><kbd>F5</kbd> / <kbd>F9</kbd></td><td>None</td></tr>
             </tbody>
           </table>
         </div>
+        <p class="muted" style="font-size:var(--t-sm)">Prompts switch between keyboard and gamepad glyphs on their own. The pause menu has a Controls page.</p>
       </div>
       <div class="stack" style="gap:0.9rem">
-        <h3>What the controller does</h3>
+        <h3>How it plays</h3>
         <ul style="display:grid;gap:0.45rem;font-size:var(--t-sm)">
-          <li>Walks and runs relative to the camera on the terrain's collision heightmap.</li>
-          <li>Starts swimming once the water is deeper than 1 m and floats chest-deep.</li>
-          <li>Dives while the dive key is held, keeping clear of the seabed, and resurfaces on release.</li>
-          <li>Crossfades animations and matches playback speed to movement speed.</li>
-          <li>The camera follows with damping and a small look-ahead. It never rotates on its own.</li>
+          <li><b>Fishing:</b> hold use to charge the cast and release to throw. Press when the <b>!</b> appears, then hold to reel and ease off when the tension runs high.</li>
+          <li><b>Spearfishing:</b> hold Dive in deep water and press use to thrust. Underwater, the spear locks onto the nearest fish in front of you.</li>
+          <li><b>Boats:</b> interact to board. <kbd>W</kbd> and <kbd>S</kbd> row, <kbd>A</kbd> and <kbd>D</kbd> steer, and interact again steps ashore.</li>
+          <li><b>Camp:</b> sleeping in a shelter skips the night, heals, moves your respawn point and saves the game.</li>
+          <li><b>Settings:</b> music, effects and ambience volume, fullscreen, interface size from 80 to 140%, tap-to-dive instead of hold, and objectives on or off.</li>
         </ul>
       </div>
     </div>
@@ -633,7 +731,7 @@ dialog.lightbox .lb-close { position: fixed; top: calc(env(safe-area-inset-top, 
     <div class="sec-head">
       <p class="kicker">Compare</p>
       <h2>Side by side with the references</h2>
-      <p class="sec-lede">Each pair puts one of your references next to the closest in-engine view. The references are third-party images you supplied. They appear here for comparison only and none of their content is in the game.</p>
+      <p class="sec-lede">Each pair puts one of your references next to the closest in-engine view. These comparisons were made for v0.2, before the explorer replaced the castaway. The references are third-party images you supplied. They appear here for comparison only and none of their content is in the game.</p>
     </div>
     <div class="tabs" role="tablist" aria-label="Comparisons" id="compare-tabs"></div>
     <div id="compare-panel" role="tabpanel"></div>
@@ -655,10 +753,10 @@ dialog.lightbox .lb-close { position: fixed; top: calc(env(safe-area-inset-top, 
             <button class="btn" type="button" id="v-gameplay">Gameplay angle</button>
             <button class="btn" type="button" id="v-spin" aria-pressed="true">Spin</button>
           </div>
-          <p class="stage-msg" id="viewer-msg">Loading the 3D viewer…</p>
+          <p class="stage-msg" id="viewer-msg">The explorer loads when you scroll here.</p>
         </div>
         <div class="vinfo">
-          <div class="vtitle"><h3 id="v-name">castaway</h3><span class="pill info" id="v-group">Character</span></div>
+          <div class="vtitle"><h3 id="v-name">explorer</h3><span class="pill info" id="v-group">Character</span></div>
           <dl class="vstats" id="v-stats"></dl>
           <div class="anims" id="v-anims" role="group" aria-label="Animations"></div>
         </div>
@@ -793,7 +891,7 @@ dialog.lightbox .lb-close { position: fixed; top: calc(env(safe-area-inset-top, 
         <dl class="spec">
           <div><dt>Projection</dt><dd>Narrow perspective, FOV 38°, measured from Ref B and chosen over three other candidates in an A/B test. Orthographic is one setting away.</dd></div>
           <div><dt>Angle</dt><dd>Pitch −40°, yaw 18°, so props face the camera almost square-on</dd></div>
-          <div><dt>Zoom</dt><dd>9 to 110 m of view at the focus; 17 m by default</dd></div>
+          <div><dt>Zoom</dt><dd>6 to 110 m of view at the focus; 11 m by default since v0.3 (17 m in v0.2). Eases in a little while diving.</dd></div>
           <div><dt>Tracking</dt><dd>Critically damped follow with a small look-ahead. Never rotates by itself.</dd></div>
         </dl>
       </div>
@@ -839,7 +937,7 @@ dialog.lightbox .lb-close { position: fixed; top: calc(env(safe-area-inset-top, 
     <div class="sec-head">
       <p class="kicker">Manifest</p>
       <h2>Asset manifest</h2>
-      <p class="sec-lede">Every asset in the project, with its origin, licence and review state, read from <code>docs/ASSET_MANIFEST.csv</code>. All game assets are project-owned originals. The bottom rows are outside packs that were researched but not acquired.</p>
+      <p class="sec-lede">Every asset in the project, with its origin, licence and review state, read from <code>docs/ASSET_MANIFEST.csv</code>. Game assets are project-owned originals, except the CC0 animation rig, two OFL fonts and the MIT Godot runtime in the builds. Rows marked not acquired are outside packs that were researched but not bought.</p>
     </div>
     <div class="toolbar">
       <div class="filters" id="manifest-filters" role="group" aria-label="Filter by category"></div>
@@ -863,19 +961,26 @@ dialog.lightbox .lb-close { position: fixed; top: calc(env(safe-area-inset-top, 
     <div class="sec-head">
       <p class="kicker">Build</p>
       <h2>How the game is made and checked</h2>
-      <p class="sec-lede">Every model is generated by a script, so any asset can be rebuilt from source. Rebuilds are byte-identical: face order is canonicalised before export.</p>
+      <p class="sec-lede">Every model and every sound is generated by a script, so any asset can be rebuilt from source. Model rebuilds are byte-identical, because face order is canonicalised before export.</p>
     </div>
     <ol class="steps">
-      <li><div class="body"><h3>Generate the assets in Blender</h3><p class="muted" style="font-size:var(--t-sm)">Python generators in <code>tools/blender/</code> build palms, rocks, props, foliage, the terrain and the castaway, bake ambient occlusion into vertex colours, and export GLB files. Material names choose the Godot shader.</p></div></li>
-      <li><div class="body"><h3>Design the island</h3><p class="muted" style="font-size:var(--t-sm)">The island shape is a signed distance field. The terrain step writes a faceted mesh, a 261 × 261 collision heightmap and <code>haven_layout.json</code> with hand-composed vignettes.</p></div></li>
-      <li><div class="body"><h3>Import into Godot and assemble the scene</h3><p class="muted" style="font-size:var(--t-sm)">A headless import, then <code>tools/build_haven_scene.gd</code> writes <code>scenes/world/haven_island.tscn</code> from the layout.</p>
-        <div class="cmd"><pre class="code"><code>tools/build_all.sh               # all groups
-tools/build_all.sh palms rocks   # palms rocks props foliage terrain character</code></pre><button class="btn copy" type="button">Copy</button></div></div></li>
-      <li><div class="body"><h3>Validate</h3><p class="muted" style="font-size:var(--t-sm)">World checks, the controller test with simulated input, and screenshots from the real renderer.</p>
+      <li><div class="body"><h3>Generate the assets in Blender</h3><p class="muted" style="font-size:var(--t-sm)">Python generators in <code>tools/blender/</code> build the islands, palms, rocks, props, foliage, items, fish and the explorer, bake ambient occlusion into vertex colours and export GLB files. Material names choose the Godot shader.</p>
+        <div class="cmd"><pre class="code"><code>tools/build_all.sh                    # every group, then import and scenes
+tools/build_all.sh explorer items     # palms rocks props foliage terrain character items explorer islands</code></pre><button class="btn copy" type="button">Copy</button></div></div></li>
+      <li><div class="body"><h3>Synthesise the sound</h3><p class="muted" style="font-size:var(--t-sm)">47 effects and 6 loops from numpy: plucked strings, filtered noise and envelopes. The loops are encoded to Ogg Vorbis with ffmpeg.</p>
+        <div class="cmd"><pre class="code"><code>/opt/bpyenv/bin/python tools/audio/make_audio.py</code></pre><button class="btn copy" type="button">Copy</button></div></div></li>
+      <li><div class="body"><h3>Import into Godot and assemble the islands</h3><p class="muted" style="font-size:var(--t-sm)">A headless import, then <code>tools/build_haven_scene.gd</code> writes the Haven Island, Palm Key and Lookout Isle scenes from their layouts. At load time, <code>WorldPopulator</code> turns the set dressing into gameplay: palms and rocks become resources, driftwood and shells become pickups, and the camp gets a working fire, chest and boat.</p></div></li>
+      <li><div class="body"><h3>Test</h3><p class="muted" style="font-size:var(--t-sm)">World checks, the controller test, and the end-to-end gameplay test with simulated input.</p>
         <div class="cmd"><pre class="code"><code>godot --headless --path game --script res://tools/smoke_test.gd
 godot --headless --path game --script res://tools/player_test.gd
-godot --path game -- --capture=/abs/out.png --view=26,0.5,21.5,18,18,-40,38</code></pre><button class="btn copy" type="button">Copy</button></div>
-        <p class="muted" style="font-size:var(--t-xs)"><code>--view</code> is focus x, y, z, view size, yaw, pitch and an optional FOV (0 for orthographic).</p></div></li>
+godot --headless --path game --script res://tools/gameplay_test.gd</code></pre><button class="btn copy" type="button">Copy</button></div></div></li>
+      <li><div class="body"><h3>Capture and record</h3><p class="muted" style="font-size:var(--t-sm)"><code>--fixed-fps 30</code> keeps game time at 1/30 s per frame even when rendering is slow, so timed moments such as a bite or a cooking bar are not skipped. Movie Maker mode renders every frame of the scripted run for the video.</p>
+        <div class="cmd"><pre class="code"><code>godot --path game --fixed-fps 30 --script res://tools/capture_gameplay.gd -- --out=/abs/dir
+godot --path game --write-movie /abs/demo.avi --fixed-fps 30 --resolution 1280x720 --script res://tools/demo_video.gd
+godot --path game --script res://tools/perf_probe.gd</code></pre><button class="btn copy" type="button">Copy</button></div></div></li>
+      <li><div class="body"><h3>Export the desktop builds</h3><p class="muted" style="font-size:var(--t-sm)">Linux, Windows and macOS presets, built with the official Godot 4.4.1 export templates (SHA-512 checked against the release). The script copies the Godot licence, the licence manifest and a play guide next to each build.</p>
+        <div class="cmd"><pre class="code"><code>tools/export_desktop.sh               # Linux Windows macOS
+tools/export_desktop.sh Linux</code></pre><button class="btn copy" type="button">Copy</button></div></div></li>
       <li><div class="body"><h3>Package this page</h3>
         <div class="cmd"><pre class="code"><code>python3 tools/package/build_package.py</code></pre><button class="btn copy" type="button">Copy</button></div></div></li>
     </ol>
@@ -883,31 +988,49 @@ godot --path game -- --capture=/abs/out.png --view=26,0.5,21.5,18,18,-40,38</cod
     <div class="split">
       <div class="stack" style="gap:0.9rem">
         <h3>Repository layout</h3>
-<pre class="code">references/          the two visual references
-docs/                research, art bible, manifest, tasks,
-                     toolchain, reviews, screenshots/
+<pre class="code">references/          official character and island references
+docs/                licences, manifest, test results, research,
+                     art bible, tasks, toolchain, screenshots/
 tools/
-  blender/           bpy asset generators and island layout
-  palette/           reference colour sampler
+  blender/           bpy generators: islands, palms, rocks, props,
+                     foliage, items, explorer
+  blender/third_party/quaternius_ual/   CC0 rig and clips
+  audio/             procedural sound effects and loops
+  ui/                HUD stat icons
   package/           builds this page
-  build_all.sh       assets → Godot import → Haven scene
+  export_desktop.sh  Linux, Windows and macOS exports
+  build_all.sh       assets → Godot import → island scenes
 game/                the Godot project (project.godot)
-  assets/models/     generated GLBs (rebuild, don't edit)
-  assets/terrain/    heightmap + set-dressing layout
-  shaders/           water, terrain, stylised vertex colour
-  materials/         shader materials, daylight environment
-  scenes/            main, world, player, camera, props
-  scripts/           camera, world, player, props, debug
-  tools/             scene builder, smoke and player tests</pre>
+  scripts/core/      input, items, game state, world, audio, saves
+  scripts/player/    controller, held items, rod, spear, builder
+  scripts/gameplay/  interactables, resources, boats, fish
+  scripts/ui/        HUD, inventory, storage, menus
+  scripts/world/     islands, terrain, scatter, day and night
+  shaders/           water, terrain, foliage, character, fish
+  tools/             tests, captures, scene builder, icon baker</pre>
       </div>
       <div class="stack" style="gap:0.9rem">
         <h3>Toolchain</h3>
         <dl class="spec">
-          <div><dt>Godot</dt><dd>4.4.1 stable from the Ubuntu archive. The official download was blocked here.</dd></div>
+          <div><dt>Godot</dt><dd>4.4.1 stable. The editor is the Ubuntu archive build; the desktop builds use the official 4.4.1 export templates.</dd></div>
           <div><dt>Blender</dt><dd>5.2.2 as the <code>bpy</code> Python module (PyPI wheel, Python 3.13)</dd></div>
-          <div><dt>Renderer</dt><dd>Vulkan through Mesa llvmpipe under Xvfb. There is no GPU in this environment, so frames take 10 to 20 s, but they are genuine engine renders.</dd></div>
-          <div><dt>On your machine</dt><dd>Install Godot 4.4 or newer, open <code>game/project.godot</code> and press Play.</dd></div>
+          <div><dt>Audio</dt><dd>numpy for synthesis, ffmpeg with libvorbis for the loops</dd></div>
+          <div><dt>Renderer</dt><dd>Vulkan through Mesa llvmpipe under Xvfb. There is no GPU here, so frames take about a second each, but they are genuine engine renders.</dd></div>
+          <div><dt>On your machine</dt><dd>Run a desktop build, or install Godot 4.4 or newer, open <code>game/project.godot</code> and press Play.</dd></div>
         </dl>
+        <h3>Renderer load</h3>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>View, 1920×1080</th><th>Draw calls</th><th>Primitives</th><th>Video memory</th></tr></thead>
+            <tbody class="tnum">
+              <tr><td>Camp at start</td><td>406</td><td>484k</td><td>449 MiB</td></tr>
+              <tr><td>Swimming offshore</td><td>335</td><td>423k</td><td>449 MiB</td></tr>
+              <tr><td>Zoomed out, 55 m</td><td>366</td><td>378k</td><td>449 MiB</td></tr>
+              <tr><td>Palm Key</td><td>313</td><td>317k</td><td>449 MiB</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="muted" style="font-size:var(--t-sm)">From <code>tools/perf_probe.gd</code>. These figures don't depend on the GPU; frame rate on real hardware has not been measured. The 8192² shadow map takes about 256 MiB of the video memory, so halving its size is the first setting to change for lower-end machines.</p>
       </div>
     </div>
   </div>
@@ -931,6 +1054,21 @@ game/                the Godot project (project.godot)
       <h2>What changed in each build</h2>
     </div>
     <div class="log">
+      <div class="release">
+        <div><p class="ver">v0.3.0</p><p class="mono muted">Playable game, explorer</p></div>
+        <ul>
+          <li><b>Explorer:</b> replaces the castaway. Original mesh from your official reference, skinned to the CC0 Quaternius rig, with 28 clips and tools held in the right hand. Nothing was bought.</li>
+          <li><b>Controls:</b> keyboard, mouse and gamepad, with prompts in the glyphs of the device in use.</li>
+          <li><b>Survival loop:</b> gathering with regrowing palms and rocks, a 24-slot pack and hotbar, crafting, cooking, springs, and hunger, thirst, stamina, health and oxygen.</li>
+          <li><b>Fishing and spearfishing:</b> cast, bite, hook and a tension reel; a pole-spear thrust with aim assist; four fish species in schools.</li>
+          <li><b>Camp and boats:</b> ghost placement for campfire, storage, lean-to and raft; sleeping; rowboat repair and rowing with a foam wake.</li>
+          <li><b>World:</b> Palm Key with a shipwreck to salvage and Lookout Isle with the signal fire that ends the game; 16 guided objectives with a compass arrow.</li>
+          <li><b>Ocean:</b> clear water around the diver, an edge glow, a camera ease-in, dives capped at 4.2 m, muffled sound underwater.</li>
+          <li><b>Day and night:</b> 24-minute days, warm dawn and dusk, moonlit nights with crickets. The look from 07:00 to 17:00 is unchanged.</li>
+          <li><b>Saving, UI, sound:</b> full save and load, menus and HUD in Fredoka and Nunito, 47 synthesised effects and 6 loops, interface size and tap-to-dive settings.</li>
+          <li><b>Handoff:</b> Linux, Windows and macOS export presets, licence manifest, test results, control guide, 15 captures and a gameplay video.</li>
+        </ul>
+      </div>
       <div class="release">
         <div><p class="ver">v0.2.0</p><p class="mono muted">Environment refinement</p></div>
         <ul>
@@ -975,14 +1113,13 @@ game/                the Godot project (project.godot)
     <div class="sec-head">
       <p class="kicker">Decisions</p>
       <h2>What I need from you</h2>
-      <p class="sec-lede">Nothing below blocks the next build step except the first item.</p>
+      <p class="sec-lede">None of these blocks further work. The first two need hardware or a player I don't have here.</p>
     </div>
     <ul class="decisions">
-      <li class="decision"><h3>Review v0.2 and the castaway</h3><span class="pill warn">Waiting on you</span><p>Approve the environment pass and the character, or tell me what still needs to change. The captures, comparisons and 3D viewer above cover everything.</p></li>
-      <li class="decision"><h3>Choose the next phase</h3><span class="pill info">Proposal</span><p>I suggest underwater first (colour grade, breath meter, three animated fish species), then the fishing and spearfishing systems that use them. Rod and spear would attach to the castaway's hand as part of fishing.</p></li>
-      <li class="decision"><h3>Polygon Hangar membership (probable Ref A source)</h3><span class="pill">On hold</span><p>You asked me not to buy it yet. Its licence for use in a commercial game is still unknown.</p></li>
-      <li class="decision"><h3>GGART-BCN Survival Island pack, US$20</h3><span class="pill">On hold</span><p>Same kind of props as Ref B, but its licence isn't shown in search results. You asked me not to buy it yet.</p></li>
-      <li class="decision"><h3>Network allow-list, optional</h3><span class="pill">Optional</span><p>Allowing quaternius.com, kenney.nl and poly.pizza in this environment's network settings would let me evaluate their free CC0 animated fish and characters.</p></li>
+      <li class="decision"><h3>Play the build</h3><span class="pill warn">Waiting on you</span><p>Tell me how it feels: movement, fishing tension, how fast hunger and thirst drop, recipe costs and how long a full run takes. Balance so far is a first pass, tuned by tests rather than by play.</p></li>
+      <li class="decision"><h3>Run the Windows and macOS builds</h3><span class="pill warn">Waiting on you</span><p>Both exported cleanly, but there is no Windows or Mac machine here to launch them. A quick start-up check, and the frame rate if you can, would close that gap.</p></li>
+      <li class="decision"><h3>A higher-fidelity explorer</h3><span class="pill">Optional</span><p>The current explorer is original and free to ship. A sculpted, hand-painted version from an artist or a licensed marketplace model would get closer to the reference render. The options are in <code>docs/CHARACTER_ASSET_RESEARCH.md</code>. Nothing has been bought.</p></li>
+      <li class="decision"><h3>Polygon Hangar and Superhive packs</h3><span class="pill">On hold</span><p>Still not purchased, as you asked. The game does not depend on them.</p></li>
     </ul>
   </div>
 </section>
@@ -990,8 +1127,8 @@ game/                the Godot project (project.godot)
 
 <footer>
   <div class="wrap">
-    <p>Built on 17 October 2026 from branch <code>@BRANCH@</code> at commit <code>@COMMIT@</code> by <code>tools/package/build_package.py</code>.</p>
-    <p>Every game image is an unedited Godot capture rendered on a software Vulkan device. No image on this page is AI-generated. The two references are third-party images, used only for comparison.</p>
+    <p>Built on 18 October 2026 from branch <code>@BRANCH@</code> at commit <code>@COMMIT@</code> by <code>tools/package/build_package.py</code>.</p>
+    <p>Every game image and the video are unedited Godot output rendered on a software Vulkan device. No image on this page is AI-generated. The references are third-party images, used only for comparison.</p>
   </div>
 </footer>
 
@@ -1161,15 +1298,21 @@ window.PU_PALETTE = /*@PALETTE@*/{};
   /* ---------- roadmap ---------- */
   safely("roadmap", () => {
     const R = [
-      ["Phase 0", "Reference and asset research", [["x", "Inspect references A and B: forensics and visual classification"], ["x", "Investigate origins (text search only; image search and marketplaces blocked)"], ["x", "Superhive Survival Island pack: similar alternative, unverified"], ["x", "JustCreate3D Stylized Tropical Island with Ruins: not a match for Ref A"], ["x", "Investigation report and asset manifest"], ["x", "Your decision: no Polygon Hangar or Superhive purchase yet"], ["p", "Free CC0 sources: Kenney GitHub kit evaluated, not suitable; Quaternius, Poly Pizza and kenney.nl blocked"]]],
-      ["Phase 1", "Visual foundation", [["x", "Art bible with a palette sampled from both references"], ["x", "Godot 4.4 Forward+ scaffold, input map, shader globals"], ["x", "Three-quarter camera with smooth follow, zoom and scripted views"], ["x", "Daylight rig: warm sun, lavender ambient, SSAO, glow, tonemap"], ["x", "Water: depth colour ramp, seabed refraction, shoreline foam, wave bands, glints"], ["x", "Caustics on terrain and props below the waterline"], ["x", "Haven Island terrain: SDF design to a faceted Delaunay mesh"], ["x", "Terrain collision from the exported heightmap"], ["t", "Sunrise and sunset lighting variants"], ["t", "Underwater post-process while diving"]]],
+      ["Handoff", "Character replacement", [["x", "Marketplace research written up in CHARACTER_ASSET_RESEARCH.md; nothing bought"], ["x", "Original explorer mesh matching the official reference: cap with sage brim, auburn bob, brown eyes, tan vest, teal shorts, belt and pouches, fingerless gloves, kneepads, boots"], ["x", "Rigged to the Quaternius UAL skeleton (CC0) with 28 clips; animation blending in game"], ["x", "Held tools follow the hand bone; grips checked in captures for hatchet, rod and spear"], ["p", "Face and hands are simple next to the reference render; a sculpted, hand-painted character from an artist or a licensed model would be the next step up"]]],
+      ["M1", "Playable character", [["x", "Move, run, jump, camera follow and zoom, collisions, interaction prompts"], ["x", "Keyboard, mouse and gamepad, with device-matched glyphs"], ["x", "Animation crossfades for locomotion, swimming and actions"]]],
+      ["M2", "Ocean", [["x", "Shore-to-swim transition, surface swimming, diving with oxygen, underwater movement"], ["x", "Four animated fish species in schools: boids, swim shader, depth bands"], ["x", "Underwater readability: clear water around the diver, edge glow, camera ease-in, muffled audio"], ["p", "The seabed is the shared terrain; no dedicated reef scenery beyond the coral scatter"]]],
+      ["M3", "Survival loop", [["x", "Gather wood, stone, coconuts, fibre, fronds and shells; palms and rocks regrow"], ["x", "Inventory, hotbar, tools in hand, crafting: rope, hatchet, spear, rod and kits"], ["x", "Fishing: cast, bite, hook, reel with line tension, catch"], ["x", "Spearfishing with hit detection and aim assist"], ["x", "Cooking, eating, drinking; hunger, thirst, stamina, health, oxygen; death and respawn"]]],
+      ["M4", "World progression", [["x", "Shelter, storage and campfire placement; sleeping"], ["x", "Rowboat repair and control; raft"], ["x", "Two more handcrafted islands, Palm Key and Lookout Isle, and a rescue ending"], ["x", "Saves for the player, inventory, objectives, world objects, structures and boats"], ["x", "Day and night cycle with night ambience"]]],
+      ["M5", "Polish and handoff", [["x", "Procedural sound effects and loops; UI theme and fonts; settings"], ["x", "Licence manifest, asset manifest, README control guide, test results"], ["x", "Desktop export presets and script for Linux, Windows and macOS"], ["p", "Performance measured only on the software renderer here; no real-GPU profile"], ["p", "Balance is a first pass: needs rates, recipe costs, respawn timers"], ["t", "Screen for rebinding controls"], ["p", "Accessibility: glyph prompts, volume sliders, objective toggle, interface size and tap-to-dive; no colour-blind palette or captions for sound cues yet"]]],
+      ["Phase 0", "Reference and asset research", [["x", "Inspect references A and B: forensics and visual classification"], ["x", "Investigate origins (text search only; image search and marketplaces blocked)"], ["x", "Superhive Survival Island pack: similar alternative, unverified"], ["x", "JustCreate3D Stylized Tropical Island with Ruins: not a match for Ref A"], ["x", "Investigation report and asset manifest"], ["x", "Your decision: no Polygon Hangar or Superhive purchase yet"], ["p", "Free CC0 sources: Kenney GitHub kit evaluated, not suitable; Quaternius UAL used for the explorer's rig"]]],
+      ["Phase 1", "Visual foundation", [["x", "Art bible with a palette sampled from both references"], ["x", "Godot 4.4 Forward+ scaffold, input map, shader globals"], ["x", "Three-quarter camera with smooth follow, zoom and scripted views"], ["x", "Daylight rig: warm sun, lavender ambient, SSAO, glow, tonemap"], ["x", "Water: depth colour ramp, seabed refraction, shoreline foam, wave bands, glints"], ["x", "Caustics on terrain and props below the waterline"], ["x", "Haven Island terrain: SDF design to a faceted Delaunay mesh"], ["x", "Terrain collision from the exported heightmap"], ["x", "Sunrise and sunset lighting, as part of the day and night cycle (v0.3)"], ["x", "Underwater view while diving (v0.3)"]]],
       ["v0.2", "Environment refinement from your notes", [["x", "Gameplay camera matched to Ref B and A/B-tested with captures"], ["x", "Rock stack: sculpted slabs, baked AO, stone material, deeper cave, vegetation"], ["x", "Palms: curved trunks, 9 variants including groves, richer leaves"], ["x", "Handcrafted vignettes, coastal details, dunes, trail, patch grass"], ["x", "Sand variation and softer shadows; water preserved"], ["x", "Island, beach, cave and water captures with reference comparisons"]]],
-      ["Phase 2", "Environment assets", [["x", "Palms: 7 variants plus twin and trio, wind sway and frond flutter"], ["x", "Rocks: 4 boulders, 2 clusters, 6 pebbles and the landmark rock stack"], ["x", "Props: campfire, lean-to, chest, barrel, crate, log seat, drying rack, raft, rowboat, wreck ribs, planks, starfish, driftwood, shells, coconuts"], ["x", "Corals, seaweed, grass, agaves, bushes, flowering shrubs, beach grass"], ["t", "Harvestable coconuts, berry bushes, driftwood pickups"], ["t", "Shelter variants for the building system"]]],
-      ["Phase 3", "Character", [["x", "Rigged castaway with 11 animations"], ["x", "PlayerController: walk, run, auto-swim, dive, crossfades, camera follow (14/14)"], ["t", "Held tools (rod, spear, machete) on the hand bone"], ["t", "Interaction prompts once gathering and fishing exist"], ["t", "Footstep dust and water splashes"]]],
-      ["Phase 4", "Ocean gameplay", [["p", "Swimming and diving movement work; breath meter not started"], ["t", "Underwater fog and colour grade while diving"], ["t", "Three animated fish species: schooling, avoidance, fleeing, depth habitat"]]],
-      ["Phase 5", "Fishing", [["t", "Fishing: cast, line, bobber, bite, hook, reel, escape"], ["t", "Spearfishing: aim, throw, hit, catch"]]],
-      ["Phase 6", "Survival", [["t", "Inventory, crafting, building, cooking at the campfire"], ["t", "Saving and the game UI"]]],
-      ["Phase 7", "Polish", [["t", "Performance pass on a real GPU, LODs, shadow cascade tuning"], ["t", "Audio"]]],
+      ["Phase 2", "Environment assets", [["x", "Palms: 7 variants plus twin and trio, wind sway and frond flutter"], ["x", "Rocks: 4 boulders, 2 clusters, 6 pebbles and the landmark rock stack"], ["x", "Props: campfire, lean-to, chest, barrel, crate, log seat, drying rack, raft, rowboat, wreck ribs, planks, starfish, driftwood, shells, coconuts"], ["x", "Corals, seaweed, grass, agaves, bushes, flowering shrubs, beach grass"], ["p", "Coconut and driftwood pickups (v0.3); no berry bushes yet"], ["p", "One buildable lean-to shelter; no variants yet"]]],
+      ["Phase 3", "Character", [["x", "v0.2 castaway with 11 animations, replaced by the explorer in v0.3"], ["x", "PlayerController: walk, run, auto-swim, dive, crossfades, camera follow (14/14)"], ["x", "Held tools (rod, spear, hatchet) on the hand bone (v0.3)"], ["x", "Interaction prompts with device glyphs (v0.3)"], ["p", "Footstep and splash sounds and a boat wake; no footstep dust"]]],
+      ["Phase 4", "Ocean gameplay", [["x", "Swimming, diving and the oxygen meter (v0.3)"], ["x", "Underwater view while diving (v0.3)"], ["x", "Fish schools: 4 species, avoidance, scattering from swimmers, depth habitat (v0.3)"]]],
+      ["Phase 5", "Fishing", [["x", "Fishing: cast, line, bobber, bite, hook, reel, escape (v0.3)"], ["x", "Spearfishing: aim assist, thrust, hit, catch (v0.3)"]]],
+      ["Phase 6", "Survival", [["x", "Inventory, crafting, building, cooking (v0.3)"], ["x", "Saving, the HUD and menus (v0.3)"]]],
+      ["Phase 7", "Polish", [["p", "Performance: only checked on the software renderer; no real-GPU profile, no LODs"], ["x", "Audio: procedural sound effects and loops (v0.3)"]]],
     ];
     $("#phases").replaceChildren(...R.map(([tag, title, items]) => {
       const n = items.length, d = items.filter((i) => i[0] === "x").length, p = items.filter((i) => i[0] === "p").length;
@@ -1194,6 +1337,10 @@ window.PU_PALETTE = /*@PALETTE@*/{};
       if (t.startsWith("not acquired")) return h("span", { class: "pill", text: "Not acquired, on hold" });
       if (t.startsWith("water approved")) return r.name.startsWith("water") ? h("span", { class: "pill ok", text: "Approved (v0.1)" }) : h("span", { class: "pill warn", text: "v0.2 review pending" });
       if (t.startsWith("direction approved")) return h("span", { class: "pill warn", text: "v0.2 review pending" });
+      if (t.startsWith("v0.3 in game")) return h("span", { class: "pill ok", text: "In game (v0.3)" });
+      if (t.startsWith("imported")) return h("span", { class: "pill info", text: s.split(",")[0] });
+      if (t.startsWith("superseded")) return h("span", { class: "pill", text: "Superseded by the explorer" });
+      if (t.startsWith("runtime")) return h("span", { class: "pill info", text: "Build runtime" });
       return h("span", { class: "pill warn", text: s.replace("pending review", "review pending") });
     };
     const filters = $("#manifest-filters");
@@ -1487,8 +1634,14 @@ window.PU_PALETTE = /*@PALETTE@*/{};
       renderer.render(scene, camera);
     };
     tick();
-    const first = MODELS.find((m) => m.name === "castaway") || MODELS[0];
-    if (first) load(first.url);
+    // The explorer is a few MB, so fetch it only when the viewer comes near the screen.
+    const first = MODELS.find((m) => m.name === "explorer") || MODELS[0];
+    let started = false;
+    const start = () => { if (!started && first) { started = true; if (!token) load(first.url); } };
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) { io.disconnect(); start(); } }, { rootMargin: "600px 0px" });
+      io.observe(stage);
+    } else start();
   });
 })();
 </script>
