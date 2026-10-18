@@ -13,12 +13,13 @@ const STRUCTURE_MODELS := {
 }
 ## Per-item view tweaks: [yaw deg, pitch deg, zoom]
 const VIEWS := {
-	"spear": [35.0, -35.0, 0.95],
-	"fishing_rod": [35.0, -35.0, 0.95],
 	"hatchet": [55.0, -25.0, 1.0],
 	"rope": [20.0, -55.0, 1.0],
-	"shell": [10.0, -55.0, 1.0],
+	"shell": [0.0, -62.0, 1.05],
 }
+## Long, thin tools: laid corner to corner and drawn thicker so they read at
+## hotbar size. id -> girth multiplier (the shaft runs along the model's +Y).
+const DIAGONAL := {"spear": 2.6, "fishing_rod": 3.2}
 
 
 func _initialize() -> void:
@@ -67,8 +68,14 @@ func _run() -> void:
 		vp.add_child(node)
 		node.position = Vector3(0, 60, 0)
 		MaterialLibrary.apply(node)
-		var aabb := _aabb(node)
 		var view: Array = VIEWS.get(id, [30.0, -32.0, 1.0])
+		if DIAGONAL.has(id):
+			var girth: float = DIAGONAL[id]
+			# Tip to the top right, turned slightly so it still reads as 3D.
+			node.basis = Basis(Vector3.BACK, deg_to_rad(-45.0)) * Basis(Vector3.UP, deg_to_rad(30.0)) \
+					* Basis.from_scale(Vector3(girth, 1.0, girth))
+			view = [0.0, -8.0, 1.32]
+		var aabb := _aabb(node)
 		var radius := aabb.size.length() * 0.5
 		var dist := radius / sin(deg_to_rad(cam.fov * 0.5)) * 1.02 / float(view[2])
 		var basis := Basis.from_euler(Vector3(deg_to_rad(view[1]), deg_to_rad(view[0]), 0.0))

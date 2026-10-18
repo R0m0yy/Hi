@@ -9,4 +9,10 @@ func _initialize() -> void:
 
 
 func _start() -> void:
-	root.add_child(load("res://tools/capture_gameplay_runner.gd").new())
+	var script := load("res://tools/capture_gameplay_runner.gd") as GDScript
+	if script == null or not script.can_instantiate():
+		push_error("capture_gameplay: capture_gameplay_runner.gd failed to compile")
+		print("capture_gameplay: FAIL (runner did not compile)")
+		quit(1)
+		return
+	root.add_child(script.new())

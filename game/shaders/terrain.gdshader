@@ -75,7 +75,7 @@ void fragment() {
 	col += col * caus * 2.4 + vec3(0.55, 0.8, 0.75) * caus * 0.35;
 
 	ALBEDO = col;
-	EMISSION = vec3(1.0, 0.95, 0.85) * sparkle * sparkle_strength * (1.0 - grass) * (1.0 - wet);
+	EMISSION = vec3(1.0, 0.95, 0.85) * sparkle * sparkle_strength * (1.0 - grass) * (1.0 - wet) * daylight;
 	ROUGHNESS = mix(0.95, 0.5, wet * (1.0 - under));
 	SPECULAR = 0.3;
 }

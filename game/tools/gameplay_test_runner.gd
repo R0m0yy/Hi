@@ -163,6 +163,10 @@ func _run() -> void:
 	await _frames(200)
 	_check(player.mode == PlayerController.Mode.DIVE and player.is_head_underwater(), "diving underwater")
 	_check(game.stats["oxygen"] < 100.0 - 5.0, "holding breath uses oxygen (%.0f)" % game.stats["oxygen"])
+	var dive_depth := World.water_level() - player.global_position.y
+	_check(dive_depth > 1.0 and dive_depth <= player.max_dive_depth + 0.15, "dive stays within reach of the fish (%.1f m down)" % dive_depth)
+	var reveal := float(get_tree().current_scene.get("_reveal"))
+	_check(reveal > 0.9, "water clears around the diver (reveal %.2f)" % reveal)
 
 	# --- Spearfishing -----------------------------------------------------------
 	game.inventory.add("wood", 2)
@@ -226,6 +230,26 @@ func _run() -> void:
 	await _frames(90)
 	_check(game.time_hours + game.day * 24.0 > hours_before + 1.5, "sleeping passes time")
 	_check(game.respawn_point.distance_to(bed.global_position) < 4.0, "respawn point moves to the shelter")
+
+	# --- Day and night ------------------------------------------------------------
+	var dn := get_tree().current_scene.get_node("DayNight") as DayNight
+	var sun := get_tree().current_scene.get_node("DaylightRig/Sun") as DirectionalLight3D
+	var hour_saved: float = game.time_hours
+	game.time_hours = 12.0
+	await _frames(3)
+	var noon_energy := sun.light_energy
+	var noon_dir := -sun.global_basis.z
+	game.time_hours = 23.0
+	await _frames(3)
+	_check(sun.light_energy < noon_energy * 0.4, "night is darker than noon (%.2f vs %.2f)" % [sun.light_energy, noon_energy])
+	_check(dn.sample(23.0)["daylight"] < 0.3 and dn.sample(12.0)["daylight"] > 0.99, "daylight shader global follows the clock")
+	await _frames(40)
+	_check(AudioManager.get("_night") > 0.9, "night ambience fades in after dark")
+	game.time_hours = 16.5
+	await _frames(3)
+	_check((-sun.global_basis.z).angle_to(noon_dir) > deg_to_rad(5.0), "the sun moves across the day")
+	game.time_hours = hour_saved
+	await _frames(3)
 
 	# --- Rowboat ----------------------------------------------------------------
 	game.inventory.add("wood", 6)

@@ -4,6 +4,7 @@ extends Node
 
 var out_dir := "/tmp/pu_captures"
 var only: Array = []
+var verbose := false
 var player: PlayerController
 var world: GameWorld
 
@@ -12,6 +13,8 @@ func _ready() -> void:
 	for a in OS.get_cmdline_user_args():
 		if a.begins_with("--out="):
 			out_dir = a.substr(6)
+		elif a == "--verbose":
+			verbose = true
 		elif a.begins_with("--only="):
 			only = Array(a.substr(7).split(","))
 	DirAccess.make_dir_recursive_absolute(out_dir)
@@ -112,6 +115,16 @@ func _run() -> void:
 		await _approach(fire, 1.6)
 		await _frames(20)
 		await _shot("camp")
+	if _wanted("dusk") or _wanted("night"):
+		var fire3 := _find(func(n): return n is CookingStation)
+		await _approach(fire3, 2.2)
+		for pair in [["dusk", 18.5], ["night", 22.5]]:
+			if _wanted(pair[0]):
+				Game.time_hours = pair[1]
+				await _frames(20)
+				await _shot(pair[0])
+		Game.time_hours = 8.0
+		await _frames(5)
 	if _wanted("cook"):
 		var fire2 := _find(func(n): return n is CookingStation)
 		await _approach(fire2, 1.5)
@@ -155,6 +168,8 @@ func _shot(name: String) -> void:
 func _frames(n: int) -> void:
 	for i in n:
 		await get_tree().process_frame
+	if verbose:
+		print("    frames +%d  t=%.1fs  fps=%.1f" % [n, Time.get_ticks_msec() / 1000.0, Engine.get_frames_per_second()])
 
 
 func _find(pred: Callable) -> Node:

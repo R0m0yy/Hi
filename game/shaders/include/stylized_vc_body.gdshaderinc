@@ -54,5 +54,5 @@ void fragment() {
 	ROUGHNESS = roughness_value;
 	SPECULAR = specular_value;
 	BACKLIGHT = albedo * translucency;
-	EMISSION = albedo * emission_from_albedo;
+	EMISSION = albedo * emission_from_albedo * daylight;
 }

@@ -72,10 +72,10 @@ def C(h: str, mul: float = 1.0):
 
 PAL = {
     "skin": C("#F6BE98"), "skin_shade": C("#E39C7A"), "blush": C("#F28C86"), "lip": C("#C8564A"),
-    "hair": C("#8E4329"), "hair_dark": C("#5E2A1C"), "hair_light": C("#B4623F"),
+    "hair": C("#7C4434"), "hair_dark": C("#522A20"), "hair_light": C("#9C5D47"),
     "cap": C("#E5C29A"), "cap_light": C("#F2DEC4"), "cap_seam": C("#C9A27A"), "brim": C("#7F9C87"), "brim_dark": C("#5F7B68"),
-    "vest": C("#D99A5B"), "vest_dark": C("#B97B42"), "vest_seam": C("#9E6634"), "shirt": C("#EFE6DC"),
-    "sleeve": C("#E4A866"), "sleeve_band": C("#CB8D50"),
+    "vest": C("#D6A475"), "vest_dark": C("#B58457"), "vest_seam": C("#97683F"), "shirt": C("#EFE6DC"),
+    "sleeve": C("#DDAB7C"), "sleeve_band": C("#C49264"),
     "glove": C("#7E5A4E"), "glove_dark": C("#5E4038"), "cuff": C("#6A4638"),
     "belt": C("#7A3F26"), "buckle": C("#C9CDD2"), "pouch": C("#A85A32"), "pouch_dark": C("#7E3F22"),
     "tool_metal": C("#9AA3AB"), "tool_handle": C("#5A3A26"),

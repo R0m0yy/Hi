@@ -90,8 +90,13 @@ void fragment() {
 
 	float clarity = exp(-rdepth * clarity_falloff);
 	float reveal = diver_reveal * (1.0 - smoothstep(2.5, 7.5, distance(world_vertex.xz, diver_pos.xz)));
-	clarity = mix(clarity, max(clarity, exp(-rdepth * clarity_falloff * 0.22)), reveal);
-	vec3 tint = mix(vec3(1.0), color_turquoise.rgb * 1.25, transmission_tint * smoothstep(0.0, 1.1, rdepth));
+	// Around a diver, whatever is at the diver's depth (the explorer, fish) turns
+	// nearly clear and keeps its colours, while the seabed below only lifts a
+	// little, so the subject stands out against blue water.
+	float diver_depth = water_level - diver_pos.y;
+	float subject = 1.0 - smoothstep(diver_depth + 0.6, diver_depth + 1.8, rdepth);
+	clarity = mix(clarity, max(clarity, exp(-rdepth * clarity_falloff * mix(0.42, 0.07, subject))), reveal);
+	vec3 tint = mix(vec3(1.0), color_turquoise.rgb * 1.25, transmission_tint * smoothstep(0.0, 1.1, rdepth) * (1.0 - reveal * mix(0.3, 0.75, subject)));
 	vec3 transmitted = refr * tint;
 
 	// Shoreline foam: thin crisp band that washes in and out.
@@ -120,8 +125,9 @@ void fragment() {
 	glint *= 1.0 - reveal;
 
 	ALBEDO = mix(body * body_brightness * (1.0 - clarity), foam_color.rgb, foam);
-	EMISSION = transmitted * clarity * (1.0 - foam) + foam_color.rgb * (foam * 0.3 + glint * 0.6);
-	ROUGHNESS = mix(roughness_value, 0.9, foam);
-	SPECULAR = 0.18;
+	EMISSION = transmitted * clarity * (1.0 - foam) + foam_color.rgb * (foam * 0.3 + glint * 0.6) * daylight;
+	// Less sky reflection over a diver, so the surface reads as a window.
+	ROUGHNESS = mix(mix(roughness_value, 0.55, reveal), 0.9, foam);
+	SPECULAR = 0.18 * (1.0 - reveal * 0.85);
 	ALPHA = 1.0;
 }

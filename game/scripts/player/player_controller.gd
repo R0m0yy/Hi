@@ -34,6 +34,8 @@ const FALLBACK := {"swim_idle": "swim", "fish_idle": "idle", "row": "idle", "sit
 ## How far below the surface the body origin floats while swimming.
 @export var float_depth := 0.32
 @export var seabed_clearance := 0.6
+## Deepest a dive goes below the surface (fish swim no deeper than 4 m).
+@export var max_dive_depth := 4.2
 ## Height of the eyes above the body origin (for "is the head underwater").
 @export var head_height := 0.45
 ## Vertical model offset per clip, so an upright treading pose keeps the head
@@ -143,7 +145,7 @@ func _physics_process(delta: float) -> void:
 		Mode.DIVE:
 			_move_horizontal(wish * swim_speed * (1.25 if _sprinting else 0.9), delta)
 			var floor_y := _ground_y() + seabed_clearance
-			var target := maxf(floor_y, global_position.y - 4.0)
+			var target := maxf(maxf(floor_y, global_position.y - 4.0), _surface_y() - max_dive_depth)
 			velocity.y = clampf((target - global_position.y) * 4.0, -dive_speed, dive_speed)
 			exertion = 8.0 if _sprinting else 0.0
 	move_and_slide()

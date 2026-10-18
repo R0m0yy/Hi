@@ -6,10 +6,13 @@ extends Node
 ## down the limb with local Z forward).
 
 ## Tool -> [pitch degrees about the bone's X, offset along the bone].
+## On the explorer's hand bone, local Z runs out of the thumb side of the
+## fist, so 90 points the shaft straight out of the fist. The rod sits at 60:
+## near-level while waiting for a bite, raised high while reeling.
 const GRIPS := {
 	"hatchet": [80.0, 0.04],
 	"spear": [90.0, 0.04],
-	"fishing_rod": [130.0, 0.04],
+	"fishing_rod": [60.0, 0.04],
 }
 
 

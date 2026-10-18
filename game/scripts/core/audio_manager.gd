@@ -14,6 +14,7 @@ var _pool2d: Array[AudioStreamPlayer] = []
 var _loops := {}
 var _rng := RandomNumberGenerator.new()
 var _underwater := false
+var _night := 0.0
 
 
 func _ready() -> void:
@@ -123,8 +124,27 @@ func set_underwater(on: bool) -> void:
 			AudioServer.add_bus_effect(i, lp)
 		AudioServer.set_bus_effect_enabled(i, 0, on)
 	set_loop("ocean", -22.0 if on else -6.0, "Ambience", 0.6)
-	set_loop("wind", -40.0 if on else -16.0, "Ambience", 0.6)
 	set_loop("underwater", -4.0 if on else -60.0, "Ambience", 0.6)
+	_apply_ambience(0.6)
+
+
+## 0 = day (wind), 1 = night (crickets). DayNight calls this every frame.
+func set_night(amount: float) -> void:
+	amount = clampf(amount, 0.0, 1.0)
+	if absf(amount - _night) < 0.02:
+		return
+	_night = amount
+	_apply_ambience(0.5)
+
+
+## Starts or re-levels the wind and night loops for the current state.
+func refresh_ambience() -> void:
+	_apply_ambience(1.5)
+
+
+func _apply_ambience(fade: float) -> void:
+	set_loop("wind", -40.0 if _underwater else lerpf(-16.0, -26.0, _night), "Ambience", fade)
+	set_loop("night", -60.0 if _underwater else lerpf(-60.0, -13.0, sqrt(_night)), "Ambience", fade)
 
 
 func _exit_tree() -> void:

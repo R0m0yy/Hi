@@ -283,24 +283,50 @@ def item_frond() -> MeshBuilder:
 
 
 def item_shell() -> MeshBuilder:
+    """Scallop: a domed fan of ribs from the hinge, a wavy rim and two ears."""
     mb = MeshBuilder()
-    pink, cream = C("#E9A496"), C("#F7E2D2")
-    n = 9
-    apex = mb.v((0, 0.02, -0.1))
-    rim = []
-    for i in range(n + 1):
-        a = math.radians(-70 + 140 * i / n)
-        rim.append(mb.v((math.sin(a) * 0.12, 0.02 + 0.04 * math.cos(a * 2.0), math.cos(a) * 0.1 - 0.02)))
+    pink, deep, cream = C("#EE9A84"), C("#CF6C5C"), C("#F5D6C2")
+    R, ribs, per, m = 0.12, 7, 4, 5
+    n = ribs * per
+    hinge = Vector((0.0, 0.0, -0.06))
+
+    def rib(i: int) -> float:
+        return math.sin(math.pi * (i % per) / per) ** 2  # 0 in the grooves, 1 on the rib crests
+
+    def top(i: int, a: float, r: float) -> Vector:
+        k = r / R
+        rr = r * (1.0 + 0.05 * rib(i) * k)
+        h = 0.006 + 0.036 * (1.0 - k * k) * min(1.0, k * 3.0) + 0.008 * rib(i) * k
+        return hinge + Vector((math.sin(a) * rr, h, math.cos(a) * rr))
+
+    def shade(i: int, j: int) -> object:
+        k = j / m
+        c = mix(deep, pink, rib(i))
+        c = mix(c, cream, 0.25 if j % 2 else 0.0)  # growth bands
+        return mix(cream, c, 0.3 + 0.7 * k)
+
+    angles = [math.radians(-72 + 144 * i / n) for i in range(n + 1)]
+    grid = [[mb.v(top(i, a, R * (0.12 + 0.88 * j / m))) for i, a in enumerate(angles)] for j in range(m + 1)]
+    for j in range(m):
+        for i in range(n):
+            mb.face((grid[j][i], grid[j + 1][i], grid[j + 1][i + 1], grid[j][i + 1]),
+                    [shade(i, j), shade(i, j + 1), shade(i + 1, j + 1), shade(i + 1, j)], "PU_Solid", True)
+    apex = mb.v(hinge + Vector((0.0, 0.012, 0.0)))
     for i in range(n):
-        top = mb.v(Vector(mb.verts[rim[i]]).lerp(Vector(mb.verts[rim[i + 1]]), 0.5) + Vector((0, 0.05, -0.03)))
-        mb.face((apex, rim[i], top), [cream, pink, mix(pink, cream, 0.5)], "PU_Solid", True)
-        mb.face((apex, top, rim[i + 1]), [cream, mix(pink, cream, 0.5), pink], "PU_Solid", True)
-    base = [mb.v(Vector(mb.verts[k]) - Vector((0, 0.025, 0))) for k in rim]
+        mb.face((apex, grid[0][i], grid[0][i + 1]), [cream] * 3, "PU_Solid", True)
+    rim = grid[m]
+    base = [mb.v(Vector(mb.verts[k]) * Vector((1.0, 0.0, 1.0)) + Vector((0, 0.002, 0))) for k in rim]
     for i in range(n):
-        mb.face((rim[i + 1], rim[i], base[i], base[i + 1]), [pink] * 4, "PU_Solid", True)
-    bc = mb.v((0, -0.005, -0.04))
+        mb.face((rim[i + 1], rim[i], base[i], base[i + 1]), [deep] * 4, "PU_Solid", True)
+    bc = mb.v(hinge + Vector((0.0, 0.002, 0.04)))
     for i in range(n):
         mb.face((bc, base[i + 1], base[i]), [cream] * 3, "PU_Solid", True)
+    for side in (-1.0, 1.0):  # hinge ears
+        a = mb.v(hinge + Vector((0.0, 0.012, -0.005)))
+        b = mb.v(hinge + Vector((side * 0.045, 0.006, -0.012)))
+        c = mb.v(hinge + Vector((side * 0.03, 0.01, 0.02)))
+        tri = (a, b, c) if side > 0 else (a, c, b)
+        mb.face(tri, [cream, pink, pink], "PU_Solid", True)
     return mb
 
 

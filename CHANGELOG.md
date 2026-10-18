@@ -1,5 +1,61 @@
 # Changelog
 
+## v0.3.0: Playable game and explorer character (2026-10-18)
+
+This release follows `CLAUDE_CODE_INSTRUCTIONS.md` from the handoff package.
+Test results are in `docs/TEST_RESULTS.md`.
+
+- **Explorer character:** replaces the castaway as the player model. It matches
+  `official_character_reference.jpg`:
+  - beige cap with a sage brim, auburn bob and big brown eyes
+  - tan vest over a light shirt, teal cargo shorts, belt with pouches
+  - fingerless gloves, kneepads, socks and boots
+
+  The mesh is original, built in Blender Python and skinned to Quaternius' CC0
+  *Universal Animation Library* rig, re-proportioned for a stylised build. It has
+  28 game clips covering locomotion, swimming, actions, rowing, hurt and death.
+  Held tools attach to the hand bone. Marketplace research and the decision are in
+  `docs/CHARACTER_ASSET_RESEARCH.md`; nothing was bought.
+- **Controls:** keyboard, mouse and gamepad. Prompts show the glyphs of the device
+  in use.
+- **Survival loop:**
+  - Gather wood, stone, fibre, palm fronds, shells and coconuts. Palms and rocks regrow.
+  - 24-slot inventory and hotbar; crafting for rope, hatchet, spear, fishing rod and kits.
+  - Hunger, thirst, stamina, health and oxygen.
+  - Cooking at the campfire, springs for drinking water, death and respawn.
+- **Fishing:** charge and cast, bobber, bite, hook, then a tension and progress reel.
+  Four species live in different depth bands.
+- **Spearfishing:** pole-spear thrust with tip hit detection and underwater aim assist.
+  Fish swim in schools (boids) with a swim shader.
+- **Building and camp:**
+  - Ghost placement with validity checks for the campfire, storage box, lean-to
+    shelter and raft.
+  - Sleeping skips the night, heals, sets the respawn point and autosaves.
+- **Boats:** repair the rowboat, then row it or sail the raft with tank controls.
+  The boat bobs, leaves a wake and lets you step ashore at the nearest land.
+- **World:** two more handcrafted islands. *Palm Key* has a shipwreck to salvage.
+  *Lookout Isle* has a plateau camp and the signal fire that ends the game. There
+  are 16 guided objectives, with a compass arrow for off-island goals.
+- **Ocean:**
+  - The water clears around a diver. Things at the diver's depth (explorer, fish)
+    keep their colours while the seabed stays hazy.
+  - The explorer gets a soft aqua edge glow underwater, and the camera eases in
+    while diving.
+  - Dives are capped at 4.2 m, just below the fish.
+  - Underwater audio is muffled.
+- **Day/night cycle:** 24-minute days. The sun swings and warms at dawn and dusk;
+  the night has moonlight, campfire glow and crickets. The look between 07:00 and
+  17:00 is unchanged.
+- **Save/load:** player, stats, inventory, objectives, world objects, structures and
+  boats, plus quick save/load and settings.
+- **UI:** HUD, inventory/crafting, storage, pause, settings, controls, title, death and
+  rescue screens. Fonts are Fredoka and Nunito (OFL).
+- **Audio:** 47 procedural sound effects and 6 loops (ocean, wind, night, underwater,
+  fire, theme). The loops are now written as Ogg Vorbis by `tools/audio/make_audio.py`.
+- **Desktop builds:** Linux, Windows and macOS presets plus `tools/export_desktop.sh`.
+- **Docs:** README control guide, `docs/LICENSES.md`, `docs/TEST_RESULTS.md`, and an
+  updated asset manifest.
+
 ## v0.2.0: Environment refinement pass (2026-10-17)
 
 Direction approved by the user on v0.1. This pass works through their feedback.

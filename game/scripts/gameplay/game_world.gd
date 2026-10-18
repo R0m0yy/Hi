@@ -6,8 +6,8 @@ extends Node3D
 
 const START_POS := Vector3(25.5, 1.5, 22.5)
 const START_YAW := 200.0
-## Default gameplay zoom: metres of view at the player (the character reads at ~8% of the screen).
-const DEFAULT_ZOOM := 14.0
+## Default gameplay zoom: metres of view at the player (the character reads at ~10% of the screen).
+const DEFAULT_ZOOM := 11.0
 
 const ISLAND_PROFILES := {
 	"HavenIsland": {
@@ -49,6 +49,10 @@ var _reveal := 0.0
 
 
 func _ready() -> void:
+	var day_night := DayNight.new()
+	day_night.name = "DayNight"
+	day_night.rig_path = NodePath("../DaylightRig")
+	add_child(day_night)
 	var fish_root := Node3D.new()
 	fish_root.name = "Fish"
 	add_child(fish_root)
@@ -94,6 +98,7 @@ func _on_storage_requested(box: Node) -> void:
 
 func _show_title() -> void:
 	Game.set_state("menu")
+	camera.zoom_scale = 1.0
 	hud.set_visible_hud(false)
 	main_menu.open()
 	AudioManager.set_loop("ocean", -8.0)
@@ -131,7 +136,7 @@ func _begin_play() -> void:
 	camera.snap_to_target()
 	Game.hotbar_changed.emit(Game.selected)
 	AudioManager.set_loop("ocean", -6.0)
-	AudioManager.set_loop("wind", -16.0)
+	AudioManager.refresh_ambience()
 	AudioManager.set_loop("theme", -14.0, "Music")
 
 
@@ -153,6 +158,7 @@ func _process(delta: float) -> void:
 		var target := 1.0 if player.mode == PlayerController.Mode.DIVE else 0.0
 		_reveal = move_toward(_reveal, target, delta * 1.5)
 		RenderingServer.global_shader_parameter_set("diver_reveal", _reveal)
+		camera.zoom_scale = lerpf(1.0, 0.8, _reveal)
 		RenderingServer.global_shader_parameter_set("diver_pos", player.global_position)
 
 

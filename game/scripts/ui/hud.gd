@@ -139,7 +139,7 @@ void fragment() {
 	float v = smoothstep(0.25, 0.85, length(uv * vec2(1.25, 1.0)));
 	float caustic = sin(UV.x * 38.0 + TIME * 1.3) * sin(UV.y * 31.0 - TIME * 1.1) * 0.5 + 0.5;
 	vec3 deep = vec3(0.02, 0.22, 0.38);
-	COLOR = vec4(mix(deep, vec3(0.2, 0.6, 0.7), caustic * 0.15), strength * (0.18 + v * 0.75));
+	COLOR = vec4(mix(deep, vec3(0.2, 0.6, 0.7), caustic * 0.15), strength * (0.05 + v * 0.7));
 }"""
 	_vignette_mat = ShaderMaterial.new()
 	_vignette_mat.shader = sh

@@ -5,6 +5,8 @@ global uniform float water_level;
 global uniform vec2 wind_direction;
 global uniform float wind_strength;
 global uniform float caustics_strength;
+// 1 at full day, ~0.25 at night (DayNight).
+global uniform float daylight;
 
 float pu_hash(vec2 p) {
 	p = fract(p * vec2(123.34, 456.21));

@@ -3,11 +3,13 @@
     /opt/bpyenv/bin/python tools/audio/make_audio.py      (needs numpy)
 
 Writes 16-bit WAVs to game/assets/audio/sfx/ (one-shots, some with
-variants name_1.wav ...) and game/assets/audio/loops/ (seamless ambience
-loops and the music theme). Deterministic: fixed random seeds.
+variants name_1.wav ...) and Ogg Vorbis files to game/assets/audio/loops/
+(seamless ambience loops and the music theme; encoded with ffmpeg's
+libvorbis). Deterministic: fixed random seeds.
 """
 from __future__ import annotations
 
+import subprocess
 import wave
 from pathlib import Path
 
@@ -19,6 +21,8 @@ SFX = ROOT / "sfx"
 LOOPS = ROOT / "loops"
 rng = np.random.default_rng(20261018)
 
+
+FFMPEG = "ffmpeg"
 
 # ---------------------------------------------------------------------------
 # Building blocks
@@ -113,6 +117,15 @@ def write(path: Path, x: np.ndarray, peak: float = 0.85) -> None:
         w.setsampwidth(2)
         w.setframerate(SR)
         w.writeframes(pcm.tobytes())
+
+
+def write_loop(name: str, left: np.ndarray, right: np.ndarray, peak: float = 0.8) -> None:
+    """Writes LOOPS/<name>.ogg (Vorbis q5) via a temporary WAV."""
+    wav = LOOPS / f"{name}.tmp.wav"
+    write_stereo(wav, left, right, peak)
+    subprocess.run([FFMPEG, "-loglevel", "error", "-y", "-i", str(wav), "-c:a", "libvorbis", "-q:a", "5",
+                    "-fflags", "+bitexact", "-flags:a", "+bitexact", str(LOOPS / f"{name}.ogg")], check=True)
+    wav.unlink()
 
 
 def write_stereo(path: Path, left: np.ndarray, right: np.ndarray, peak: float = 0.8) -> None:
@@ -342,6 +355,29 @@ def loop_wind(dur=24.0):
     return out
 
 
+def loop_night(dur=16.0):
+    """Night insects: a few crickets (pulsed sines, each on a period that
+    divides the loop) over a soft, low surf bed."""
+    n = int(dur * SR)
+    t = np.arange(n) / SR
+    out = []
+    bed = band(rng.standard_normal(n), 60, 500, 0.4) * 0.12
+    for ch in range(2):
+        x = np.roll(bed, ch * int(0.21 * SR)).copy()
+        for k in range(4):
+            f = round(rng.uniform(4100, 5300) * dur) / dur  # whole cycles per loop
+            period = dur / round(dur * rng.uniform(0.9, 1.6))  # chirps per loop: whole number
+            pulses = int(rng.integers(3, 5))
+            rate = rng.uniform(28.0, 36.0)
+            phase = rng.uniform(0, period)
+            local = np.mod(t + phase, period)
+            gate = (local < pulses / rate) * np.maximum(np.sin(np.pi * np.mod(local * rate, 1.0)), 0.0) ** 2
+            level = rng.uniform(0.04, 0.09) * (1.0 if (k + ch) % 2 else 0.55)
+            x += np.sin(2 * np.pi * f * t) * gate * level
+        out.append(x)
+    return out
+
+
 def loop_underwater(dur=12.0):
     n = int(dur * SR)
     rum = band(rng.standard_normal(n), 30, 280, 0.4)
@@ -469,15 +505,18 @@ def main() -> None:
         write(SFX / f"step_sand_{i}.wav", sfx_step(rng.uniform(0.8, 1.0)), 0.6)
         write(SFX / f"step_grass_{i}.wav", sfx_step(rng.uniform(0.8, 1.0), True), 0.5)
     o = loop_ocean()
-    write_stereo(LOOPS / "ocean.wav", o[0], o[1], 0.7)
+    write_loop("ocean", o[0], o[1], 0.7)
     w = loop_wind()
-    write_stereo(LOOPS / "wind.wav", w[0], w[1], 0.6)
+    write_loop("wind", w[0], w[1], 0.6)
     u = loop_underwater()
-    write_stereo(LOOPS / "underwater.wav", u[0], u[1], 0.7)
+    write_loop("underwater", u[0], u[1], 0.7)
     f = loop_fire()
-    write_stereo(LOOPS / "fire.wav", f[0], f[1], 0.7)
+    write_loop("fire", f[0], f[1], 0.7)
     m = music_theme()
-    write_stereo(LOOPS / "theme.wav", m[0], m[1], 0.8)
+    write_loop("theme", m[0], m[1], 0.8)
+    # Generated last so the earlier sounds keep their random draws.
+    nt = loop_night()
+    write_loop("night", nt[0], nt[1], 0.6)
     print("audio ->", ROOT)
 
 

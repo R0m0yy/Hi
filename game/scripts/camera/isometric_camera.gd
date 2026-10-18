@@ -12,12 +12,14 @@ extends Node3D
 @export var yaw_degrees := 18.0
 @export var fov_degrees := 38.0
 @export var zoom_size := 17.0
-@export var min_size := 9.0
+@export var min_size := 6.0
 @export var max_size := 110.0
 @export var zoom_step := 1.15
 ## Seconds for the camera to close half the distance to its goal.
 @export var follow_half_life := 0.16
 @export var zoom_half_life := 0.12
+## Temporary multiplier on zoom_size (GameWorld eases in while diving).
+var zoom_scale := 1.0
 ## Metres of look-ahead per m/s of target velocity.
 @export var look_ahead := 0.25
 ## Orthographic only: how far back the camera sits (clipping, not framing).
@@ -48,7 +50,7 @@ func _process(delta: float) -> void:
 		if vel is Vector3:
 			goal += Vector3(vel.x, 0.0, vel.z) * look_ahead
 		_focus = _focus.lerp(goal, _damp(follow_half_life, delta))
-	_size = lerpf(_size, zoom_size, _damp(zoom_half_life, delta))
+	_size = lerpf(_size, zoom_size * zoom_scale, _damp(zoom_half_life, delta))
 	_apply()
 
 

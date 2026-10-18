@@ -1,0 +1,32 @@
+PARADISE UNTAMED v0.3
+
+Running the game
+  Linux:   ./ParadiseUntamed.x86_64   (needs Vulkan drivers)
+  Windows: ParadiseUntamed.exe        (unsigned: SmartScreen > More info > Run anyway)
+  macOS:   unzip ParadiseUntamed.zip, then right-click Paradise Untamed.app > Open
+           (ad-hoc signed and not notarised, so Gatekeeper asks the first time)
+
+Saves are written to the Godot user folder:
+  Linux   ~/.local/share/godot/app_userdata/Paradise Untamed/
+  Windows %APPDATA%\Godot\app_userdata\Paradise Untamed\
+  macOS   ~/Library/Application Support/Godot/app_userdata/Paradise Untamed/
+
+Controls (keyboard and mouse / gamepad)
+  Move ................ WASD or arrow keys / left stick
+  Sprint .............. Shift / LT
+  Jump ................ Space / A
+  Interact ............ E / X        gather, open, board or leave a boat
+  Use item ............ Left mouse / RT    chop, cast or reel, spear, eat, place
+  Cancel .............. Right mouse or Q / B
+  Dive (hold) ......... Ctrl or C / B
+  Inventory + crafting  Tab or I / Y
+  Hotbar .............. 1-6, X and Z / RB and LB
+  Rotate placement .... R / D-pad right
+  Zoom ................ mouse wheel, + and - / D-pad up and down
+  Pause menu .......... Esc / Start
+  Quick save / load ... F5 / F9
+
+Follow the objective panel at the top left. Its arrow points to the next island
+when the goal is somewhere else.
+
+Licences: see LICENSES.md and GODOT_LICENSE.txt.
