@@ -327,11 +327,15 @@ func _build_busy() -> void:
 
 func _build_fishing() -> void:
 	_fish_panel = PanelContainer.new()
-	_fish_panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER_RIGHT)
-	_fish_panel.grow_horizontal = Control.GROW_DIRECTION_BEGIN
-	_fish_panel.grow_vertical = Control.GROW_DIRECTION_BOTH
-	_fish_panel.offset_right = -340
-	_fish_panel.offset_top = 40
+	# Just below the player (the camera keeps them at the centre), clear of
+	# the notification feed on the right and the prompt above the hotbar.
+	_fish_panel.set_anchors_preset(Control.PRESET_CENTER)
+	_fish_panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	_fish_panel.grow_vertical = Control.GROW_DIRECTION_END
+	_fish_panel.offset_left = -170
+	_fish_panel.offset_right = 170
+	_fish_panel.offset_top = 110
+	_fish_panel.offset_bottom = 110
 	_fish_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var col := VBoxContainer.new()
 	col.add_theme_constant_override("separation", 6)

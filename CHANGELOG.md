@@ -48,8 +48,12 @@ Test results are in `docs/TEST_RESULTS.md`.
   17:00 is unchanged.
 - **Save/load:** player, stats, inventory, objectives, world objects, structures and
   boats, plus quick save/load and settings.
+- **Accessibility settings:** interface size (80–140 %) and tap-to-dive as an
+  alternative to holding the button.
 - **UI:** HUD, inventory/crafting, storage, pause, settings, controls, title, death and
-  rescue screens. Fonts are Fredoka and Nunito (OFL).
+  rescue screens. Fonts are Fredoka and Nunito (OFL). The fishing meter sits just below
+  the player, clear of the notification feed.
+- **Boats:** the wake is now soft foam instead of rings.
 - **Audio:** 47 procedural sound effects and 6 loops (ocean, wind, night, underwater,
   fire, theme). The loops are now written as Ogg Vorbis by `tools/audio/make_audio.py`.
 - **Desktop builds:** Linux, Windows and macOS presets plus `tools/export_desktop.sh`.

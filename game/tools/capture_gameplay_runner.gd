@@ -129,7 +129,8 @@ func _run() -> void:
 		var fire2 := _find(func(n): return n is CookingStation)
 		await _approach(fire2, 1.5)
 		fire2.interact(player)
-		await _frames(50)
+		# Few frames: on a slow renderer each frame is a big step of game time.
+		await _frames(3)
 		await _shot("cook")
 		await _frames(100)
 	if _wanted("storage"):

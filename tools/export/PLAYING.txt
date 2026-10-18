@@ -18,7 +18,7 @@ Controls (keyboard and mouse / gamepad)
   Interact ............ E / X        gather, open, board or leave a boat
   Use item ............ Left mouse / RT    chop, cast or reel, spear, eat, place
   Cancel .............. Right mouse or Q / B
-  Dive (hold) ......... Ctrl or C / B
+  Dive (hold) ......... Ctrl or C / B   (Settings: tap to dive instead)
   Inventory + crafting  Tab or I / Y
   Hotbar .............. 1-6, X and Z / RB and LB
   Rotate placement .... R / D-pad right

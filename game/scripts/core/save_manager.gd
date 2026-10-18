@@ -9,7 +9,8 @@ const SAVE_PATH := "user://savegame.json"
 const SETTINGS_PATH := "user://settings.cfg"
 const VERSION := 1
 
-var settings := {"music": 0.7, "sfx": 0.85, "ambience": 0.8, "fullscreen": false, "objectives": true}
+var settings := {"music": 0.7, "sfx": 0.85, "ambience": 0.8, "fullscreen": false, "objectives": true,
+		"ui_scale": 1.0, "toggle_dive": false}
 var last_error := ""
 
 
@@ -140,3 +141,4 @@ func apply_settings() -> void:
 			DisplayServer.window_set_mode(want)
 	for hud in get_tree().get_nodes_in_group("hud"):
 		hud.set_objectives_visible(settings["objectives"])
+	get_tree().root.content_scale_factor = clampf(float(settings["ui_scale"]), 0.75, 1.5)

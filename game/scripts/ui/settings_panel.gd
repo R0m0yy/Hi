@@ -31,6 +31,28 @@ func _init() -> void:
 		SaveManager.settings["fullscreen"] = on
 		SaveManager.apply_settings())
 	add_child(fs)
+	var scale_row := HBoxContainer.new()
+	var scale_label := UITheme.label("Interface size", 20)
+	scale_label.custom_minimum_size = Vector2(260, 0)
+	scale_row.add_child(scale_label)
+	var scale := HSlider.new()
+	scale.min_value = 0.8
+	scale.max_value = 1.4
+	scale.step = 0.05
+	scale.custom_minimum_size = Vector2(360, 30)
+	scale.value = SaveManager.settings.get("ui_scale", 1.0)
+	# Applied on release so the slider does not resize under the cursor.
+	scale.drag_ended.connect(func(_changed: bool) -> void:
+		SaveManager.settings["ui_scale"] = scale.value
+		SaveManager.apply_settings())
+	scale_row.add_child(scale)
+	add_child(scale_row)
+	var dive := CheckButton.new()
+	dive.text = "Tap to dive and surface (instead of holding)"
+	dive.button_pressed = SaveManager.settings.get("toggle_dive", false)
+	dive.toggled.connect(func(on: bool) -> void:
+		SaveManager.settings["toggle_dive"] = on)
+	add_child(dive)
 	var hints := CheckButton.new()
 	hints.text = "Show objectives"
 	hints.button_pressed = SaveManager.settings.get("objectives", true)

@@ -197,6 +197,19 @@ func _run() -> void:
 	var o2 := float(game.stats["oxygen"])
 	await _frames(60)
 	_check(game.stats["oxygen"] > o2 or game.stats["oxygen"] >= 99.0, "oxygen recovers at the surface (%.0f)" % game.stats["oxygen"])
+	SaveManager.settings["toggle_dive"] = true
+	await _tap("dive")
+	await _frames(40)
+	_check(player.mode == PlayerController.Mode.DIVE, "tap-to-dive setting: a tap dives")
+	await _tap("dive")
+	await _frames(120)
+	_check(player.mode == PlayerController.Mode.SWIM, "tap-to-dive setting: a second tap surfaces")
+	SaveManager.settings["toggle_dive"] = false
+	SaveManager.settings["ui_scale"] = 1.2
+	SaveManager.apply_settings()
+	_check(is_equal_approx(get_tree().root.content_scale_factor, 1.2), "interface size setting scales the UI")
+	SaveManager.settings["ui_scale"] = 1.0
+	SaveManager.apply_settings()
 
 	# --- Building a shelter ------------------------------------------------------
 	game.inventory.add("wood", 8)

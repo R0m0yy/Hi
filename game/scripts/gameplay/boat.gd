@@ -44,7 +44,7 @@ func _ready() -> void:
 static func _make_wake() -> GPUParticles3D:
 	var p := GPUParticles3D.new()
 	p.name = "Wake"
-	p.amount = 48
+	p.amount = 64
 	p.lifetime = 2.2
 	p.local_coords = false
 	p.emitting = false
@@ -66,7 +66,7 @@ static func _make_wake() -> GPUParticles3D:
 	pm.scale_curve = curve
 	var grad := Gradient.new()
 	grad.offsets = PackedFloat32Array([0.0, 0.2, 1.0])
-	grad.colors = PackedColorArray([Color(1, 0.98, 0.9, 0.0), Color(1, 0.98, 0.9, 0.75), Color(1, 0.98, 0.9, 0.0)])
+	grad.colors = PackedColorArray([Color(1, 0.98, 0.9, 0.0), Color(1, 0.98, 0.9, 0.6), Color(1, 0.98, 0.9, 0.0)])
 	var gt := GradientTexture1D.new()
 	gt.gradient = grad
 	pm.color_ramp = gt
@@ -84,13 +84,24 @@ static func _make_wake() -> GPUParticles3D:
 	return p
 
 
+## A soft foam blob with a broken edge; overlapping blobs read as a trail.
 static func _foam_texture() -> Texture2D:
 	var img := Image.create(64, 64, false, Image.FORMAT_RGBA8)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 41
+	var bumps: Array[Vector3] = []  # x, y, radius of the lumps that make the outline
+	for i in 9:
+		var a := TAU * i / 9.0 + rng.randf_range(-0.3, 0.3)
+		var r := rng.randf_range(0.25, 0.45)
+		bumps.append(Vector3(cos(a) * (0.62 - r * 0.5), sin(a) * (0.62 - r * 0.5), r))
 	for y in 64:
 		for x in 64:
-			var d := Vector2(x - 31.5, y - 31.5).length() / 31.5
-			var ring := clampf(1.0 - absf(d - 0.62) * 4.0, 0.0, 1.0) + clampf(0.35 - d, 0.0, 1.0)
-			img.set_pixel(x, y, Color(1, 1, 1, clampf(ring, 0.0, 1.0)))
+			var p := Vector2(x - 31.5, y - 31.5) / 31.5
+			var cover := clampf(1.0 - p.length() / 0.5, 0.0, 1.0)
+			for b in bumps:
+				cover = maxf(cover, clampf(1.0 - p.distance_to(Vector2(b.x, b.y)) / b.z, 0.0, 1.0))
+			var alpha := smoothstep(0.05, 0.45, cover) * (0.55 + 0.45 * cover)
+			img.set_pixel(x, y, Color(1, 1, 1, alpha))
 	return ImageTexture.create_from_image(img)
 
 

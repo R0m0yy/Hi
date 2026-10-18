@@ -13,7 +13,7 @@ rig, two OFL fonts, and the Godot runtime in the desktop builds. See `docs/LICEN
 > islands, rescue ending, save/load). See `docs/TEST_RESULTS.md` for what is verified
 > and `docs/TASKS.md` for what is still open.
 
-![Gameplay](docs/screenshots/v0.3_fishing.png)
+![Gameplay](docs/screenshots/v0.3_fishing.jpg)
 
 ## Playing
 
@@ -65,7 +65,7 @@ between keyboard and gamepad glyphs automatically.
 | Interact (gather, open, talk, board or leave a boat) | E | X |
 | Use the selected item (chop, cast or reel, thrust spear, eat, place) | Left mouse button | RT |
 | Cancel (cast, placement) | Right mouse button or Q | B |
-| Dive (hold in deep water; release to surface) | Ctrl or C | B (hold) |
+| Dive (hold in deep water, release to surface; Settings can switch it to tap) | Ctrl or C | B |
 | Inventory and crafting | Tab or I | Y |
 | Hotbar slot | 1–6 | — |
 | Next or previous hotbar slot | X / Z | RB / LB |
@@ -83,6 +83,14 @@ thrust. In the water the spear locks onto the nearest fish in front of you.
 
 **Boats:** press interact at the rowboat or raft to board. W and S row, A and D
 steer, and interact steps ashore.
+
+**Settings** (title screen or pause menu):
+
+- music, effects and ambience volume
+- fullscreen
+- interface size (80–140 %)
+- tap-to-dive instead of hold
+- show or hide objectives
 
 ## Repository layout
 
@@ -129,8 +137,10 @@ plus numpy for audio. `docs/TOOLCHAIN.md` has the details.
 ```sh
 godot --headless --path game --script res://tools/smoke_test.gd      # world and scene checks
 godot --headless --path game --script res://tools/player_test.gd     # controller with simulated input
-godot --headless --path game --script res://tools/gameplay_test.gd   # full survival loop, 71 checks
-godot --path game --script res://tools/capture_gameplay.gd -- --out=/abs/dir [--only=fishing,dive]
+godot --headless --path game --script res://tools/gameplay_test.gd   # full survival loop, 80 checks
+godot --path game --fixed-fps 30 --script res://tools/capture_gameplay.gd -- --out=/abs/dir [--only=fishing,dive]
+godot --path game --write-movie /abs/demo.avi --fixed-fps 30 --resolution 1280x720 --script res://tools/demo_video.gd
+godot --path game --script res://tools/perf_probe.gd                 # draw calls, primitives, video memory
 ```
 
 `docs/TEST_RESULTS.md` lists every check and the latest results.

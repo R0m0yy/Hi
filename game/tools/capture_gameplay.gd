@@ -1,7 +1,9 @@
 extends SceneTree
 ## Drives the real game into a series of gameplay situations and saves a
 ## screenshot of each (needs a renderer):
-##   godot --path game --script res://tools/capture_gameplay.gd -- --out=/abs/dir [--only=name,name]
+##   godot --path game --fixed-fps 30 --script res://tools/capture_gameplay.gd -- --out=/abs/dir [--only=name,name]
+## --fixed-fps keeps game time at 1/30 s per frame even when rendering is slow
+## (otherwise timed moments such as a fish bite or a cooking bar get skipped).
 
 
 func _initialize() -> void:

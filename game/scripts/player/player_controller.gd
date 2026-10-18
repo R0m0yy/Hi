@@ -44,6 +44,7 @@ const FALLBACK := {"swim_idle": "swim", "fish_idle": "idle", "row": "idle", "sit
 
 @onready var model: Node3D = $Model
 
+var _dive_latched := false
 var mode := Mode.GROUND
 var focus: Interactable
 var boat: Boat
@@ -386,7 +387,7 @@ func _move_horizontal(target: Vector3, delta: float) -> void:
 func _update_mode(control: bool) -> void:
 	var depth := water_depth()
 	var before := mode
-	var dive_held := control and Input.is_action_pressed("dive")
+	var dive_held := control and _dive_input()
 	match mode:
 		Mode.GROUND:
 			if depth > swim_depth and global_position.y < _surface_y() - float_depth + 0.25:
@@ -396,12 +397,16 @@ func _update_mode(control: bool) -> void:
 				mode = Mode.GROUND
 			elif dive_held and depth > swim_depth + 0.8 and Game.stats.get("oxygen", 100.0) > 5.0:
 				mode = Mode.DIVE
+			else:
+				_dive_latched = false  # a tap in shallow water does nothing
 		Mode.DIVE:
 			var out_of_air: bool = Game.stats.get("oxygen", 100.0) <= 0.0
 			if not dive_held or out_of_air or depth < swim_depth:
 				velocity.y = dive_speed
 				mode = Mode.SWIM
 	if mode != before:
+		if before == Mode.DIVE:
+			_dive_latched = false
 		mode_changed.emit(mode)
 		if mode == Mode.SWIM and before == Mode.GROUND:
 			AudioManager.play("splash", global_position)
@@ -409,6 +414,17 @@ func _update_mode(control: bool) -> void:
 			AudioManager.play("dive", global_position)
 		elif before == Mode.DIVE:
 			AudioManager.play("surface", global_position)
+
+
+## Hold to dive, or (accessibility setting) tap to dive and tap to surface.
+func _dive_input() -> bool:
+	if SaveManager.settings.get("toggle_dive", false):
+		if mode != Mode.SWIM and mode != Mode.DIVE:
+			_dive_latched = false
+		elif Input.is_action_just_pressed("dive"):
+			_dive_latched = not _dive_latched
+		return _dive_latched
+	return Input.is_action_pressed("dive")
 
 
 func _face(wish: Vector3, delta: float) -> void:

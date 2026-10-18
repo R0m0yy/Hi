@@ -45,8 +45,8 @@ Legend: [x] done and verified · [~] partial · [ ] not started
 - [~] Performance measured only on the software renderer (llvmpipe) in this container; no real-GPU profile
 - [~] Balancing is a first pass (needs rates, recipe costs, respawn timers)
 - [ ] Rebindable controls UI (bindings are central in `input_bindings.gd` but there is no rebinding screen)
-- [ ] Accessibility beyond the basics (glyph prompts, volume sliders, objective toggle): no colour-blind
-      or text-size options yet
+- [~] Accessibility: glyph prompts, volume sliders, objective toggle, interface size and tap-to-dive;
+      no colour-blind palette or subtitles for sound cues yet
 
 ## Phase 0: Reference and asset research
 - [x] Inspect reference A and B (forensics, visual classification)
