@@ -54,6 +54,9 @@ Test results are in `docs/TEST_RESULTS.md`.
   rescue screens. Fonts are Fredoka and Nunito (OFL). The fishing meter sits just below
   the player, clear of the notification feed.
 - **Boats:** the wake is now soft foam instead of rings.
+- **Single-file browser build:** `tools/web/build_single_html.py` embeds the engine, game
+  data and audio worklets in one 26 MB HTML file that works from `file://` (audio worklets
+  load from data: URLs there, since blob: URLs fail on file pages).
 - **Menus on a real keyboard:** Tab and Escape now close the pack. A focused pack slot
   was taking Tab for focus navigation, and the pause menu swallowed Escape. The tests
   sent input actions and so missed it; `keyboard_test.gd` sends real key events.

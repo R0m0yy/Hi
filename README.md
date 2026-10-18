@@ -21,7 +21,9 @@ rig, two OFL fonts, and the Godot runtime in the desktop builds. See `docs/LICEN
 
 `tools/web/build_web.py` builds a browser version (Godot's web export on the
 Compatibility renderer, no threads) into `build/web_artifact/`. Serve that folder
-over HTTP or publish it, open `index.html` and press **Play**. It needs a browser with
+over HTTP or publish it, open `index.html` and press **Play**.
+`tools/web/build_single_html.py` then packs the same build into one self-contained
+`build/ParadiseUntamed-v0.3-browser.html` (26 MB) that opens by double-click, no server needed. It needs a browser with
 WebGL 2 and WebAssembly. It is a little plainer than the desktop build (no ambient
 occlusion) and the page has a Sharpness setting for slower graphics chips.
 
@@ -117,7 +119,7 @@ tools/
   audio/make_audio.py   procedural sound effects and music loops
   ui/make_ui_icons.py   HUD stat icons
   export_desktop.sh     Linux, Windows and macOS exports
-  web/                  browser build: build_web.py, play.html (the page), browser_test.js
+  web/                  browser build: build_web.py, build_single_html.py, play.html (the page), browser_test.js
   build_all.sh          rebuild assets -> Godot import -> scenes
 game/                   the Godot project (open game/project.godot)
   scripts/core/         autoloads: input, items, game state, world queries, audio, saves
@@ -152,6 +154,7 @@ godot --path game --fixed-fps 30 --script res://tools/capture_gameplay.gd -- --o
 godot --path game --write-movie /abs/demo.avi --fixed-fps 30 --resolution 1280x720 --script res://tools/demo_video.gd
 godot --path game --script res://tools/perf_probe.gd                 # draw calls, primitives, video memory
 python3 tools/web/build_web.py                                       # browser build into build/web_artifact/
+python3 tools/web/build_single_html.py                               # the same, as one HTML file
 ```
 
 `docs/TEST_RESULTS.md` lists every check and the latest results.

@@ -267,7 +267,10 @@ kbd { display: inline-block; padding: 0.05em 0.45em; border: 1px solid var(--lin
     statusEl.textContent = label + " " + Math.round(f * 100) + "%";
   }
 
-  function fetchPacked(name) {
+  /*@SOURCE_BEGIN@*/
+  // Where the packed bytes come from: published files, fetched with progress.
+  // (tools/web/build_single_html.py swaps this block for data inside the page.)
+  function packedBytes(name) {
     var url = GZ[name];
     return fetch(url).then(function (res) {
       if (!res.ok) throw new Error("Could not download " + url + " (HTTP " + res.status + ")");
@@ -288,9 +291,14 @@ kbd { display: inline-block; padding: 0.05em 0.45em; border: 1px solid var(--lin
         chunks.forEach(function (c) { buf.set(c, o); o += c.length; });
         return buf;
       });
-    }).then(function (text) {
+    });
+  }
+  /*@SOURCE_END@*/
+
+  function fetchPacked(name) {
+    return packedBytes(name).then(function (text) {
       var buf = fromBase64(text);
-      if (buf.length < 3 || buf[0] !== 0x1f || buf[1] !== 0x8b) throw new Error(url + " is not a gzip file");
+      if (buf.length < 3 || buf[0] !== 0x1f || buf[1] !== 0x8b) throw new Error(name + " is not a gzip file");
       var ds = new Blob([buf]).stream().pipeThrough(new DecompressionStream("gzip"));
       return new Response(ds).arrayBuffer();
     });
