@@ -28,11 +28,70 @@ var _t := 0.0
 var _visual: Node3D
 
 
+var _wake: GPUParticles3D
+
+
 func _ready() -> void:
 	_visual = get_node_or_null(visual_path) as Node3D
 	_yaw = global_rotation.y
 	super._ready()
 	add_to_group("boats")
+	_wake = _make_wake()
+	add_child(_wake)
+	_wake.position = Vector3(0, 0.05, -1.2)
+
+
+static func _make_wake() -> GPUParticles3D:
+	var p := GPUParticles3D.new()
+	p.name = "Wake"
+	p.amount = 48
+	p.lifetime = 2.2
+	p.local_coords = false
+	p.emitting = false
+	var pm := ParticleProcessMaterial.new()
+	pm.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_BOX
+	pm.emission_box_extents = Vector3(0.45, 0.0, 0.1)
+	pm.gravity = Vector3.ZERO
+	pm.spread = 30.0
+	pm.initial_velocity_min = 0.1
+	pm.initial_velocity_max = 0.35
+	pm.scale_min = 0.6
+	pm.scale_max = 1.2
+	var curve := CurveTexture.new()
+	var c := Curve.new()
+	c.add_point(Vector2(0.0, 0.4))
+	c.add_point(Vector2(0.3, 1.0))
+	c.add_point(Vector2(1.0, 1.6))
+	curve.curve = c
+	pm.scale_curve = curve
+	var grad := Gradient.new()
+	grad.offsets = PackedFloat32Array([0.0, 0.2, 1.0])
+	grad.colors = PackedColorArray([Color(1, 0.98, 0.9, 0.0), Color(1, 0.98, 0.9, 0.75), Color(1, 0.98, 0.9, 0.0)])
+	var gt := GradientTexture1D.new()
+	gt.gradient = grad
+	pm.color_ramp = gt
+	p.process_material = pm
+	var quad := QuadMesh.new()
+	quad.size = Vector2(0.55, 0.55)
+	quad.orientation = PlaneMesh.FACE_Y
+	var mat := StandardMaterial3D.new()
+	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	mat.vertex_color_use_as_albedo = true
+	mat.albedo_texture = _foam_texture()
+	quad.material = mat
+	p.draw_pass_1 = quad
+	return p
+
+
+static func _foam_texture() -> Texture2D:
+	var img := Image.create(64, 64, false, Image.FORMAT_RGBA8)
+	for y in 64:
+		for x in 64:
+			var d := Vector2(x - 31.5, y - 31.5).length() / 31.5
+			var ring := clampf(1.0 - absf(d - 0.62) * 4.0, 0.0, 1.0) + clampf(0.35 - d, 0.0, 1.0)
+			img.set_pixel(x, y, Color(1, 1, 1, clampf(ring, 0.0, 1.0)))
+	return ImageTexture.create_from_image(img)
 
 
 func focus_position() -> Vector3:
@@ -114,6 +173,9 @@ func _physics_process(delta: float) -> void:
 	else:
 		global_position.x = next.x
 		global_position.z = next.z
+	if _wake:
+		_wake.emitting = absf(speed) > 1.0
+		_wake.amount_ratio = clampf(absf(speed) / max_speed, 0.2, 1.0)
 	var surface := World.surface_at(global_position)
 	global_position.y = lerpf(global_position.y, surface + sin(_t * 1.3) * 0.04, 1.0 - exp(-6.0 * delta))
 	global_rotation = Vector3(sin(_t * 1.1) * 0.03 + speed * 0.006, _yaw, sin(_t * 0.9 + 1.0) * 0.035)

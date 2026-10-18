@@ -68,3 +68,11 @@ caustics_strength={
 "type": "float",
 "value": 1.0
 }
+diver_pos={
+"type": "vec3",
+"value": Vector3(0, 0, 0)
+}
+diver_reveal={
+"type": "float",
+"value": 0.0
+}

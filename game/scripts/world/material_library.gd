@@ -13,6 +13,7 @@ const BY_NAME := {
 	"PU_Emissive": preload("res://materials/pu_emissive.tres"),
 	"PU_Terrain": preload("res://materials/terrain_haven.tres"),
 	"PU_Fish": preload("res://materials/pu_fish.tres"),
+	"PU_Char": preload("res://materials/pu_char.tres"),
 }
 
 

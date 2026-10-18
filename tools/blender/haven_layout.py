@@ -43,8 +43,9 @@ NO_SHADOW = {"seaweed", "seabed_pebbles", "shells", "grass_tufts"}
 
 
 class Layout:
-    def __init__(self, bvh, seed: int = 3):
+    def __init__(self, bvh, seed: int = 3, island=None):
         self.bvh = bvh
+        self.isl = island or isl  # island definition module (shape queries)
         self.items: list[dict] = []
         self.sc: dict[str, list[list[float]]] = {k: [] for k in SCATTER_SCENES}
         self.rand = random.Random(seed)
@@ -53,10 +54,10 @@ class Layout:
     # -- queries -------------------------------------------------------------
     def ground(self, x: float, z: float) -> float:
         hit = self.bvh.ray_cast(Vector((x, 60.0, z)), Vector((0, -1, 0)), 200.0)
-        return hit[0].y if hit[0] is not None else isl.height(x, z)
+        return hit[0].y if hit[0] is not None else self.isl.height(x, z)
 
     def inland(self, x: float, z: float) -> float:
-        return -isl.sdf(x, z)
+        return -self.isl.sdf(x, z)
 
     def free(self, x: float, z: float, radius: float = 0.0) -> bool:
         return all(math.hypot(x - kx, z - kz) > kr + radius for kx, kz, kr in self.keepout)
@@ -353,13 +354,17 @@ def build(bvh) -> Layout:
 
 
 def export(bvh) -> str:
-    L = build(bvh)
+    return write(build(bvh), "haven")
+
+
+def write(L: Layout, name: str) -> str:
+    """Writes game/assets/terrain/<name>_layout.json (items + scatter sets)."""
     scatter = {}
     for key, inst in L.sc.items():
         if inst:
             scatter[key] = {"scene": SCATTER_SCENES[key], "group": "Scatter", "shadows": key not in NO_SHADOW,
                             "instances": [[round(v, 3) for v in i] for i in inst]}
-    out = pu.GAME / "assets" / "terrain" / "haven_layout.json"
+    out = pu.GAME / "assets" / "terrain" / f"{name}_layout.json"
     out.write_text(json.dumps({"items": L.items, "scatter": scatter}, indent=1) + "\n")
     counts = {k: len(v["instances"]) for k, v in scatter.items()}
-    return f"terrain/haven_layout.json items={len(L.items)} scatter={counts}"
+    return f"terrain/{name}_layout.json items={len(L.items)} scatter={counts}"

@@ -55,6 +55,12 @@ def build_terrain() -> list[str]:
     return assets_terrain.export_all()
 
 
+def build_islands() -> list[str]:
+    """Only the new islands (Haven is rebuilt by the "terrain" group)."""
+    import assets_terrain
+    return assets_terrain.export_all(["palm_key", "lookout"])
+
+
 def build_character() -> list[str]:
     import assets_character
     return assets_character.export_all()
@@ -65,6 +71,11 @@ def build_items() -> list[str]:
     return assets_items.export_all()
 
 
+def build_explorer() -> list[str]:
+    import assets_explorer
+    return assets_explorer.export_all()
+
+
 GROUPS = {
     "palms": build_palms,
     "rocks": build_rocks,
@@ -73,6 +84,8 @@ GROUPS = {
     "terrain": build_terrain,
     "character": build_character,
     "items": build_items,
+    "explorer": build_explorer,
+    "islands": build_islands,
 }
 
 

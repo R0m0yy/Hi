@@ -13,6 +13,7 @@ var _pool3d: Array[AudioStreamPlayer3D] = []
 var _pool2d: Array[AudioStreamPlayer] = []
 var _loops := {}
 var _rng := RandomNumberGenerator.new()
+var _underwater := false
 
 
 func _ready() -> void:
@@ -100,13 +101,45 @@ func set_loop(name: String, volume_db: float, bus: String = "Ambience", fade: fl
 	if p == null:
 		p = AudioStreamPlayer.new()
 		p.bus = bus
-		p.stream = load(path)
+		p.stream = AudioUtil.looped(load(path))
 		p.volume_db = -60.0
 		add_child(p)
 		_loops[name] = p
 		p.play()
 	var tw := create_tween()
 	tw.tween_property(p, "volume_db", volume_db, fade)
+
+
+## Muffles effects and swaps the ambience while the player's head is underwater.
+func set_underwater(on: bool) -> void:
+	if on == _underwater:
+		return
+	_underwater = on
+	var i := AudioServer.get_bus_index("SFX")
+	if i >= 0:
+		if AudioServer.get_bus_effect_count(i) == 0:
+			var lp := AudioEffectLowPassFilter.new()
+			lp.cutoff_hz = 900.0
+			AudioServer.add_bus_effect(i, lp)
+		AudioServer.set_bus_effect_enabled(i, 0, on)
+	set_loop("ocean", -22.0 if on else -6.0, "Ambience", 0.6)
+	set_loop("wind", -40.0 if on else -16.0, "Ambience", 0.6)
+	set_loop("underwater", -4.0 if on else -60.0, "Ambience", 0.6)
+
+
+func _exit_tree() -> void:
+	# Release looping streams so nothing is left playing when the game quits.
+	for name in _loops:
+		var p: AudioStreamPlayer = _loops[name]
+		p.stop()
+		p.stream = null
+	_loops.clear()
+	for p in _pool3d:
+		p.stop()
+		p.stream = null
+	for p in _pool2d:
+		p.stop()
+		p.stream = null
 
 
 func stop_loop(name: String, fade: float = 1.0) -> void:

@@ -9,3 +9,4 @@ __pycache__/
 *.swp
 # Generated HTML package (tools/package/build_package.py)
 build/
+game/_ual_preview/

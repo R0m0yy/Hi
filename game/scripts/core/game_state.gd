@@ -12,6 +12,7 @@ signal player_died
 signal state_changed(state: String)
 signal hour_changed(hour: int)
 signal storage_requested(box: Node)
+signal rescued
 
 const HOTBAR_SIZE := 6
 const INVENTORY_SIZE := 24
@@ -42,8 +43,16 @@ const OBJECTIVES := [
 	{"id": "shelter", "text": "Build a lean-to shelter", "event": "place:shelter", "count": 1},
 	{"id": "boat", "text": "Repair the rowboat on the east shore", "event": "repair:rowboat", "count": 1},
 	{"id": "palm_key", "text": "Row north-east to Palm Key", "event": "discover:palm_key", "count": 1},
-	{"id": "lookout", "text": "Find Lookout Isle to the south-west", "event": "discover:lookout_isle", "count": 1},
+	{"id": "lookout", "text": "Find Lookout Isle to the south-west", "event": "discover:lookout", "count": 1},
+	{"id": "signal", "text": "Light the signal fire on Lookout Isle's plateau", "event": "signal_fire", "count": 1},
 ]
+
+## Where discovery objectives point the HUD compass: event -> island node name.
+const OBJECTIVE_TARGETS := {
+	"discover:palm_key": "PalmKey",
+	"discover:lookout": "LookoutIsle",
+	"signal_fire": "LookoutIsle",
+}
 
 var state := "menu"
 var inventory := Inventory.new(INVENTORY_SIZE)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scripts/gameplay/game_world.gd" id="0_world"]
 [ext_resource type="PackedScene" path="res://scenes/world/daylight_rig.tscn" id="1_day"]
@@ -6,6 +6,8 @@
 [ext_resource type="Script" path="res://scripts/world/water_system.gd" id="3_water"]
 [ext_resource type="PackedScene" path="res://scenes/camera/isometric_camera.tscn" id="4_cam"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="5_player"]
+[ext_resource type="PackedScene" path="res://scenes/world/palm_key.tscn" id="6_palmkey"]
+[ext_resource type="PackedScene" path="res://scenes/world/lookout_isle.tscn" id="7_lookout"]
 
 [node name="Main" type="Node3D"]
 script = ExtResource("0_world")
@@ -13,6 +15,12 @@ script = ExtResource("0_world")
 [node name="DaylightRig" parent="." instance=ExtResource("1_day")]
 
 [node name="HavenIsland" parent="." instance=ExtResource("2_haven")]
+
+[node name="PalmKey" parent="." instance=ExtResource("6_palmkey")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 175, 0, -140)
+
+[node name="LookoutIsle" parent="." instance=ExtResource("7_lookout")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -180, 0, 165)
 
 [node name="Ocean" type="MeshInstance3D" parent="."]
 script = ExtResource("3_water")

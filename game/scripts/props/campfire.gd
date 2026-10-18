@@ -22,6 +22,16 @@ func _ready() -> void:
 	super._ready()
 	_flame = find_child("Flame", true, false) as Node3D
 	_update_visibility()
+	if not Engine.is_editor_hint() and ResourceLoader.exists("res://assets/audio/loops/fire.ogg"):
+		var crackle := AudioStreamPlayer3D.new()
+		crackle.name = "Crackle"
+		crackle.stream = AudioUtil.looped(load("res://assets/audio/loops/fire.ogg"))
+		crackle.bus = "Ambience"
+		crackle.unit_size = 3.0
+		crackle.max_distance = 20.0
+		crackle.volume_db = -4.0
+		crackle.autoplay = true
+		add_child(crackle)
 
 
 func _process(delta: float) -> void:
@@ -43,3 +53,10 @@ func _update_visibility() -> void:
 		_light.visible = is_lit
 	if _sparks:
 		_sparks.emitting = is_lit
+
+
+func _exit_tree() -> void:
+	var crackle := get_node_or_null("Crackle") as AudioStreamPlayer3D
+	if crackle:
+		crackle.stop()
+		crackle.stream = null

@@ -32,10 +32,13 @@ const FALLBACK := {"swim_idle": "swim", "fish_idle": "idle", "row": "idle", "sit
 ## Water deeper than this (metres) at the player's position means swimming.
 @export var swim_depth := 1.0
 ## How far below the surface the body origin floats while swimming.
-@export var float_depth := 1.05
+@export var float_depth := 0.32
 @export var seabed_clearance := 0.6
 ## Height of the eyes above the body origin (for "is the head underwater").
-@export var head_height := 1.25
+@export var head_height := 0.45
+## Vertical model offset per clip, so an upright treading pose keeps the head
+## above water while the horizontal swim stroke lies at the surface.
+@export var clip_offsets := {"swim_idle": -0.78, "swim": 0.05, "dive": 0.0}
 
 @onready var model: Node3D = $Model
 
@@ -310,7 +313,7 @@ func unboard(spot: Vector3) -> void:
 	_update_mode(true)
 	mode_changed.emit(mode)
 	if _rig:
-		_rig.zoom_size = 17.0
+		_rig.zoom_size = GameWorld.DEFAULT_ZOOM
 
 
 func _boat_process(delta: float) -> void:
@@ -453,6 +456,13 @@ func _animate(delta: float) -> void:
 	if anim.current_animation != clip:
 		anim.play(clip, 0.2)
 	anim.speed_scale = maxf(rate, 0.4)
+	var target_y: float = clip_offsets.get(clip, 0.0) if mode != Mode.GROUND else 0.0
+	model.position.y = lerpf(model.position.y, target_y, 1.0 - exp(-6.0 * delta))
+	# Pitch the diver head-down while descending and level out when rising.
+	var pitch := 0.0
+	if mode == Mode.DIVE:
+		pitch = clampf(-velocity.y * 0.25, -0.5, 0.5)
+	model.rotation.x = lerp_angle(model.rotation.x, pitch, 1.0 - exp(-5.0 * delta))
 
 
 func _footsteps(delta: float) -> void:

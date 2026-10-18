@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scripts/player/player_controller.gd" id="1_player"]
-[ext_resource type="PackedScene" path="res://assets/models/characters/castaway.glb" id="2_model"]
+[ext_resource type="PackedScene" path="res://assets/models/characters/explorer.glb" id="2_model"]
 [ext_resource type="Script" path="res://scripts/player/held_item.gd" id="3_held"]
 [ext_resource type="Script" path="res://scripts/player/fishing_rod.gd" id="4_rod"]
 [ext_resource type="Script" path="res://scripts/player/spear_attack.gd" id="5_spear"]

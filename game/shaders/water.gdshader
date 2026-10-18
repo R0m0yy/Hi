@@ -13,6 +13,10 @@ render_mode blend_mix, depth_draw_always, cull_back, diffuse_burley, specular_sc
 
 #include "res://shaders/include/world_common.gdshaderinc"
 
+// Gameplay: a clear "window" around a diving player so they stay readable.
+global uniform vec3 diver_pos;
+global uniform float diver_reveal;
+
 uniform sampler2D screen_tex : hint_screen_texture, filter_linear_mipmap, repeat_disable;
 uniform sampler2D depth_tex : hint_depth_texture, filter_nearest, repeat_disable;
 uniform sampler2D normal_a : hint_normal, filter_linear_mipmap, repeat_enable;
@@ -85,6 +89,8 @@ void fragment() {
 	body = mix(body, color_deep.rgb, smoothstep(10.0, 18.0, rdepth));
 
 	float clarity = exp(-rdepth * clarity_falloff);
+	float reveal = diver_reveal * (1.0 - smoothstep(2.5, 7.5, distance(world_vertex.xz, diver_pos.xz)));
+	clarity = mix(clarity, max(clarity, exp(-rdepth * clarity_falloff * 0.22)), reveal);
 	vec3 tint = mix(vec3(1.0), color_turquoise.rgb * 1.25, transmission_tint * smoothstep(0.0, 1.1, rdepth));
 	vec3 transmitted = refr * tint;
 
@@ -102,7 +108,7 @@ void fragment() {
 	float band = smoothstep(0.93 - faa, 0.93 + faa, f) * (1.0 - smoothstep(0.965 - faa, 0.965 + faa, f));
 	float band_mask = smoothstep(wash, wash + 0.3, depth) * (1.0 - smoothstep(0.7, 1.4, depth));
 	band_mask *= smoothstep(0.52, 0.66, pu_fbm(wp * 0.13 + vec2(7.0, TIME * 0.03)));
-	float foam = clamp(max(shore_foam, band * band_mask * wave_foam_strength), 0.0, 1.0);
+	float foam = clamp(max(shore_foam, band * band_mask * wave_foam_strength), 0.0, 1.0) * (1.0 - reveal * 0.6);
 
 	// Sun glints on open water (Ref A's white flecks).
 	// Clustered in slowly drifting patches so open water reads calm, not noisy.
@@ -111,6 +117,7 @@ void fragment() {
 	float g2 = pu_value_noise(wp * vec2(2.9, 2.1) - TIME * vec2(0.23, 0.29) + 3.1);
 	float glint = smoothstep(0.74, 0.8, g1 * g2 * 1.55) * patch * smoothstep(1.5, 4.0, depth) * glint_strength;
 	glint *= 1.0 - smoothstep(60.0, 140.0, length(VERTEX));  // sparkles are a close-up detail
+	glint *= 1.0 - reveal;
 
 	ALBEDO = mix(body * body_brightness * (1.0 - clarity), foam_color.rgb, foam);
 	EMISSION = transmitted * clarity * (1.0 - foam) + foam_color.rgb * (foam * 0.3 + glint * 0.6);

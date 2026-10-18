@@ -32,6 +32,8 @@ var _flash: ColorRect
 var _place_panel: PanelContainer
 var _last_health := 100.0
 var _root: Control
+var _compass: CompassArrow
+var _compass_label: Label
 
 
 func _ready() -> void:
@@ -96,6 +98,28 @@ func _process(delta: float) -> void:
 		if _prompt_panel.visible and player.focus:
 			_refresh_prompt_soft()
 	_flash.color.a = maxf(_flash.color.a - delta * 1.5, 0.0)
+	_update_compass()
+
+
+## Points toward the island the current objective asks you to reach.
+func _update_compass() -> void:
+	var row := _compass.get_parent() as Control
+	var obj := Game.current_objective()
+	var target_name: String = Game.OBJECTIVE_TARGETS.get(obj.get("event", ""), "")
+	var target: Node3D = get_tree().current_scene.get_node_or_null(target_name) if target_name != "" else null
+	if target == null or player == null:
+		row.visible = false
+		return
+	var d := target.global_position - player.global_position
+	d.y = 0.0
+	var rig := get_tree().get_first_node_in_group("camera_rig") as Node3D
+	var yaw := rig.global_rotation.y if rig else 0.0
+	var right := Vector3(cos(yaw), 0, -sin(yaw))
+	var fwd := Vector3(-sin(yaw), 0, -cos(yaw))
+	_compass.angle = atan2(d.dot(right), d.dot(fwd))
+	_compass.queue_redraw()
+	_compass_label.text = "%s · %d m" % [target.get("island_name"), int(d.length())]
+	row.visible = true
 
 
 # ---------------------------------------------------------------------------
@@ -253,6 +277,15 @@ func _build_objective() -> void:
 	_objective_text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_objective_text.custom_minimum_size = Vector2(388, 0)
 	col.add_child(_objective_text)
+	var compass_row := HBoxContainer.new()
+	compass_row.add_theme_constant_override("separation", 10)
+	_compass = CompassArrow.new()
+	_compass.custom_minimum_size = Vector2(30, 30)
+	compass_row.add_child(_compass)
+	_compass_label = UITheme.label("", 19, UITheme.SAND, true)
+	compass_row.add_child(_compass_label)
+	compass_row.visible = false
+	col.add_child(compass_row)
 	panel.add_child(col)
 	_root.add_child(panel)
 

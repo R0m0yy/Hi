@@ -53,7 +53,7 @@ static func _attach(island: Node3D, item: Node3D, profile: Dictionary) -> int:
 		return _pickup(item, "wood", 3, 360.0, "Collect")
 	if n == "Planks":
 		return _pickup(item, "wood", 4, 0.0, "Collect")
-	if n == "Coconuts":
+	if n.begins_with("Coconuts"):
 		return _pickup(item, "coconut", 2, 420.0, "Pick up")
 	if n == "Campfire":
 		var c := CookingStation.new()
@@ -61,12 +61,18 @@ static func _attach(island: Node3D, item: Node3D, profile: Dictionary) -> int:
 		c.reach = 2.2
 		item.add_child(c)
 		return 1
-	if n == "Chest":
+	if n == "Chest" or n == "LookoutChest":
 		var box := StorageBox.new()
 		box.name = "Storage"
-		box.title = "camp chest"
+		box.title = "camp chest" if n == "Chest" else "old sea chest"
 		box.starting_items = profile.get("chest", {})
 		item.add_child(box)
+		return 1
+	if n == "SignalFire":
+		var fire := SignalFire.new()
+		fire.name = "Signal"
+		fire.reach = 2.6
+		item.add_child(fire)
 		return 1
 	if n == "LeanTo":
 		var bed := ShelterBed.new()
@@ -75,10 +81,10 @@ static func _attach(island: Node3D, item: Node3D, profile: Dictionary) -> int:
 		item.add_child(bed)
 		bed.position = Vector3(0, 0, 1.3)
 		return 1
-	if n == "Barrel" or n == "Barrel2" or n == "Crate":
+	if n.begins_with("Barrel") or n.begins_with("Crate"):
 		var s := Searchable.new()
 		s.name = "Search"
-		s.title = "crate" if n == "Crate" else "barrel"
+		s.title = "crate" if n.begins_with("Crate") else "barrel"
 		s.loot = profile.get("loot", {}).get(n, {"rope": 1})
 		item.add_child(s)
 		return 1
@@ -185,7 +191,7 @@ static func _extra(island: Node3D, extra: Dictionary) -> int:
 	node.name = String(extra.get("name", "Extra"))
 	var p: Array = extra["pos"]
 	island.add_child(node)
-	var pos := Vector3(p[0], 0.0, p[1])
+	var pos := island.to_global(Vector3(p[0], 0.0, p[1]))
 	pos.y = p[2] if p.size() > 2 else (island as IslandManager).height_at(pos.x, pos.z)
 	node.global_position = pos
 	node.reach = extra.get("reach", 2.0)

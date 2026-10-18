@@ -18,7 +18,8 @@ static func grip_transform(id: String) -> Transform3D:
 	return Transform3D(Basis.from_euler(Vector3(deg_to_rad(g[0]), 0.0, 0.0)), Vector3(0.0, g[1], 0.0))
 
 
-@export var bone_name := "hand.R"
+## The first of these bones found on the model's skeleton holds the tool.
+@export var bone_names: PackedStringArray = ["DEF-hand.R", "hand.R"]
 
 var current_id := ""
 var node: Node3D
@@ -39,12 +40,17 @@ func rebind() -> void:
 	if skels.is_empty():
 		return
 	var skel := skels[0] as Skeleton3D
-	if skel.find_bone(bone_name) < 0:
-		push_warning("HeldItem: no bone %s" % bone_name)
+	var bone := ""
+	for b in bone_names:
+		if skel.find_bone(b) >= 0:
+			bone = b
+			break
+	if bone.is_empty():
+		push_warning("HeldItem: no hand bone on %s" % player.model.name)
 		return
 	_attach = BoneAttachment3D.new()
 	_attach.name = "HandAttachment"
-	_attach.bone_name = bone_name
+	_attach.bone_name = bone
 	skel.add_child(_attach)
 	var id := current_id
 	current_id = ""

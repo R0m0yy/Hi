@@ -1,0 +1,405 @@
+[gd_scene load_steps=51 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/island_manager.gd" id="1_p75wt"]
+[ext_resource type="PackedScene" path="res://assets/models/terrain/palm_key_terrain.glb" id="2_4lgdx"]
+[ext_resource type="PackedScene" path="res://assets/models/vegetation/palm_trio.glb" id="3_2ld7l"]
+[ext_resource type="PackedScene" path="res://assets/models/vegetation/palm_twin.glb" id="4_ky61n"]
+[ext_resource type="PackedScene" path="res://assets/models/vegetation/palm_tall.glb" id="5_udph0"]
+[ext_resource type="PackedScene" path="res://assets/models/vegetation/palm_curve.glb" id="6_53yut"]
+[ext_resource type="PackedScene" path="res://assets/models/vegetation/palm_mid.glb" id="7_qcavs"]
+[ext_resource type="PackedScene" path="res://assets/models/vegetation/palm_lean.glb" id="8_fotvb"]
+[ext_resource type="PackedScene" path="res://assets/models/vegetation/palm_bent.glb" id="9_wag66"]
+[ext_resource type="PackedScene" path="res://assets/models/vegetation/palm_young.glb" id="10_7023r"]
+[ext_resource type="PackedScene" path="res://assets/models/rocks/rock_cluster_a.glb" id="11_n74ke"]
+[ext_resource type="PackedScene" path="res://assets/models/rocks/rock_cluster_b.glb" id="12_lpfxe"]
+[ext_resource type="PackedScene" path="res://assets/models/rocks/boulder_d.glb" id="13_gpb0x"]
+[ext_resource type="PackedScene" path="res://assets/models/props/driftwood_b.glb" id="14_kjakc"]
+[ext_resource type="PackedScene" path="res://assets/models/props/coconuts_fallen.glb" id="15_jmtdl"]
+[ext_resource type="PackedScene" path="res://assets/models/props/planks.glb" id="16_g3qhi"]
+[ext_resource type="PackedScene" path="res://assets/models/props/barrel.glb" id="17_5fi6c"]
+[ext_resource type="PackedScene" path="res://assets/models/props/crate.glb" id="18_oe336"]
+[ext_resource type="PackedScene" path="res://assets/models/props/wreck_ribs.glb" id="19_xcm3a"]
+[ext_resource type="PackedScene" path="res://assets/models/props/coral_brain.glb" id="20_rtv7s"]
+[ext_resource type="PackedScene" path="res://assets/models/props/coral_tube.glb" id="21_uqdpx"]
+[ext_resource type="PackedScene" path="res://assets/models/props/coral_fan.glb" id="22_gqhdi"]
+[ext_resource type="PackedScene" path="res://assets/models/props/coral_branch.glb" id="23_1hrhl"]
+[ext_resource type="Script" path="res://scripts/world/scatter_field.gd" id="24_55g8t"]
+[ext_resource type="PackedScene" path="res://assets/models/vegetation/grass_tufts.glb" id="25_ndhu8"]
+[ext_resource type="PackedScene" path="res://assets/models/vegetation/ferns.glb" id="26_brsm1"]
+[ext_resource type="PackedScene" path="res://assets/models/vegetation/bushes.glb" id="27_csoom"]
+[ext_resource type="PackedScene" path="res://assets/models/vegetation/broadleafs.glb" id="28_vi0gd"]
+[ext_resource type="PackedScene" path="res://assets/models/vegetation/flower_shrubs.glb" id="29_3mtso"]
+[ext_resource type="PackedScene" path="res://assets/models/vegetation/grass_carpets.glb" id="30_y8jyg"]
+[ext_resource type="PackedScene" path="res://assets/models/rocks/pebbles.glb" id="31_kqexg"]
+[ext_resource type="PackedScene" path="res://assets/models/props/shells.glb" id="32_sw6gq"]
+[ext_resource type="PackedScene" path="res://assets/models/vegetation/seaweed.glb" id="33_54cua"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_3386b"]
+height = 2.5
+radius = 0.298187
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_wpxd2"]
+height = 2.5
+radius = 0.313561
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_fobth"]
+height = 2.5
+radius = 0.321867
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_c1k4q"]
+height = 2.5
+radius = 0.28564
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_hx6d0"]
+height = 2.5
+radius = 0.31137
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_mwb8o"]
+height = 2.5
+radius = 0.308028
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_p8mry"]
+height = 2.5
+radius = 0.305715
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_jp3nh"]
+height = 2.5
+radius = 0.275949
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_3faag"]
+height = 2.5
+radius = 0.266201
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_rv4i5"]
+height = 2.5
+radius = 0.266357
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_r2jg6"]
+height = 2.5
+radius = 0.283824
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_m7anm"]
+height = 2.5
+radius = 0.261189
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_ge12w"]
+height = 2.5
+radius = 0.261295
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_13wq1"]
+height = 2.5
+radius = 0.261791
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_l4l63"]
+height = 2.5
+radius = 0.28516
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_e1ltq"]
+height = 1.0
+radius = 0.42
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nenvj"]
+size = Vector3(0.9, 0.9, 0.9)
+
+[node name="PalmKey" type="Node3D"]
+script = ExtResource("1_p75wt")
+island_name = "Palm Key"
+island_id = "palm_key"
+discover_radius = 45.0
+heightmap_json = "res://assets/terrain/palm_key_heightmap.json"
+
+[node name="Terrain" type="Node3D" parent="." instance=ExtResource("2_4lgdx")]
+
+[node name="Vegetation" type="Node3D" parent="."]
+
+[node name="Palm00" type="Node3D" parent="Vegetation" instance=ExtResource("3_2ld7l")]
+transform = Transform3D(-0.523647, 0, -0.844885, 0, 0.994, 0, 0.844885, 0, -0.523647, -2, 0.536, 3)
+
+[node name="Collider" type="StaticBody3D" parent="Vegetation/Palm00"]
+
+[node name="Shape" type="CollisionShape3D" parent="Vegetation/Palm00/Collider"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource("CylinderShape3D_3386b")
+
+[node name="Palm01" type="Node3D" parent="Vegetation" instance=ExtResource("4_ky61n")]
+transform = Transform3D(-0.923791, 0, -0.488503, 0, 1.045, 0, 0.488503, 0, -0.923791, -12, 0.781, 7)
+
+[node name="Collider" type="StaticBody3D" parent="Vegetation/Palm01"]
+
+[node name="Shape" type="CollisionShape3D" parent="Vegetation/Palm01/Collider"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource("CylinderShape3D_wpxd2")
+
+[node name="Palm02" type="Node3D" parent="Vegetation" instance=ExtResource("5_udph0")]
+transform = Transform3D(0.308697, 0, -1.02764, 0, 1.073, 0, 1.02764, 0, 0.308697, 6, 0.463, 9)
+
+[node name="Collider" type="StaticBody3D" parent="Vegetation/Palm02"]
+
+[node name="Shape" type="CollisionShape3D" parent="Vegetation/Palm02/Collider"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource("CylinderShape3D_fobth")
+
+[node name="Palm03" type="Node3D" parent="Vegetation" instance=ExtResource("6_53yut")]
+transform = Transform3D(-0.636765, 0, 0.707696, 0, 0.952, 0, -0.707696, 0, -0.636765, -6, 0.454, -7)
+
+[node name="Collider" type="StaticBody3D" parent="Vegetation/Palm03"]
+
+[node name="Shape" type="CollisionShape3D" parent="Vegetation/Palm03/Collider"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource("CylinderShape3D_c1k4q")
+
+[node name="Palm04" type="Node3D" parent="Vegetation" instance=ExtResource("7_qcavs")]
+transform = Transform3D(0.469304, 0, 0.92585, 0, 1.038, 0, -0.92585, 0, 0.469304, 2, -0.296, -4)
+
+[node name="Collider" type="StaticBody3D" parent="Vegetation/Palm04"]
+
+[node name="Shape" type="CollisionShape3D" parent="Vegetation/Palm04/Collider"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource("CylinderShape3D_hx6d0")
+
+[node name="Palm05" type="Node3D" parent="Vegetation" instance=ExtResource("8_fotvb")]
+transform = Transform3D(-1.02698, 0, -0.00573587, 0, 1.027, 0, 0.00573587, 0, -1.02698, -15, 0.4, 1)
+
+[node name="Collider" type="StaticBody3D" parent="Vegetation/Palm05"]
+
+[node name="Shape" type="CollisionShape3D" parent="Vegetation/Palm05/Collider"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource("CylinderShape3D_mwb8o")
+
+[node name="Palm06" type="Node3D" parent="Vegetation" instance=ExtResource("9_wag66")]
+transform = Transform3D(0.789331, 0, -0.644451, 0, 1.019, 0, 0.644451, 0, 0.789331, 11, 0.357, 14)
+
+[node name="Collider" type="StaticBody3D" parent="Vegetation/Palm06"]
+
+[node name="Shape" type="CollisionShape3D" parent="Vegetation/Palm06/Collider"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource("CylinderShape3D_p8mry")
+
+[node name="Palm07" type="Node3D" parent="Vegetation" instance=ExtResource("10_7023r")]
+transform = Transform3D(-0.503893, 0, -0.769735, 0, 0.92, 0, 0.769735, 0, -0.503893, -9, 0.368, 14)
+
+[node name="Collider" type="StaticBody3D" parent="Vegetation/Palm07"]
+
+[node name="Shape" type="CollisionShape3D" parent="Vegetation/Palm07/Collider"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource("CylinderShape3D_jp3nh")
+
+[node name="Palm08" type="Node3D" parent="Vegetation" instance=ExtResource("9_wag66")]
+transform = Transform3D(-0.805199, 0, -0.372054, 0, 0.887, 0, 0.372054, 0, -0.805199, -19.702, 0.249, 11.375)
+
+[node name="Collider" type="StaticBody3D" parent="Vegetation/Palm08"]
+
+[node name="Shape" type="CollisionShape3D" parent="Vegetation/Palm08/Collider"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource("CylinderShape3D_3faag")
+
+[node name="Palm09" type="Node3D" parent="Vegetation" instance=ExtResource("8_fotvb")]
+transform = Transform3D(-0.755357, 0, 0.466883, 0, 0.888, 0, -0.466883, 0, -0.755357, -15.035, 0.25, -5.472)
+
+[node name="Collider" type="StaticBody3D" parent="Vegetation/Palm09"]
+
+[node name="Shape" type="CollisionShape3D" parent="Vegetation/Palm09/Collider"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource("CylinderShape3D_rv4i5")
+
+[node name="Palm10" type="Node3D" parent="Vegetation" instance=ExtResource("8_fotvb")]
+transform = Transform3D(-0.559246, 0, 0.762994, 0, 0.946, 0, -0.762994, 0, -0.559246, -6.926, 0.25, -19.029)
+
+[node name="Collider" type="StaticBody3D" parent="Vegetation/Palm10"]
+
+[node name="Shape" type="CollisionShape3D" parent="Vegetation/Palm10/Collider"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource("CylinderShape3D_r2jg6")
+
+[node name="Palm11" type="Node3D" parent="Vegetation" instance=ExtResource("8_fotvb")]
+transform = Transform3D(0.328255, 0, 0.806777, 0, 0.871, 0, -0.806777, 0, 0.328255, 0.375, 0.255, -0.65)
+
+[node name="Collider" type="StaticBody3D" parent="Vegetation/Palm11"]
+
+[node name="Shape" type="CollisionShape3D" parent="Vegetation/Palm11/Collider"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource("CylinderShape3D_m7anm")
+
+[node name="Palm12" type="Node3D" parent="Vegetation" instance=ExtResource("9_wag66")]
+transform = Transform3D(0.846471, 0, -0.205252, 0, 0.871, 0, 0.205252, 0, 0.846471, 16.887, 0.244, 9.75)
+
+[node name="Collider" type="StaticBody3D" parent="Vegetation/Palm12"]
+
+[node name="Shape" type="CollisionShape3D" parent="Vegetation/Palm12/Collider"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource("CylinderShape3D_ge12w")
+
+[node name="Palm13" type="Node3D" parent="Vegetation" instance=ExtResource("9_wag66")]
+transform = Transform3D(-0.0364052, 0, -0.872241, 0, 0.873, 0, 0.872241, 0, -0.0364052, 2.735, 0.255, 15.511)
+
+[node name="Collider" type="StaticBody3D" parent="Vegetation/Palm13"]
+
+[node name="Shape" type="CollisionShape3D" parent="Vegetation/Palm13/Collider"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource("CylinderShape3D_13wq1")
+
+[node name="Palm14" type="Node3D" parent="Vegetation" instance=ExtResource("4_ky61n")]
+transform = Transform3D(-0.948953, 0, 0.062364, 0, 0.951, 0, -0.062364, 0, -0.948953, -10, 0.662, -2)
+
+[node name="Collider" type="StaticBody3D" parent="Vegetation/Palm14"]
+
+[node name="Shape" type="CollisionShape3D" parent="Vegetation/Palm14/Collider"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource("CylinderShape3D_l4l63")
+
+[node name="Rocks" type="Node3D" parent="."]
+
+[node name="Rocks014" type="Node3D" parent="Rocks" instance=ExtResource("11_n74ke")]
+transform = Transform3D(-0.598998, 0, 0.518137, 0, 0.792, 0, -0.518137, 0, -0.598998, -5.497, 0.537, 8.702)
+
+[node name="Rocks016" type="Node3D" parent="Rocks" instance=ExtResource("11_n74ke")]
+transform = Transform3D(0.587557, 0, -0.139976, 0, 0.604, 0, 0.139976, 0, 0.587557, -15.473, 0.477, 10.598)
+
+[node name="CoastRocks020" type="Node3D" parent="Rocks" instance=ExtResource("12_lpfxe")]
+transform = Transform3D(0.430907, 0, 1.08668, 0, 1.169, 0, -1.08668, 0, 0.430907, -20.492, -0.639, 17.195)
+
+[node name="CoastBoulder021" type="Node3D" parent="Rocks" instance=ExtResource("13_gpb0x")]
+transform = Transform3D(-0.114498, 0, 1.10609, 0, 1.112, 0, -1.10609, 0, -0.114498, -22.762, -1.004, 17.767)
+
+[node name="CoastRocks022" type="Node3D" parent="Rocks" instance=ExtResource("12_lpfxe")]
+transform = Transform3D(0.32245, 0, 1.10699, 0, 1.153, 0, -1.10699, 0, 0.32245, 1.896, -0.628, -21.667)
+
+[node name="CoastBoulder023" type="Node3D" parent="Rocks" instance=ExtResource("13_gpb0x")]
+transform = Transform3D(0.440009, 0, -0.961063, 0, 1.057, 0, 0.961063, 0, 0.440009, 1.268, -0.973, -23.923)
+
+[node name="Props" type="Node3D" parent="."]
+
+[node name="Driftwood017" type="Node3D" parent="Props" instance=ExtResource("14_kjakc")]
+transform = Transform3D(0.911977, 0, 0.410241, 0, 1, 0, -0.410241, 0, 0.911977, -3.256, -0.095, 18.465)
+
+[node name="Driftwood018" type="Node3D" parent="Props" instance=ExtResource("14_kjakc")]
+transform = Transform3D(-0.930992, 0, 0.365039, 0, 1, 0, -0.365039, 0, -0.930992, -12.762, -0.12, -18.226)
+
+[node name="Driftwood019" type="Node3D" parent="Props" instance=ExtResource("14_kjakc")]
+transform = Transform3D(0.249366, 0, 0.968409, 0, 1, 0, -0.968409, 0, 0.249366, 4.678, -0.109, -0.825)
+
+[node name="CoconutsGrove" type="Node3D" parent="Props" instance=ExtResource("15_jmtdl")]
+transform = Transform3D(0.766044, 0, 0.642788, 0, 1, 0, -0.642788, 0, 0.766044, -1, 0.686, 5)
+
+[node name="Planks" type="Node3D" parent="Props" instance=ExtResource("16_g3qhi")]
+transform = Transform3D(0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, 0.939693, 12, -0.953, -16)
+
+[node name="BarrelWreck" type="Node3D" parent="Props" instance=ExtResource("17_5fi6c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.457, 0.064, -1.721)
+
+[node name="Collider" type="StaticBody3D" parent="Props/BarrelWreck"]
+
+[node name="Shape" type="CollisionShape3D" parent="Props/BarrelWreck/Collider"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("CylinderShape3D_e1ltq")
+
+[node name="CrateWreck" type="Node3D" parent="Props" instance=ExtResource("18_oe336")]
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 1.057, 0.283, -0.821)
+
+[node name="Collider" type="StaticBody3D" parent="Props/CrateWreck"]
+
+[node name="Shape" type="CollisionShape3D" parent="Props/CrateWreck/Collider"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+shape = SubResource("BoxShape3D_nenvj")
+
+[node name="Landmarks" type="Node3D" parent="."]
+
+[node name="WreckRibs" type="Node3D" parent="Landmarks" instance=ExtResource("19_xcm3a")]
+transform = Transform3D(0.942025, 0, -0.659613, 0, 1.15, 0, 0.659613, 0, 0.942025, 24, -1.705, -17)
+
+[node name="Reef" type="Node3D" parent="."]
+
+[node name="Coral029" type="Node3D" parent="Reef" instance=ExtResource("20_rtv7s")]
+transform = Transform3D(-0.420141, 0, 0.752679, 0, 0.862, 0, -0.752679, 0, -0.420141, 8.448, -0.985, -14.415)
+
+[node name="Coral030" type="Node3D" parent="Reef" instance=ExtResource("21_uqdpx")]
+transform = Transform3D(1.10568, 0, 0.624799, 0, 1.27, 0, -0.624799, 0, 1.10568, 9.474, -1.182, -11.393)
+
+[node name="Coral031" type="Node3D" parent="Reef" instance=ExtResource("22_gqhdi")]
+transform = Transform3D(0.979817, 0, 0.11025, 0, 0.986, 0, -0.11025, 0, 0.979817, 14.583, -0.792, -3.345)
+
+[node name="Coral032" type="Node3D" parent="Reef" instance=ExtResource("22_gqhdi")]
+transform = Transform3D(0.98753, 0, 0.322965, 0, 1.039, 0, -0.322965, 0, 0.98753, 16.528, -0.828, -6.803)
+
+[node name="Coral033" type="Node3D" parent="Reef" instance=ExtResource("21_uqdpx")]
+transform = Transform3D(0.0748222, 0, 1.0754, 0, 1.078, 0, -1.0754, 0, 0.0748222, 8.218, -1.174, -9.981)
+
+[node name="Coral034" type="Node3D" parent="Reef" instance=ExtResource("22_gqhdi")]
+transform = Transform3D(0.777155, 0, 0.297077, 0, 0.832, 0, -0.297077, 0, 0.777155, 15.232, -0.938, -10.435)
+
+[node name="Coral035" type="Node3D" parent="Reef" instance=ExtResource("20_rtv7s")]
+transform = Transform3D(-0.000999008, 0, 0.953999, 0, 0.954, 0, -0.953999, 0, -0.000999008, 12.592, -1.042, -13.812)
+
+[node name="Coral036" type="Node3D" parent="Reef" instance=ExtResource("23_1hrhl")]
+transform = Transform3D(0.915891, 0, -0.589121, 0, 1.089, 0, 0.589121, 0, 0.915891, 8.207, -1.041, -6.459)
+
+[node name="Coral037" type="Node3D" parent="Reef" instance=ExtResource("22_gqhdi")]
+transform = Transform3D(1.16346, 0, 0.141207, 0, 1.172, 0, -0.141207, 0, 1.16346, 9.708, -1.121, -6.957)
+
+[node name="Coral038" type="Node3D" parent="Reef" instance=ExtResource("20_rtv7s")]
+transform = Transform3D(-0.3074, 0, 0.779583, 0, 0.838, 0, -0.779583, 0, -0.3074, 7.681, -1.126, -8.615)
+
+[node name="Coral039" type="Node3D" parent="Reef" instance=ExtResource("23_1hrhl")]
+transform = Transform3D(-0.770051, 0, -0.732797, 0, 1.063, 0, 0.732797, 0, -0.770051, 17.888, -0.822, -9.656)
+
+[node name="Coral040" type="Node3D" parent="Reef" instance=ExtResource("21_uqdpx")]
+transform = Transform3D(0.528358, 0, 1.1856, 0, 1.298, 0, -1.1856, 0, 0.528358, 13.324, -0.934, -5.064)
+
+[node name="Scatter" type="Node3D" parent="."]
+
+[node name="GrassTufts" type="Node3D" parent="Scatter"]
+script = ExtResource("24_55g8t")
+source_scene = ExtResource("25_ndhu8")
+layout_json = "res://assets/terrain/palm_key_layout.json"
+layout_key = "grass_tufts"
+cast_shadows = false
+
+[node name="Ferns" type="Node3D" parent="Scatter"]
+script = ExtResource("24_55g8t")
+source_scene = ExtResource("26_brsm1")
+layout_json = "res://assets/terrain/palm_key_layout.json"
+layout_key = "ferns"
+
+[node name="Bushes" type="Node3D" parent="Scatter"]
+script = ExtResource("24_55g8t")
+source_scene = ExtResource("27_csoom")
+layout_json = "res://assets/terrain/palm_key_layout.json"
+layout_key = "bushes"
+
+[node name="Broadleafs" type="Node3D" parent="Scatter"]
+script = ExtResource("24_55g8t")
+source_scene = ExtResource("28_vi0gd")
+layout_json = "res://assets/terrain/palm_key_layout.json"
+layout_key = "broadleafs"
+
+[node name="FlowerShrubs" type="Node3D" parent="Scatter"]
+script = ExtResource("24_55g8t")
+source_scene = ExtResource("29_3mtso")
+layout_json = "res://assets/terrain/palm_key_layout.json"
+layout_key = "flower_shrubs"
+
+[node name="GrassCarpets" type="Node3D" parent="Scatter"]
+script = ExtResource("24_55g8t")
+source_scene = ExtResource("30_y8jyg")
+layout_json = "res://assets/terrain/palm_key_layout.json"
+layout_key = "grass_carpets"
+
+[node name="Pebbles" type="Node3D" parent="Scatter"]
+script = ExtResource("24_55g8t")
+source_scene = ExtResource("31_kqexg")
+layout_json = "res://assets/terrain/palm_key_layout.json"
+layout_key = "pebbles"
+
+[node name="Shells" type="Node3D" parent="Scatter"]
+script = ExtResource("24_55g8t")
+source_scene = ExtResource("32_sw6gq")
+layout_json = "res://assets/terrain/palm_key_layout.json"
+layout_key = "shells"
+cast_shadows = false
+
+[node name="Seaweed" type="Node3D" parent="Scatter"]
+script = ExtResource("24_55g8t")
+source_scene = ExtResource("33_54cua")
+layout_json = "res://assets/terrain/palm_key_layout.json"
+layout_key = "seaweed"
+cast_shadows = false

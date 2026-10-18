@@ -6,6 +6,8 @@ extends Node3D
 
 const START_POS := Vector3(25.5, 1.5, 22.5)
 const START_YAW := 200.0
+## Default gameplay zoom: metres of view at the player (the character reads at ~8% of the screen).
+const DEFAULT_ZOOM := 14.0
 
 const ISLAND_PROFILES := {
 	"HavenIsland": {
@@ -19,6 +21,17 @@ const ISLAND_PROFILES := {
 		"extras": [{"type": "spring", "name": "FreshSpring", "pos": [-6.3, -7.6], "reach": 2.4}],
 		"fish_near": [Vector2(38.0, 21.0), Vector2(36.0, 31.0), Vector2(30.0, 35.0)],
 	},
+	"PalmKey": {
+		"loot": {
+			"BarrelWreck": {"rope": 3, "coconut": 2},
+			"CrateWreck": {"wood": 4, "shell": 2, "fish_mackerel_cooked": 1},
+			"WreckRibs": {"wood": 6, "rope": 2, "palm_frond": 2},
+		},
+	},
+	"LookoutIsle": {
+		"chest": {"rope": 3, "coconut": 3, "palm_frond": 4, "fish_grouper_cooked": 1},
+		"extras": [{"type": "spring", "name": "LookoutSpring", "pos": [8.0, -17.5], "reach": 2.2}],
+	},
 }
 
 @onready var player: PlayerController = $Player
@@ -30,7 +43,9 @@ var storage_menu: StorageMenu
 var pause_menu: PauseMenu
 var main_menu: MainMenu
 var death_screen: DeathScreen
+var rescue_screen: RescueScreen
 var _title_yaw := 0.0
+var _reveal := 0.0
 
 
 func _ready() -> void:
@@ -56,6 +71,8 @@ func _ready() -> void:
 	death_screen = DeathScreen.new()
 	add_child(death_screen)
 	death_screen.respawn_requested.connect(_respawn)
+	rescue_screen = RescueScreen.new()
+	add_child(rescue_screen)
 	main_menu = MainMenu.new()
 	add_child(main_menu)
 	if "--new-game" in OS.get_cmdline_user_args() and Game.pending_start == "":
@@ -110,7 +127,7 @@ func _begin_play() -> void:
 	camera.set_target(player)
 	camera.yaw_degrees = 18.0
 	camera.pitch_degrees = -40.0
-	camera.zoom_size = 17.0
+	camera.zoom_size = DEFAULT_ZOOM
 	camera.snap_to_target()
 	Game.hotbar_changed.emit(Game.selected)
 	AudioManager.set_loop("ocean", -6.0)
@@ -132,6 +149,11 @@ func _process(delta: float) -> void:
 		return
 	if Game.is_playing():
 		_check_discovery()
+		AudioManager.set_underwater(player.is_head_underwater())
+		var target := 1.0 if player.mode == PlayerController.Mode.DIVE else 0.0
+		_reveal = move_toward(_reveal, target, delta * 1.5)
+		RenderingServer.global_shader_parameter_set("diver_reveal", _reveal)
+		RenderingServer.global_shader_parameter_set("diver_pos", player.global_position)
 
 
 func _unhandled_input(event: InputEvent) -> void:
