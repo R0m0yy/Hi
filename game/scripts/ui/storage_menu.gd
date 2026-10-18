@@ -73,7 +73,8 @@ func close() -> void:
 	super.close()
 
 
-func _unhandled_input(event: InputEvent) -> void:
+## _input, not _unhandled_input, so a focused slot cannot take Tab for focus navigation.
+func _input(event: InputEvent) -> void:
 	if is_open and (event.is_action_pressed("cancel") or event.is_action_pressed("pause") or event.is_action_pressed("inventory") or event.is_action_pressed("interact")):
 		close()
 		get_viewport().set_input_as_handled()

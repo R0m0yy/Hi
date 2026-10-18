@@ -51,7 +51,9 @@ void fragment() {
 	_main.add_child(MenuBase.button("New game", _on_new))
 	_main.add_child(MenuBase.button("Controls", func() -> void: _show("controls")))
 	_main.add_child(MenuBase.button("Settings", func() -> void: _show("settings")))
-	_main.add_child(MenuBase.button("Quit", func() -> void: get_tree().quit()))
+	# A browser tab cannot be closed by the page, so the web build has no Quit.
+	if not OS.has_feature("web"):
+		_main.add_child(MenuBase.button("Quit", func() -> void: get_tree().quit()))
 	col.add_child(_main)
 	var controls_page := PanelContainer.new()
 	var csb := UITheme.panel_box(20)

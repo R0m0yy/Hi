@@ -33,7 +33,7 @@ void fragment() {
 	float large = pu_fbm(p * 0.035);
 	float mid = pu_fbm(p * 0.16 + 11.0);
 	float fine = pu_value_noise(p * 1.7);
-	vec3 col = mix(sand_shade_color.rgb, sand_color.rgb, smoothstep(0.3, 0.7, large));
+	vec3 col = mix(pu_lin(sand_shade_color.rgb), pu_lin(sand_color.rgb), smoothstep(0.3, 0.7, large));
 	col *= 0.965 + mid * 0.07;
 	col *= 0.97 + fine * 0.06;
 	// Wind ripples: soft parallel bands, broken up by noise, faded near water and grass.
@@ -46,21 +46,21 @@ void fragment() {
 
 	float above = world_pos.y - water_level;
 	float wet = 1.0 - smoothstep(0.0, wet_band_height, above + (fine - 0.5) * 0.08);
-	col = mix(col, wet_sand_color.rgb, wet * 0.85);
+	col = mix(col, pu_lin(wet_sand_color.rgb), wet * 0.85);
 	float under = smoothstep(0.0, -0.3, above);
-	col = mix(col, seabed_color.rgb * (0.95 + fine * 0.1), under);
+	col = mix(col, pu_lin(seabed_color.rgb) * (0.95 + fine * 0.1), under);
 
 	float g = masks.r + (pu_fbm(p * 0.21 + 5.0) - 0.5) * grass_edge_noise + (pu_value_noise(p * 1.6) - 0.5) * 0.12;
 	float grass = smoothstep(0.48, 0.51, g);
 	float rim = grass * (1.0 - smoothstep(0.51, 0.57, g));
-	vec3 gcol = mix(grass_dark_color.rgb, grass_color.rgb, smoothstep(0.25, 0.75, pu_fbm(p * 0.11 + 3.0)));
+	vec3 gcol = mix(pu_lin(grass_dark_color.rgb), pu_lin(grass_color.rgb), smoothstep(0.25, 0.75, pu_fbm(p * 0.11 + 3.0)));
 	gcol *= 0.96 + fine * 0.08;
 	gcol *= 0.92 + pu_fbm(p * 0.45 + 7.0) * 0.16;                       // clumpy mottling
 	gcol *= 1.0 - smoothstep(0.7, 0.95, pu_value_noise(p * 6.0)) * 0.12;  // blade shadows
-	gcol = mix(gcol, grass_rim_color.rgb, rim * 0.75);
+	gcol = mix(gcol, pu_lin(grass_rim_color.rgb), rim * 0.75);
 	col = mix(col, gcol, grass * (1.0 - under));
 
-	col = mix(col, col * dirt_tint.rgb, masks.g * (1.0 - grass) * 0.6);
+	col = mix(col, col * pu_lin(dirt_tint.rgb), masks.g * (1.0 - grass) * 0.6);
 	// Organic, slightly darker sand just outside the grass edge.
 	float near_grass = smoothstep(0.3, 0.47, g) * (1.0 - grass);
 	col *= 1.0 - near_grass * 0.1;
@@ -74,8 +74,8 @@ void fragment() {
 	float caus = pu_caustics(world_pos, TIME);
 	col += col * caus * 2.4 + vec3(0.55, 0.8, 0.75) * caus * 0.35;
 
-	ALBEDO = col;
-	EMISSION = vec3(1.0, 0.95, 0.85) * sparkle * sparkle_strength * (1.0 - grass) * (1.0 - wet) * daylight;
+	ALBEDO = pu_out(col);
+	EMISSION = pu_out(vec3(1.0, 0.95, 0.85) * sparkle * sparkle_strength * (1.0 - grass) * (1.0 - wet) * daylight);
 	ROUGHNESS = mix(0.95, 0.5, wet * (1.0 - under));
 	SPECULAR = 0.3;
 }

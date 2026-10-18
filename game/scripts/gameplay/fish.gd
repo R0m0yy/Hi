@@ -9,6 +9,7 @@ var radius := 0.15
 var velocity := Vector3.ZERO
 var school: Node
 var _mesh: GeometryInstance3D
+var _mats: Array[ShaderMaterial] = []
 
 
 func setup(sp: String, owner_school: Node, model: PackedScene, rng: RandomNumberGenerator) -> void:
@@ -17,10 +18,19 @@ func setup(sp: String, owner_school: Node, model: PackedScene, rng: RandomNumber
 	var inst := model.instantiate()
 	add_child(inst)
 	MaterialLibrary.apply(inst)
+	var phase := rng.randf() * TAU
 	for mi in inst.find_children("*", "MeshInstance3D", true, false):
-		_mesh = mi as GeometryInstance3D
-		_mesh.set_instance_shader_parameter("swim_phase", rng.randf() * TAU)
-		_mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		var m := mi as MeshInstance3D
+		_mesh = m
+		m.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		for i in m.mesh.get_surface_count():
+			var shared := m.get_surface_override_material(i) as ShaderMaterial
+			if shared == null:
+				continue
+			var own := shared.duplicate() as ShaderMaterial
+			own.set_shader_parameter("swim_phase", phase)
+			m.set_surface_override_material(i, own)
+			_mats.append(own)
 	var s := rng.randf_range(0.85, 1.15)
 	inst.scale = Vector3.ONE * s  # keep this node's basis orthonormal for steering
 	var length: float = {"snapper": 0.4, "tang": 0.3, "mackerel": 0.55, "grouper": 0.78}.get(sp, 0.4)
@@ -29,8 +39,8 @@ func setup(sp: String, owner_school: Node, model: PackedScene, rng: RandomNumber
 
 
 func set_swim_rate(rate: float) -> void:
-	if _mesh:
-		_mesh.set_instance_shader_parameter("swim_rate", rate)
+	for m in _mats:
+		m.set_shader_parameter("swim_rate", rate)
 
 
 func speared() -> void:

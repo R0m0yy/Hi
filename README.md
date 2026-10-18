@@ -17,6 +17,14 @@ rig, two OFL fonts, and the Godot runtime in the desktop builds. See `docs/LICEN
 
 ## Playing
 
+### In the browser
+
+`tools/web/build_web.py` builds a browser version (Godot's web export on the
+Compatibility renderer, no threads) into `build/web_artifact/`. Serve that folder
+over HTTP or publish it, open `index.html` and press **Play**. It needs a browser with
+WebGL 2 and WebAssembly. It is a little plainer than the desktop build (no ambient
+occlusion) and the page has a Sharpness setting for slower graphics chips.
+
 ### Desktop builds
 
 `build/desktop/` holds the exported builds (they are not committed to git):
@@ -109,6 +117,7 @@ tools/
   audio/make_audio.py   procedural sound effects and music loops
   ui/make_ui_icons.py   HUD stat icons
   export_desktop.sh     Linux, Windows and macOS exports
+  web/                  browser build: build_web.py, play.html (the page), browser_test.js
   build_all.sh          rebuild assets -> Godot import -> scenes
 game/                   the Godot project (open game/project.godot)
   scripts/core/         autoloads: input, items, game state, world queries, audio, saves
@@ -138,9 +147,11 @@ plus numpy for audio. `docs/TOOLCHAIN.md` has the details.
 godot --headless --path game --script res://tools/smoke_test.gd      # world and scene checks
 godot --headless --path game --script res://tools/player_test.gd     # controller with simulated input
 godot --headless --path game --script res://tools/gameplay_test.gd   # full survival loop, 80 checks
+godot --headless --path game --script res://tools/keyboard_test.gd   # real key events: Tab, Escape, I
 godot --path game --fixed-fps 30 --script res://tools/capture_gameplay.gd -- --out=/abs/dir [--only=fishing,dive]
 godot --path game --write-movie /abs/demo.avi --fixed-fps 30 --resolution 1280x720 --script res://tools/demo_video.gd
 godot --path game --script res://tools/perf_probe.gd                 # draw calls, primitives, video memory
+python3 tools/web/build_web.py                                       # browser build into build/web_artifact/
 ```
 
 `docs/TEST_RESULTS.md` lists every check and the latest results.

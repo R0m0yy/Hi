@@ -55,7 +55,7 @@ void fragment() {
 		}
 	}
 #endif
-	vec3 albedo = COLOR.rgb * albedo_tint.rgb;
+	vec3 albedo = COLOR.rgb * pu_lin(albedo_tint.rgb);
 #ifdef TWO_SIDED
 	if (!FRONT_FACING) {
 		albedo *= backface_darken;
@@ -77,9 +77,9 @@ void fragment() {
 	}
 	float caus = pu_caustics(world_pos, TIME);
 	albedo += albedo * caus * 2.4 + vec3(0.55, 0.8, 0.75) * caus * 0.35;
-	ALBEDO = albedo;
+	ALBEDO = pu_out(albedo);
 	ROUGHNESS = roughness_value;
 	SPECULAR = specular_value;
 	BACKLIGHT = albedo * translucency;
-	EMISSION = albedo * emission_from_albedo * daylight;
+	EMISSION = pu_out(albedo * emission_from_albedo * daylight);
 }

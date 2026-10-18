@@ -54,9 +54,16 @@ void vertex() {
 	world_vertex = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
 }
 
-vec3 scene_world_pos(vec2 uv, mat4 inv_proj, mat4 inv_view) {
-	float d = texture(depth_tex, uv).r;
-	vec4 v = inv_proj * vec4(uv * 2.0 - 1.0, d, 1.0);
+// World position of the scene pixel at `uv` whose depth-buffer value is `d`.
+// The depth texture itself is read in fragment(): the Compatibility renderer
+// declares it after user functions, so a helper cannot sample it.
+vec3 world_from_depth(vec2 uv, float d, mat4 inv_proj, mat4 inv_view) {
+#if CURRENT_RENDERER == RENDERER_COMPATIBILITY
+	vec3 ndc = vec3(uv, d) * 2.0 - 1.0;  // OpenGL clip space: z in -1..1
+#else
+	vec3 ndc = vec3(uv * 2.0 - 1.0, d);
+#endif
+	vec4 v = inv_proj * vec4(ndc, 1.0);
 	v.xyz /= v.w;
 	return (inv_view * vec4(v.xyz, 1.0)).xyz;
 }
@@ -70,23 +77,23 @@ void fragment() {
 	NORMAL_MAP_DEPTH = normal_strength;
 	vec2 ripple = (nmix.xy * 2.0 - 1.0);
 
-	vec3 floor_pos = scene_world_pos(SCREEN_UV, INV_PROJECTION_MATRIX, INV_VIEW_MATRIX);
+	vec3 floor_pos = world_from_depth(SCREEN_UV, texture(depth_tex, SCREEN_UV).r, INV_PROJECTION_MATRIX, INV_VIEW_MATRIX);
 	float depth = max(world_vertex.y - floor_pos.y, 0.0);
 
 	// Refract only toward pixels that are themselves underwater.
 	vec2 ruv = SCREEN_UV + ripple * refraction_strength * clamp(depth * 0.7, 0.0, 1.0);
-	vec3 rfloor = scene_world_pos(ruv, INV_PROJECTION_MATRIX, INV_VIEW_MATRIX);
+	vec3 rfloor = world_from_depth(ruv, texture(depth_tex, ruv).r, INV_PROJECTION_MATRIX, INV_VIEW_MATRIX);
 	if (rfloor.y > world_vertex.y) {
 		ruv = SCREEN_UV;
 		rfloor = floor_pos;
 	}
 	float rdepth = max(world_vertex.y - rfloor.y, 0.0);
-	vec3 refr = textureLod(screen_tex, ruv, 0.0).rgb;
+	vec3 refr = pu_lin(textureLod(screen_tex, ruv, 0.0).rgb);
 
-	vec3 body = mix(color_shallow.rgb, color_turquoise.rgb, smoothstep(0.0, 1.4, rdepth));
-	body = mix(body, color_teal.rgb, smoothstep(1.2, 4.5, rdepth));
-	body = mix(body, color_ocean.rgb, smoothstep(4.0, 10.0, rdepth));
-	body = mix(body, color_deep.rgb, smoothstep(10.0, 18.0, rdepth));
+	vec3 body = mix(pu_lin(color_shallow.rgb), pu_lin(color_turquoise.rgb), smoothstep(0.0, 1.4, rdepth));
+	body = mix(body, pu_lin(color_teal.rgb), smoothstep(1.2, 4.5, rdepth));
+	body = mix(body, pu_lin(color_ocean.rgb), smoothstep(4.0, 10.0, rdepth));
+	body = mix(body, pu_lin(color_deep.rgb), smoothstep(10.0, 18.0, rdepth));
 
 	float clarity = exp(-rdepth * clarity_falloff);
 	float reveal = diver_reveal * (1.0 - smoothstep(2.5, 7.5, distance(world_vertex.xz, diver_pos.xz)));
@@ -96,7 +103,7 @@ void fragment() {
 	float diver_depth = water_level - diver_pos.y;
 	float subject = 1.0 - smoothstep(diver_depth + 0.6, diver_depth + 1.8, rdepth);
 	clarity = mix(clarity, max(clarity, exp(-rdepth * clarity_falloff * mix(0.42, 0.07, subject))), reveal);
-	vec3 tint = mix(vec3(1.0), color_turquoise.rgb * 1.25, transmission_tint * smoothstep(0.0, 1.1, rdepth) * (1.0 - reveal * mix(0.3, 0.75, subject)));
+	vec3 tint = mix(vec3(1.0), pu_lin(color_turquoise.rgb) * 1.25, transmission_tint * smoothstep(0.0, 1.1, rdepth) * (1.0 - reveal * mix(0.3, 0.75, subject)));
 	vec3 transmitted = refr * tint;
 
 	// Shoreline foam: thin crisp band that washes in and out.
@@ -124,8 +131,8 @@ void fragment() {
 	glint *= 1.0 - smoothstep(60.0, 140.0, length(VERTEX));  // sparkles are a close-up detail
 	glint *= 1.0 - reveal;
 
-	ALBEDO = mix(body * body_brightness * (1.0 - clarity), foam_color.rgb, foam);
-	EMISSION = transmitted * clarity * (1.0 - foam) + foam_color.rgb * (foam * 0.3 + glint * 0.6) * daylight;
+	ALBEDO = pu_out(mix(body * body_brightness * (1.0 - clarity), pu_lin(foam_color.rgb), foam));
+	EMISSION = pu_out(transmitted * clarity * (1.0 - foam) + pu_lin(foam_color.rgb) * (foam * 0.3 + glint * 0.6) * daylight);
 	// Less sky reflection over a diver, so the surface reads as a window.
 	ROUGHNESS = mix(mix(roughness_value, 0.55, reveal), 0.9, foam);
 	SPECULAR = 0.18 * (1.0 - reveal * 0.85);

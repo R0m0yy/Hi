@@ -53,6 +53,9 @@ var _day := {}
 var _sun_az := 0.0
 var _sun_el := 0.0
 var _caustics := 1.0
+## The Compatibility renderer (browser build) has no SSAO and lights a little
+## brighter, so its exposure is trimmed to match the desktop look.
+var _exposure_scale := 1.0
 
 
 func _ready() -> void:
@@ -66,6 +69,8 @@ func _ready() -> void:
 	_env = we.environment.duplicate(true)
 	we.environment = _env
 	_sky = _env.sky.sky_material as ProceduralSkyMaterial
+	if RenderingServer.get_current_rendering_method() == "gl_compatibility":
+		_exposure_scale = 0.9
 	var to_sun := _sun.global_basis.z.normalized()
 	_sun_el = asin(to_sun.y)
 	_sun_az = atan2(to_sun.x, to_sun.z)
@@ -94,7 +99,7 @@ func apply(hour: float) -> void:
 	_env.ambient_light_color = look["ambient"]
 	_env.ambient_light_energy = look["ambient_energy"]
 	_env.adjustment_saturation = look["saturation"]
-	_env.tonemap_exposure = look["exposure"]
+	_env.tonemap_exposure = look["exposure"] * _exposure_scale
 	_sun.shadow_opacity = look["shadow"]
 	_sky.sky_top_color = look["sky_top"]
 	_sky.sky_horizon_color = look["sky_horizon"]

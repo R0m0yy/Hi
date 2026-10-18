@@ -8,8 +8,11 @@ render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_burley, specula
 uniform float wave_amplitude = 0.045;
 uniform float wave_frequency = 11.0;
 uniform float sheen : hint_range(0.0, 1.0) = 0.35;
-instance uniform float swim_phase = 0.0;
-instance uniform float swim_rate = 1.0;
+// Set per fish through a private copy of the material. (Instance uniforms
+// would be tidier, but the Compatibility renderer caps how many instances
+// may use them, and the browser build runs on it.)
+uniform float swim_phase = 0.0;
+uniform float swim_rate = 1.0;
 
 varying vec3 world_pos;
 
@@ -27,12 +30,12 @@ void fragment() {
 	vec3 albedo = COLOR.rgb;
 	float caus = pu_caustics(world_pos, TIME);
 	albedo += albedo * caus * 2.0;
-	ALBEDO = albedo;
+	if (!FRONT_FACING) {
+		albedo *= 0.8;
+	}
+	ALBEDO = pu_out(albedo);
 	ROUGHNESS = 0.38;
 	SPECULAR = 0.5 * sheen + 0.2;
 	RIM = 0.25;
 	RIM_TINT = 0.6;
-	if (!FRONT_FACING) {
-		ALBEDO *= 0.8;
-	}
 }

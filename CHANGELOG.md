@@ -54,11 +54,24 @@ Test results are in `docs/TEST_RESULTS.md`.
   rescue screens. Fonts are Fredoka and Nunito (OFL). The fishing meter sits just below
   the player, clear of the notification feed.
 - **Boats:** the wake is now soft foam instead of rings.
+- **Menus on a real keyboard:** Tab and Escape now close the pack. A focused pack slot
+  was taking Tab for focus navigation, and the pause menu swallowed Escape. The tests
+  sent input actions and so missed it; `keyboard_test.gd` sends real key events.
 - **Occlusion fade:** leaves between the camera and the explorer dissolve in a dither
   pattern, so she stays visible behind palms and big plants.
 - **Audio:** 47 procedural sound effects and 6 loops (ocean, wind, night, underwater,
   fire, theme). The loops are now written as Ogg Vorbis by `tools/audio/make_audio.py`.
 - **Desktop builds:** Linux, Windows and macOS presets plus `tools/export_desktop.sh`.
+- **Browser build:** `tools/web/build_web.py` exports the game for the web (Compatibility
+  renderer, no threads), gzips the 44 MB engine and 10 MB game data, and writes a play page
+  with a Play button, progress bar, controls card, fullscreen and a Sharpness setting.
+  To make the shaders run on that renderer:
+  - The water shader reads the depth texture inside `fragment()` and handles the OpenGL
+    depth range.
+  - Colour-space helpers (`pu_lin`, `pu_out`) keep every shader computing in linear space.
+  - Fish keep their own material copy instead of instance uniforms, which that renderer
+    limits to a few hundred instances.
+  - Web-only settings: 4096 shadow map, FXAA, no Quit buttons.
 - **Docs:** README control guide, `docs/LICENSES.md`, `docs/TEST_RESULTS.md`, and an
   updated asset manifest.
 

@@ -8,6 +8,30 @@ global uniform float caustics_strength;
 // 1 at full day, ~0.25 at night (DayNight).
 global uniform float daylight;
 
+// Colour space. Forward+ computes in linear space and converts `source_color`
+// uniforms itself. The Compatibility renderer (the browser build) instead hands
+// uniforms and the screen texture to shaders as sRGB and expects ALBEDO and
+// EMISSION back as sRGB. pu_lin() and pu_out() make both renderers compute in
+// linear space, so one set of shaders gives the same picture on either.
+vec3 pu_lin(vec3 c) {
+#if CURRENT_RENDERER == RENDERER_COMPATIBILITY
+	vec3 hi = pow((max(c, vec3(0.0)) + 0.055) / 1.055, vec3(2.4));
+	return mix(hi, c / 12.92, step(c, vec3(0.04045)));
+#else
+	return c;
+#endif
+}
+
+vec3 pu_out(vec3 c) {
+#if CURRENT_RENDERER == RENDERER_COMPATIBILITY
+	c = max(c, vec3(0.0));
+	vec3 hi = 1.055 * pow(c, vec3(1.0 / 2.4)) - 0.055;
+	return mix(hi, c * 12.92, step(c, vec3(0.0031308)));
+#else
+	return c;
+#endif
+}
+
 float pu_hash(vec2 p) {
 	p = fract(p * vec2(123.34, 456.21));
 	p += dot(p, p + 45.32);

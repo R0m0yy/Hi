@@ -1,0 +1,396 @@
+<title>Play Paradise Untamed</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="The Paradise Untamed v0.3 web build: survive on Haven Island, fish, dive, craft and sail to the other islands, played in the browser.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@400;600;800&display=swap">
+<style>
+/* Layout: a one-screen arcade cabinet. The game fills a 16:9 stage; the controls card sits underneath. */
+:root {
+  /* colour: lavender-grey rock paper, deep-water ink, lagoon accent, sand highlight (the project's palette) */
+  --paper: #F2EFF2;
+  --card: #FBFAFB;
+  --ink: #1A2233;
+  --muted: #5D5868;
+  --line: #DAD3D9;
+  --lagoon: #0D7584;
+  --lagoon-ink: #FFFFFF;
+  --sand: #E9C48A;
+  --stage: #0A2B4E;
+  --warn: #8F5C0C;
+  --warn-soft: #F6E7CC;
+  --bad: #A23442;
+  --bad-soft: #F5DCDF;
+  /* type */
+  --f-display: "Fredoka", "Arial Rounded MT Bold", "Trebuchet MS", system-ui, sans-serif;
+  --f-body: "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --wrap: 78rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0A1524; --card: #0F1F34; --ink: #E5EAF0; --muted: #A9B0BE; --line: #22344B;
+    --lagoon: #5AD2CC; --lagoon-ink: #06222A; --sand: #E9C48A; --stage: #061B33;
+    --warn: #F0BD62; --warn-soft: #3A2C12; --bad: #F2909B; --bad-soft: #3B1A21;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0A1524; --card: #0F1F34; --ink: #E5EAF0; --muted: #A9B0BE; --line: #22344B;
+  --lagoon: #5AD2CC; --lagoon-ink: #06222A; --sand: #E9C48A; --stage: #061B33;
+  --warn: #F0BD62; --warn-soft: #3A2C12; --bad: #F2909B; --bad-soft: #3B1A21;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 1rem/1.55 var(--f-body);
+  -webkit-font-smoothing: antialiased;
+}
+.wrap {
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0.75rem 2rem;
+  display: grid;
+  gap: 1rem;
+}
+:focus-visible { outline: 2px solid var(--lagoon); outline-offset: 2px; border-radius: 4px; }
+p { margin: 0; }
+
+/* top bar */
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; }
+.mark {
+  margin: 0; font: 600 1.6rem/1 var(--f-display); letter-spacing: 0.01em; text-transform: uppercase;
+}
+.mark span { color: var(--lagoon); }
+.tools { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+.tag { font: 800 0.75rem/1 var(--f-body); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.btn {
+  font: 800 0.9rem/1 var(--f-body); padding: 0.65rem 0.95rem; border-radius: 8px; cursor: pointer;
+  border: 1px solid var(--line); background: var(--card); color: var(--ink);
+}
+.btn:hover { border-color: var(--lagoon); color: var(--lagoon); }
+select.btn { padding-right: 0.5rem; }
+.pick { display: flex; align-items: center; gap: 0.4rem; }
+
+/* stage */
+.stage {
+  position: relative; overflow: hidden; border-radius: 14px; background: var(--stage);
+  aspect-ratio: 16 / 9;
+  width: min(100%, calc((100dvh - 7.5rem) * 16 / 9));
+  min-width: min(100%, 20rem);
+  margin-inline: auto;
+  box-shadow: 0 18px 40px -26px rgba(11, 61, 126, 0.7);
+}
+.stage:fullscreen { width: 100vw; height: 100vh; aspect-ratio: auto; border-radius: 0; margin: 0; }
+#canvas { display: block; width: 100%; height: 100%; outline: none; touch-action: none; }
+.overlay {
+  position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 1rem;
+  background:
+    linear-gradient(180deg, rgba(6, 27, 51, 0.15), rgba(6, 27, 51, 0.78)),
+    url("poster.jpg") center / cover no-repeat;
+  color: #FFFFFF;
+}
+.overlay[hidden] { display: none; }
+.panel { display: grid; gap: 0.9rem; justify-items: center; max-width: 34rem; }
+.panel h2 { margin: 0; font: 600 clamp(1.6rem, 4.2vw, 2.6rem)/1.05 var(--f-display); text-wrap: balance; }
+.panel p { font-size: 1.05rem; text-wrap: pretty; }
+.play {
+  font: 600 1.4rem/1 var(--f-display); letter-spacing: 0.02em; padding: 0.95rem 2.2rem; border-radius: 999px; cursor: pointer;
+  border: 0; background: var(--lagoon); color: var(--lagoon-ink);
+  box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.6);
+}
+.play:hover { filter: brightness(1.08); }
+.play:disabled { cursor: progress; filter: none; opacity: 0.85; }
+.fine { font-size: 0.9rem; color: rgba(255, 255, 255, 0.82); }
+.bar-track { width: min(24rem, 80vw); height: 0.5rem; border-radius: 999px; background: rgba(255, 255, 255, 0.28); overflow: hidden; }
+.bar-fill { height: 100%; width: 0; background: var(--sand); transition: width 0.15s linear; }
+.notice {
+  max-width: 34rem; text-align: left; padding: 0.9rem 1rem; border-radius: 10px;
+  background: var(--bad-soft); color: var(--bad); border: 1px solid var(--bad); font-size: 0.95rem;
+}
+.notice[hidden] { display: none; }
+.notice summary { cursor: pointer; font-weight: 800; }
+.notice pre { margin: 0.5rem 0 0; white-space: pre-wrap; word-break: break-word; font: 400 0.8rem/1.4 ui-monospace, Menlo, Consolas, monospace; max-height: 8rem; overflow: auto; }
+
+/* help */
+.help { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 1rem; align-items: start; }
+@media (max-width: 800px) { .help { grid-template-columns: minmax(0, 1fr); } }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 1rem 1.1rem; min-width: 0; }
+.card h3 { margin: 0 0 0.6rem; font: 600 1.15rem/1.2 var(--f-display); }
+.keys { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; margin: 0; }
+.keys div { display: grid; grid-template-columns: minmax(0, 9.5rem) minmax(0, 1fr); gap: 0.2rem 0.8rem; padding-block: 0.4rem; border-top: 1px solid var(--line); align-items: baseline; }
+.keys div:first-child { border-top: 0; }
+.keys dt { font-weight: 800; font-size: 0.92rem; }
+.keys dd { margin: 0; color: var(--muted); font-size: 0.92rem; }
+kbd { display: inline-block; padding: 0.05em 0.45em; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px; background: var(--paper); font: 800 0.82em var(--f-body); }
+.notes { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.5rem; font-size: 0.95rem; }
+.small { font-size: 0.85rem; color: var(--muted); }
+@media (max-width: 520px) { .keys div { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .bar-fill { transition: none; } }
+</style>
+
+<div class="wrap">
+  <div class="bar">
+    <h1 class="mark">Paradise <span>Untamed</span></h1>
+    <div class="tools">
+      <span class="tag">Web build v0.3</span>
+      <label class="pick"><span class="tag">Sharpness</span>
+        <select class="btn" id="quality" aria-label="Sharpness">
+          <option value="854">Fast</option>
+          <option value="1280" selected>Balanced</option>
+          <option value="1920">Sharp</option>
+        </select>
+      </label>
+      <button class="btn" type="button" id="fs" hidden>Fullscreen</button>
+    </div>
+  </div>
+
+  <div class="stage" id="stage">
+    <canvas id="canvas" tabindex="0" aria-label="Paradise Untamed game"></canvas>
+    <div class="overlay" id="overlay">
+      <div class="panel">
+        <h2 id="headline">Washed up on Haven Island</h2>
+        <p id="sub">Gather, craft, fish and dive your way off the island. Nothing to install.</p>
+        <button class="play" type="button" id="play">Play</button>
+        <div class="bar-track" id="track" hidden><div class="bar-fill" id="fill"></div></div>
+        <p class="fine" id="status">First start downloads about 20 MB.</p>
+        <div class="notice" id="notice" hidden role="alert"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="help">
+    <section class="card" aria-labelledby="ctl">
+      <h3 id="ctl">Controls</h3>
+      <dl class="keys">
+        <div><dt><kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd></dt><dd>Move. Hold <kbd>Shift</kbd> to sprint, <kbd>Space</kbd> to jump.</dd></div>
+        <div><dt><kbd>E</kbd></dt><dd>Interact: gather, open, cook, board or leave a boat.</dd></div>
+        <div><dt>Left mouse</dt><dd>Use the item in your hand: chop, cast and reel, thrust the spear, eat, place.</dd></div>
+        <div><dt><kbd>Ctrl</kbd> or <kbd>C</kbd></dt><dd>Hold in deep water to dive, release to surface.</dd></div>
+        <div><dt><kbd>Tab</kbd> or <kbd>I</kbd></dt><dd>Pack and crafting.</dd></div>
+        <div><dt><kbd>1</kbd>–<kbd>6</kbd></dt><dd>Pick a hotbar slot. <kbd>Z</kbd> and <kbd>X</kbd> cycle.</dd></div>
+        <div><dt>Right mouse or <kbd>Q</kbd></dt><dd>Cancel a cast or a placement.</dd></div>
+        <div><dt><kbd>R</kbd></dt><dd>Rotate while placing a structure.</dd></div>
+        <div><dt>Wheel</dt><dd>Zoom.</dd></div>
+        <div><dt><kbd>Esc</kbd></dt><dd>Pause menu: save, load, settings.</dd></div>
+      </dl>
+    </section>
+    <section class="card" aria-labelledby="tips">
+      <h3 id="tips">Good to know</h3>
+      <ul class="notes">
+        <li>Click the game once so it gets your keyboard.</li>
+        <li>The panel at the top left tells you what to do next.</li>
+        <li>A gamepad works too: left stick to move, A to jump, X to interact, RT to use.</li>
+        <li>Saves go to this browser. If the viewer blocks storage, saving will not stick.</li>
+        <li class="small">This is the web version. It is lighter than the desktop build (no ambient occlusion), and the first frame can take a few seconds to compile shaders.</li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+<script src="game.js"></script>
+<script>
+(function () {
+  "use strict";
+  /*@SIZES@*/
+  var GZ = { "game.wasm": "game.wasm.gz.b64.txt", "game.pck": "game.pck.gz.b64.txt" };
+  var $ = function (s) { return document.querySelector(s); };
+  var stage = $("#stage"), canvas = $("#canvas"), overlay = $("#overlay");
+  var playBtn = $("#play"), track = $("#track"), fill = $("#fill"), statusEl = $("#status"), notice = $("#notice");
+  var fsBtn = $("#fs");
+  var started = false, running = false;
+  var qualitySel = $("#quality");
+  // Rendering size cap in pixels: lower is faster on weak graphics chips.
+  try { var saved = localStorage.getItem("pu-quality"); if (saved && qualitySel.querySelector('option[value="' + saved + '"]')) qualitySel.value = saved; } catch (e) {}
+
+  /* ---------- feature checks ---------- */
+  function missing() {
+    var out = [];
+    try {
+      var gl = document.createElement("canvas").getContext("webgl2");
+      if (!gl) out.push("WebGL 2 (graphics acceleration is off or unsupported)");
+    } catch (e) { out.push("WebGL 2"); }
+    if (typeof WebAssembly !== "object") out.push("WebAssembly");
+    if (typeof DecompressionStream !== "function") out.push("DecompressionStream (use a current Chrome, Edge, Firefox or Safari)");
+    return out;
+  }
+
+  function showNotice(title, detail) {
+    notice.hidden = false;
+    notice.innerHTML = "";
+    var d = document.createElement("details");
+    d.open = true;
+    var s = document.createElement("summary");
+    s.textContent = title;
+    d.appendChild(s);
+    var p = document.createElement("p");
+    p.textContent = "Open the page in its own browser tab and try again. If it still fails, tell me the details below.";
+    p.style.margin = "0.4rem 0 0";
+    d.appendChild(p);
+    if (detail) {
+      var pre = document.createElement("pre");
+      pre.textContent = String(detail);
+      d.appendChild(pre);
+    }
+    notice.appendChild(d);
+  }
+
+  /* ---------- downloading (gzip, base64 text; unpacked in the browser) ---------- */
+  var B64 = new Uint8Array(256).fill(255);
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".split("").forEach(function (c, i) { B64[c.charCodeAt(0)] = i; });
+  function fromBase64(src) {
+    var n = src.length;
+    while (n > 0 && (src[n - 1] === 61 || src[n - 1] === 10 || src[n - 1] === 13)) n--;
+    var out = new Uint8Array(Math.floor(n * 3 / 4));
+    var o = 0, acc = 0, bits = 0;
+    for (var i = 0; i < n; i++) {
+      var v = B64[src[i]];
+      if (v === 255) continue;
+      acc = (acc << 6) | v;
+      bits += 6;
+      if (bits >= 8) { bits -= 8; out[o++] = (acc >> bits) & 255; }
+    }
+    return out.subarray(0, o);
+  }
+
+  var total = 0, done = 0;
+  Object.keys(SIZES).forEach(function (k) { total += SIZES[k]; });
+
+  function report(label) {
+    var f = total ? Math.min(1, done / total) : 0;
+    fill.style.width = (f * 100).toFixed(1) + "%";
+    statusEl.textContent = label + " " + Math.round(f * 100) + "%";
+  }
+
+  function fetchPacked(name) {
+    var url = GZ[name];
+    return fetch(url).then(function (res) {
+      if (!res.ok) throw new Error("Could not download " + url + " (HTTP " + res.status + ")");
+      var reader = res.body.getReader();
+      var chunks = [], got = 0;
+      function pump() {
+        return reader.read().then(function (r) {
+          if (r.done) return;
+          chunks.push(r.value);
+          got += r.value.length;
+          done += r.value.length;
+          report("Downloading");
+          return pump();
+        });
+      }
+      return pump().then(function () {
+        var buf = new Uint8Array(got), o = 0;
+        chunks.forEach(function (c) { buf.set(c, o); o += c.length; });
+        return buf;
+      });
+    }).then(function (text) {
+      var buf = fromBase64(text);
+      if (buf.length < 3 || buf[0] !== 0x1f || buf[1] !== 0x8b) throw new Error(url + " is not a gzip file");
+      var ds = new Blob([buf]).stream().pipeThrough(new DecompressionStream("gzip"));
+      return new Response(ds).arrayBuffer();
+    });
+  }
+
+  var cache = {};
+  var realFetch = window.fetch.bind(window);
+  window.fetch = function (input, init) {
+    var u = typeof input === "string" ? input : (input && input.url) || "";
+    var name = u.split("?")[0].split("/").pop();
+    if (GZ[name] && cache[name]) {
+      var data = cache[name];
+      var type = name.slice(-5) === ".wasm" ? "application/wasm" : "application/octet-stream";
+      return Promise.resolve(new Response(data, { status: 200, headers: { "Content-Type": type, "Content-Length": String(data.byteLength) } }));
+    }
+    return realFetch(input, init);
+  };
+
+  /* ---------- canvas size: the page owns it, Godot follows ---------- */
+  function fit() {
+    var r = stage.getBoundingClientRect();
+    if (r.width < 2) return;
+    var dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    var w = Math.min(Math.round(r.width * dpr), parseInt(qualitySel.value, 10) || 1280);
+    var h = Math.round(w * r.height / r.width);
+    if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+  }
+  var raf = 0;
+  function queueFit() { if (!raf) raf = requestAnimationFrame(function () { raf = 0; fit(); }); }
+  if (typeof ResizeObserver === "function") new ResizeObserver(queueFit).observe(stage);
+  window.addEventListener("resize", queueFit);
+  qualitySel.addEventListener("change", function () {
+    try { localStorage.setItem("pu-quality", qualitySel.value); } catch (e) {}
+    queueFit();
+    canvas.focus();
+  });
+  fit();
+
+  // Keep the keys the game uses from scrolling or tabbing the page.
+  var KEEP = { " ": 1, "Tab": 1, "ArrowUp": 1, "ArrowDown": 1, "ArrowLeft": 1, "ArrowRight": 1, "F5": 1, "F9": 1 };
+  window.addEventListener("keydown", function (e) {
+    if (running && document.activeElement === canvas && KEEP[e.key]) e.preventDefault();
+  }, true);
+
+  /* ---------- fullscreen ---------- */
+  if (document.fullscreenEnabled) {
+    fsBtn.hidden = false;
+    fsBtn.addEventListener("click", function () {
+      var p = document.fullscreenElement ? document.exitFullscreen() : stage.requestFullscreen();
+      if (p && p.catch) p.catch(function () {});
+      setTimeout(function () { canvas.focus(); }, 100);
+    });
+    document.addEventListener("fullscreenchange", function () { queueFit(); canvas.focus(); });
+  }
+
+  /* ---------- start ---------- */
+  function start() {
+    if (started) return;
+    var gaps = missing();
+    if (gaps.length) {
+      showNotice("This browser is missing: " + gaps.join(", "), "");
+      return;
+    }
+    started = true;
+    playBtn.disabled = true;
+    track.hidden = false;
+    notice.hidden = true;
+    report("Downloading");
+    fetchPacked("game.wasm").then(function (w) {
+      cache["game.wasm"] = w;
+      return fetchPacked("game.pck");
+    }).then(function (p) {
+      cache["game.pck"] = p;
+      statusEl.textContent = "Starting the game…";
+      fill.style.width = "100%";
+      fit();
+      var engine = new Engine({
+        executable: "game",
+        canvasResizePolicy: 0,
+        focusCanvas: true,
+        ensureCrossOriginIsolationHeaders: false,
+        fileSizes: { "game.wasm": cache["game.wasm"].byteLength, "game.pck": cache["game.pck"].byteLength },
+        args: []
+      });
+      return engine.startGame({ canvas: canvas });
+    }).then(function () {
+      running = true;
+      overlay.hidden = true;
+      canvas.focus();
+    }).catch(function (err) {
+      started = false;
+      playBtn.disabled = false;
+      track.hidden = true;
+      statusEl.textContent = "The game did not start.";
+      var msg = err && err.message ? err.message : String(err);
+      var blocked = /wasm|WebAssembly|unsafe-eval/i.test(msg);
+      showNotice(blocked ? "This viewer blocked the game engine (WebAssembly)." : "The game did not start.", msg);
+    });
+  }
+  playBtn.addEventListener("click", start);
+  canvas.addEventListener("pointerdown", function () { canvas.focus(); });
+})();
+</script>

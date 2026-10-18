@@ -23,7 +23,7 @@ void fragment() {
 	albedo = clamp(mix(vec3(l), albedo, 1.0 + saturation_boost), 0.0, 1.0);
 	float caus = pu_caustics(world_pos, TIME);
 	albedo += albedo * caus * 2.0;
-	ALBEDO = albedo;
+	ALBEDO = pu_out(albedo);
 	ROUGHNESS = roughness_value;
 	SPECULAR = specular_value;
 	RIM = rim_amount;
@@ -31,5 +31,5 @@ void fragment() {
 	// Underwater, a soft aqua edge glow keeps the explorer readable from above.
 	float under = smoothstep(0.2, 0.9, water_level - world_pos.y);
 	float fres = pow(1.0 - clamp(dot(NORMAL, VIEW), 0.0, 1.0), 2.5);
-	EMISSION = vec3(0.55, 0.95, 1.0) * fres * under * 0.45 + albedo * under * 0.12;
+	EMISSION = pu_out(vec3(0.55, 0.95, 1.0) * fres * under * 0.45 + albedo * under * 0.12);
 }

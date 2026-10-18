@@ -20,7 +20,8 @@ func _ready() -> void:
 	_main_buttons.add_child(MenuBase.button("Controls", func() -> void: _show("controls")))
 	_main_buttons.add_child(MenuBase.button("Settings", func() -> void: _show("settings")))
 	_main_buttons.add_child(MenuBase.button("Save and return to title", _to_title))
-	_main_buttons.add_child(MenuBase.button("Save and quit", _quit))
+	if not OS.has_feature("web"):
+		_main_buttons.add_child(MenuBase.button("Save and quit", _quit))
 	col.add_child(_main_buttons)
 	_status = UITheme.label("", 19, UITheme.SAND)
 	col.add_child(_status)
@@ -63,6 +64,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			close()
 		elif not Game.ui_open:
 			open()
+		else:
+			return  # another menu is open and will take the key itself
 		get_viewport().set_input_as_handled()
 
 

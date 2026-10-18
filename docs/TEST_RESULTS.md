@@ -12,6 +12,7 @@ All results below come from runs in the development container:
 | World smoke test | `godot --headless --path game --script res://tools/smoke_test.gd` | **11/11 PASS** |
 | Player controller | `godot --headless --path game --script res://tools/player_test.gd` | **14/14 PASS** |
 | Gameplay end to end | `godot --headless --path game --script res://tools/gameplay_test.gd` | **80/80 PASS** |
+| Real key events | `godot --headless --path game --script res://tools/keyboard_test.gd` | **9/9 PASS** |
 
 The gameplay suite plays through the real main scene with simulated input. It
 sends input events, so menus receive them exactly as they would from a player.
@@ -136,6 +137,23 @@ smoke_test
 ```
 </details>
 
+The key-event suite exists because browser testing found a bug the others could not:
+they send input actions, which skip the GUI, so they never saw that a focused pack slot
+swallowed **Tab** and that the pause menu swallowed **Escape** while the pack was open.
+Both keys now close the pack on a real keyboard.
+
+```
+[ok] Tab opens the pack
+[ok] Tab closes the pack again (with a slot focused)
+[ok] Escape closes the pack
+[ok] that Escape does not also open the pause menu
+[ok] I opens the pack
+[ok] I closes the pack
+[ok] Escape opens the pause menu
+[ok] Escape closes the pause menu
+[ok] back in play with no menu open
+```
+
 ## In-engine checks (rendered)
 
 `game/tools/capture_gameplay.gd` puts the real game into each situation and saves a
@@ -176,6 +194,31 @@ Rendering problems found this way and fixed in v0.3:
 The Linux run caught a real export bug. The terrain heightmap `.bin` files were not
 packed, which left the terrain with no collision. The presets now include
 `assets/terrain/*.bin`, and the Linux build was re-checked.
+
+## Browser build
+
+`tools/web/build_web.py` exports the game for the web and `tools/web/browser_test.js`
+plays it in headless Chromium with software WebGL 2 (SwiftShader).
+
+| Check | Result |
+|---|---|
+| Export (Compatibility renderer, no threads) | OK: 44 MB engine, 10 MB data, packed to 12.5 MB + 12.8 MB base64 text |
+| Page loads, Play downloads and starts the engine | OK, about 30 s on this machine |
+| Title screen renders (water, terrain, fonts) | OK |
+| New game from a mouse click, movement with the keyboard | OK |
+| Pack opens and closes with Tab; pause menu with Escape | OK (after the fix above) |
+| Interaction prompts, HUD, day clock | OK |
+
+Not checked:
+
+- **Frame rate on a real GPU.** The software renderer runs about one frame per second.
+- **Sound in the browser.** The audio worklet files load without errors, but nobody listened.
+- **Running inside the claude.ai viewer.** That frame has its own security rules. If
+  it blocks WebAssembly the page says so and the same page works in an ordinary tab.
+- **Saving.** It needs browser storage, which a viewer may block.
+
+Two things differ from the desktop build: no ambient occlusion, and shadows render at 4096
+instead of 8192. The shaders needed three changes to run on that renderer; see the changelog.
 
 ## Performance
 

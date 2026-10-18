@@ -83,7 +83,9 @@ func _on_open() -> void:
 	_show_detail(Game.selected)
 
 
-func _unhandled_input(event: InputEvent) -> void:
+## _input, not _unhandled_input: the focused pack slot would otherwise take Tab
+## for focus navigation, and the pause menu would swallow Escape first.
+func _input(event: InputEvent) -> void:
 	if not is_open:
 		return
 	if event.is_action_pressed("inventory") or event.is_action_pressed("pause") or event.is_action_pressed("cancel") and _picked < 0:
